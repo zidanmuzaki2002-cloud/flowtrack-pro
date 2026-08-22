@@ -1130,6 +1130,50 @@
       </div>
     </div>
 
+    <!-- Modal 9: Edit & Sesuaikan Realized Expense -->
+    <div class="modal-overlay" id="edit-expense-modal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div style="font-weight: 700; font-size: 1rem; color: var(--text-primary);" id="txt-modal-edit-exp-title">Edit &amp; Sesuaikan Pengeluaran</div>
+          <button type="button" class="close-btn close-modal-btn">&times;</button>
+        </div>
+        <input type="hidden" id="edit-expense-id">
+        <div class="form-group">
+          <label class="form-label" id="txt-lbl-edit-exp-desc">Keterangan Pengeluaran</label>
+          <input type="text" id="edit-expense-desc-input" class="form-input" placeholder="Contoh: Makan Siang Nasi Padang">
+        </div>
+        <div class="form-group">
+          <label class="form-label" id="txt-lbl-edit-exp-bgt">Alokasikan ke Pos Anggaran</label>
+          <select id="edit-expense-budget-select" class="form-select">
+            <!-- Populated dynamically -->
+          </select>
+        </div>
+        <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 8px;">
+          <div class="form-group">
+            <label class="form-label" id="txt-lbl-edit-exp-amt">Nominal (Rp)</label>
+            <input type="number" id="edit-expense-amount-input" class="form-input">
+          </div>
+          <div class="form-group">
+            <label class="form-label" id="txt-lbl-edit-exp-date">Tanggal</label>
+            <input type="date" id="edit-expense-date-input" class="form-input">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" id="txt-lbl-edit-exp-method">Metode Pembayaran</label>
+          <select id="edit-expense-method-select" class="form-select">
+            <option value="BCA / QRIS">BCA / QRIS</option>
+            <option value="Cash / Tunai">Cash / Tunai</option>
+            <option value="GoPay / ShopeePay / OVO">GoPay / ShopeePay / OVO</option>
+            <option value="Bank Lain / Transfer">Bank Lain / Transfer</option>
+          </select>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button type="button" class="btn-primary" style="flex: 2;" onclick="submitEditExpense()" id="txt-btn-save-edit-exp">Simpan Perubahan</button>
+          <button type="button" class="btn-danger" style="flex: 1;" onclick="deleteExpenseFromModal()" id="txt-btn-del-edit-exp">Hapus</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Modal 8: Profil Pengguna & Keluar Akun -->
     <div class="modal-overlay" id="auth-modal">
       <div class="modal-card">

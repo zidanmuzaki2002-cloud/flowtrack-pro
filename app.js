@@ -2,6 +2,8 @@
 // FlowTrack Pro: Mobile-First Client Logic & Resilient Local-Cloud Sync Engine
 // Clean SVG & 3D Volumetric Badges (100% Immune to Mojibake / Character Errors)
 // Bilingual I18N Engine (ID / EN) & Bank Statement PDF Parser
+// Full Multi-Device Server Sync (Cash Accounts, Notes, Feedbacks, Budgets, Tx)
+// Realized Expense Transaction Edit & Delete Capabilities
 // ==============================================================================
 
 const API_BASE = window.location.origin;
@@ -20,7 +22,7 @@ const OPERATING_ANCHOR_YEAR = 2026;
 const OPERATING_ANCHOR_MONTH_INDEX = 7; // 7 = Agustus (0-indexed)
 const OPERATING_ANCHOR_DAY = 22;
 
-// Embedded Initial Data Store for Instant Performance & Cloud/Vercel Resilience
+// Embedded Initial Data Store for Instant Performance & Offline Resilience
 const EMBEDDED_ADMIN_DATA = {
   incomes: [{"income_id":"8c096362-a77b-4689-8d1e-36d6c16a3d70","user_id":"usr_admin_zidanmuzaki13","period_month":"Januari","period_year":2026,"source_name":"BCA","amount":2350000},{"income_id":"2624bba6-4e0f-4602-9f20-7b510f0a43e9","user_id":"usr_admin_zidanmuzaki13","period_month":"Januari","period_year":2026,"source_name":"Saham","amount":830000},{"income_id":"1cfc584d-1903-418f-b484-e4d8758b5f17","user_id":"usr_admin_zidanmuzaki13","period_month":"Januari","period_year":2026,"source_name":"BPJS TK","amount":4350000},{"income_id":"bfb58b1c-1faa-40a5-92a1-6ac69a23c99a","user_id":"usr_admin_zidanmuzaki13","period_month":"Februari","period_year":2026,"source_name":"BCA","amount":2350000},{"income_id":"2c0212f1-a04b-49fa-90bf-9a6397435bb2","user_id":"usr_admin_zidanmuzaki13","period_month":"Februari","period_year":2026,"source_name":"Saham","amount":830000},{"income_id":"45a7f7b5-454a-4288-a0cf-f5fd8b5b4bc2","user_id":"usr_admin_zidanmuzaki13","period_month":"Februari","period_year":2026,"source_name":"BPJS TK","amount":4350000},{"income_id":"2764fb5d-8391-4e86-a229-48a326e9b043","user_id":"usr_admin_zidanmuzaki13","period_month":"Maret","period_year":2026,"source_name":"Gaji","amount":4400000},{"income_id":"12543a5c-607e-47eb-8997-8def965648eb","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"source_name":"Gaji","amount":6000000},{"income_id":"90fef87d-0a2a-4b8d-9af9-f6871a7137f0","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"source_name":"Piutang","amount":500000},{"income_id":"4bef9148-900c-42be-8fbc-751dd3491a85","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"source_name":"Sisa Maret","amount":500000},{"income_id":"63f18c4d-6eca-482a-9c61-83910bc10158","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"source_name":"Lynk.id","amount":590000},{"income_id":"200a3b23-330b-4292-b6fb-241223c10578","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"source_name":"PP - MySkill","amount":130000},{"income_id":"28dd1f37-1bd0-477f-83a7-a717186cdc18","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"source_name":"Ambil Dana Darurat","amount":900000},{"income_id":"d64d4fb8-742a-4b4b-a5a2-b5b767176f86","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"source_name":"Jual sepeda","amount":900000},{"income_id":"83334c39-9e55-4863-88cf-00274b893f54","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"source_name":"Gaji","amount":6000000},{"income_id":"16a9a2f7-e83e-44cc-85f2-0c5c44d23c2b","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"source_name":"Untung WBSA","amount":350000},{"income_id":"32646be2-f8ab-40eb-9b42-4aabaecae3e9","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"source_name":"Lynk.id","amount":375000},{"income_id":"c8f4b6d1-82ac-499c-b186-d50494834920","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"source_name":"PP - Kita Lulus","amount":300000},{"income_id":"a3e5346c-d7d7-498f-8c6a-32f030479db1","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"source_name":"PP- Cocareer","amount":220000},{"income_id":"8cfbf50b-a9b0-42ad-863f-6135fc388c55","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"source_name":"Reimburse","amount":560000},{"income_id":"3f874690-ef56-47c9-91e8-d2270ae9fd6d","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"source_name":"Sisa bulan April","amount":380000},{"income_id":"a1f1fd68-ede5-4b0e-bb2f-69ca0b2a3d24","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"source_name":"PP - Parfum","amount":275000},{"income_id":"8b9f6f6a-e4fc-443a-b8fb-882c18ee0463","user_id":"usr_admin_zidanmuzaki13","period_month":"Juni","period_year":2026,"source_name":"Gaji","amount":6000000},{"income_id":"1e524670-d07f-491e-ae18-68d53bd40624","user_id":"usr_admin_zidanmuzaki13","period_month":"Juni","period_year":2026,"source_name":"PP - Tempat Belajar","amount":350000},{"income_id":"71a4022e-57d5-45a2-8a1b-b3e5116f9c6a","user_id":"usr_admin_zidanmuzaki13","period_month":"Juni","period_year":2026,"source_name":"PP - Barber Daily","amount":300000},{"income_id":"fc7387a3-4c16-4c89-8fda-4688d8913eb8","user_id":"usr_admin_zidanmuzaki13","period_month":"Juni","period_year":2026,"source_name":"Abah","amount":500000},{"income_id":"5e549e83-6006-4e2b-b99b-e977090c8ca4","user_id":"usr_admin_zidanmuzaki13","period_month":"Juli","period_year":2026,"source_name":"Gaji","amount":12500000},{"income_id":"fffe0290-9b8c-4ef4-912d-c54c5f8db425","user_id":"usr_admin_zidanmuzaki13","period_month":"Juli","period_year":2026,"source_name":"PP - Wanda","amount":300000},{"income_id":"016c63b4-3e24-4ae3-a8c4-7271a06e5ffb","user_id":"usr_admin_zidanmuzaki13","period_month":"Juli","period_year":2026,"source_name":"Lynk.id","amount":300000},{"income_id":"6b63b794-56de-4fc3-9650-9f4996d6c543","user_id":"usr_admin_zidanmuzaki13","period_month":"Juli","period_year":2026,"source_name":"Sisa bulan lalu","amount":350000},{"income_id":"c88e95b7-fed6-4bb6-afcb-1ba0b1e2cced","user_id":"usr_admin_zidanmuzaki13","period_month":"Agustus","period_year":2026,"source_name":"Gaji","amount":12500000},{"income_id":"cd823470-be5c-432f-bb81-824a33cda139","user_id":"usr_admin_zidanmuzaki13","period_month":"Agustus","period_year":2026,"source_name":"Jual Smartwatch","amount":322000},{"income_id":"1fd1c29a-150b-4d20-839e-a9a940d1c4d6","user_id":"usr_admin_zidanmuzaki13","period_month":"Agustus","period_year":2026,"source_name":"Sisa Bulan Juli","amount":300000},{"income_id":"9deb37b3-84b8-48a9-a9b7-418205e6e53f","user_id":"usr_admin_zidanmuzaki13","period_month":"Agustus","period_year":2026,"source_name":"Jual MyPertamina","amount":120000},{"income_id":"e50f94de-d6af-45d0-9f18-dd770c0c4293","user_id":"usr_admin_zidanmuzaki13","period_month":"Agustus","period_year":2026,"source_name":"Jual Proyektor","amount":320000}],
   budgets: [{"budget_id":"67af5a6e-3fe1-4eb8-95c1-7fdfcd9addd4","user_id":"usr_admin_zidanmuzaki13","period_month":"Januari","period_year":2026,"category_type":"Dasar","item_name":"Makan","nominal_satuan":50000,"frekuensi":"Harian","multiplier":8,"target_anggaran":400000,"realisasi_used":0,"timing_pattern":"Rata-rata Harian (Flat)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"4bb12f92-5fdb-49a9-9f99-3a0a54b03dbe","user_id":"usr_admin_zidanmuzaki13","period_month":"Januari","period_year":2026,"category_type":"Dasar","item_name":"Transportasi","nominal_satuan":40000,"frekuensi":"Mingguan","multiplier":2,"target_anggaran":80000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Senin \u0026 Kamis)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"d37b8700-52fc-4c12-a343-07f44a6f8078","user_id":"usr_admin_zidanmuzaki13","period_month":"Januari","period_year":2026,"category_type":"Dasar","item_name":"Air Minum","nominal_satuan":10000,"frekuensi":"Mingguan","multiplier":2,"target_anggaran":20000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Senin \u0026 Kamis)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"b58f8804-75a0-4ae4-8248-058a9446a1e2","user_id":"usr_admin_zidanmuzaki13","period_month":"Januari","period_year":2026,"category_type":"Dasar","item_name":"Paket data","nominal_satuan":75000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":75000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 10)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"7346f85a-38ef-4ea0-92e8-46ae37a82c96","user_id":"usr_admin_zidanmuzaki13","period_month":"Januari","period_year":2026,"category_type":"Pribadi","item_name":"Perawatan diri","nominal_satuan":250000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":250000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"8b4ee81b-4dc2-44d1-9a5b-ef312863fb64","user_id":"usr_admin_zidanmuzaki13","period_month":"Januari","period_year":2026,"category_type":"Pribadi","item_name":"Potong rambut","nominal_satuan":35000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":35000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"b3608a40-69c7-4916-b489-43b504a1dfd3","user_id":"usr_admin_zidanmuzaki13","period_month":"Januari","period_year":2026,"category_type":"Dasar","item_name":"Sewa Kos","nominal_satuan":1500000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":1500000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 5)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"dfb2c6d9-11bb-47f7-ab6d-86f7eff49378","user_id":"usr_admin_zidanmuzaki13","period_month":"Januari","period_year":2026,"category_type":"Hiburan","item_name":"Jajan dan Lainnya","nominal_satuan":150000,"frekuensi":"Mingguan","multiplier":2,"target_anggaran":300000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Weekend)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"440b1a64-80af-4b2d-be40-61ab6d3b3230","user_id":"usr_admin_zidanmuzaki13","period_month":"Januari","period_year":2026,"category_type":"Dasar","item_name":"Dana Cadangan","nominal_satuan":400000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":400000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"8b8425cb-d4a9-4254-833a-cae3a1e9b170","user_id":"usr_admin_zidanmuzaki13","period_month":"Januari","period_year":2026,"category_type":"Dasar","item_name":"Paylater","nominal_satuan":270000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":270000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"da9b2d3e-2127-4f53-99c5-d2c33c6d5ae6","user_id":"usr_admin_zidanmuzaki13","period_month":"Januari","period_year":2026,"category_type":"Insidental","item_name":"Persiapan OJT","nominal_satuan":1000000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":1000000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"3f6e1565-711e-4b87-9a7b-8240a53cfe57","user_id":"usr_admin_zidanmuzaki13","period_month":"Januari","period_year":2026,"category_type":"Alokasi Surplus","item_name":"Invest","nominal_satuan":3200000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":3200000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":"goal-dana-darurat","notes":"Diimpor dari sheet 2026"},{"budget_id":"4ab9e743-83f7-4ca4-a29d-b17fc9bfcb27","user_id":"usr_admin_zidanmuzaki13","period_month":"Februari","period_year":2026,"category_type":"Dasar","item_name":"Makan","nominal_satuan":50000,"frekuensi":"Harian","multiplier":8,"target_anggaran":400000,"realisasi_used":0,"timing_pattern":"Rata-rata Harian (Flat)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"66150e41-41d3-430a-baaf-36e17e0e92b0","user_id":"usr_admin_zidanmuzaki13","period_month":"Februari","period_year":2026,"category_type":"Dasar","item_name":"Transportasi","nominal_satuan":40000,"frekuensi":"Mingguan","multiplier":2,"target_anggaran":80000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Senin \u0026 Kamis)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"606d21c9-3b5a-4ef2-92a4-5ce9b7e5c727","user_id":"usr_admin_zidanmuzaki13","period_month":"Februari","period_year":2026,"category_type":"Dasar","item_name":"Air Minum","nominal_satuan":10000,"frekuensi":"Mingguan","multiplier":2,"target_anggaran":20000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Senin \u0026 Kamis)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"7fe218b2-6dc6-403f-9d1d-a0d7611a4cd7","user_id":"usr_admin_zidanmuzaki13","period_month":"Februari","period_year":2026,"category_type":"Dasar","item_name":"Paket data","nominal_satuan":75000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":75000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 10)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"7d33eca7-c153-4939-b3d8-1721bc15713a","user_id":"usr_admin_zidanmuzaki13","period_month":"Februari","period_year":2026,"category_type":"Pribadi","item_name":"Perawatan diri","nominal_satuan":250000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":250000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"029039bc-40a2-4d81-9dd8-b6fa76c0c34a","user_id":"usr_admin_zidanmuzaki13","period_month":"Februari","period_year":2026,"category_type":"Pribadi","item_name":"Potong rambut","nominal_satuan":35000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":35000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"7186b4da-d717-466c-9a86-5cf1a73337d0","user_id":"usr_admin_zidanmuzaki13","period_month":"Februari","period_year":2026,"category_type":"Dasar","item_name":"Sewa Kos","nominal_satuan":1500000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":1500000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 5)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"09a8c25f-b87a-46f0-8c80-b18175b3143c","user_id":"usr_admin_zidanmuzaki13","period_month":"Februari","period_year":2026,"category_type":"Hiburan","item_name":"Jajan dan Lainnya","nominal_satuan":150000,"frekuensi":"Mingguan","multiplier":2,"target_anggaran":300000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Weekend)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"4419543a-6a96-4126-aafa-b8156dc6a2be","user_id":"usr_admin_zidanmuzaki13","period_month":"Februari","period_year":2026,"category_type":"Dasar","item_name":"Dana Cadangan","nominal_satuan":400000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":400000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"d1772225-f3fe-44eb-a0b6-d8f95ed1f033","user_id":"usr_admin_zidanmuzaki13","period_month":"Februari","period_year":2026,"category_type":"Dasar","item_name":"Paylater","nominal_satuan":270000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":270000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"bcd43408-0eba-4262-8596-4351aabf0e5b","user_id":"usr_admin_zidanmuzaki13","period_month":"Februari","period_year":2026,"category_type":"Insidental","item_name":"Persiapan OJT","nominal_satuan":1000000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":1000000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"599148f5-1ad8-4306-8cff-8ca6e96a746e","user_id":"usr_admin_zidanmuzaki13","period_month":"Februari","period_year":2026,"category_type":"Alokasi Surplus","item_name":"Invest","nominal_satuan":3200000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":3200000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":"goal-dana-darurat","notes":"Diimpor dari sheet 2026"},{"budget_id":"952a9379-8e18-4be9-bc54-0c9a40def6bb","user_id":"usr_admin_zidanmuzaki13","period_month":"Maret","period_year":2026,"category_type":"Dasar","item_name":"Makan","nominal_satuan":50000,"frekuensi":"Harian","multiplier":31,"target_anggaran":1550000,"realisasi_used":0,"timing_pattern":"Rata-rata Harian (Flat)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"e187c8cb-22cb-4e1a-afd0-f66ade00d5f6","user_id":"usr_admin_zidanmuzaki13","period_month":"Maret","period_year":2026,"category_type":"Dasar","item_name":"Transportasi","nominal_satuan":35000,"frekuensi":"Mingguan","multiplier":4,"target_anggaran":140000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Senin \u0026 Kamis)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"ebf4d924-db4a-43a4-a184-68b26c1a7dfc","user_id":"usr_admin_zidanmuzaki13","period_month":"Maret","period_year":2026,"category_type":"Dasar","item_name":"Air Minum","nominal_satuan":10000,"frekuensi":"Mingguan","multiplier":4,"target_anggaran":40000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Senin \u0026 Kamis)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"dbb75461-41a4-49eb-8a3c-b2412bc7bba9","user_id":"usr_admin_zidanmuzaki13","period_month":"Maret","period_year":2026,"category_type":"Dasar","item_name":"Paket data","nominal_satuan":75000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":75000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 10)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"449fea21-ed5d-410f-b8af-06c44b23dfa6","user_id":"usr_admin_zidanmuzaki13","period_month":"Maret","period_year":2026,"category_type":"Pribadi","item_name":"Perawatan diri","nominal_satuan":200000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":200000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"2f4f4dfe-69fb-457f-a7a3-45a41ff5380d","user_id":"usr_admin_zidanmuzaki13","period_month":"Maret","period_year":2026,"category_type":"Pribadi","item_name":"Potong rambut","nominal_satuan":40000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":40000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"9b1b113b-eacb-40ec-b884-a1662edb6a7f","user_id":"usr_admin_zidanmuzaki13","period_month":"Maret","period_year":2026,"category_type":"Dasar","item_name":"Sewa Kos","nominal_satuan":1175000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":1175000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 5)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"c8bc392a-1439-422b-918b-2bed9d308603","user_id":"usr_admin_zidanmuzaki13","period_month":"Maret","period_year":2026,"category_type":"Hiburan","item_name":"Jajan dan Lainnya","nominal_satuan":75000,"frekuensi":"Mingguan","multiplier":4,"target_anggaran":300000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Weekend)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"1f30e796-6be8-483f-8bc0-9360e26febe7","user_id":"usr_admin_zidanmuzaki13","period_month":"Maret","period_year":2026,"category_type":"Dasar","item_name":"Dana Cadangan","nominal_satuan":300000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":300000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"0a3bff5f-7783-4e1d-abf8-51f703ab26e5","user_id":"usr_admin_zidanmuzaki13","period_month":"Maret","period_year":2026,"category_type":"Dasar","item_name":"Paketin ke Jakarta","nominal_satuan":80000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":80000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"fcd68ae5-7b83-4dd4-ac17-a3c5a6ee4e4c","user_id":"usr_admin_zidanmuzaki13","period_month":"Maret","period_year":2026,"category_type":"Alokasi Surplus","item_name":"Invest","nominal_satuan":500000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":500000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":"goal-dana-darurat","notes":"Diimpor dari sheet 2026"},{"budget_id":"e4e2423e-8436-4dfc-a7a0-585bf3f0ba6d","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"category_type":"Dasar","item_name":"Makan","nominal_satuan":50000,"frekuensi":"Harian","multiplier":30,"target_anggaran":1500000,"realisasi_used":0,"timing_pattern":"Rata-rata Harian (Flat)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"d6a18251-ee17-462b-bbcc-db59cd354031","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"category_type":"Dasar","item_name":"Transportasi","nominal_satuan":35000,"frekuensi":"Mingguan","multiplier":4,"target_anggaran":140000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Senin \u0026 Kamis)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"e2570e62-eb4e-465c-801c-360c33184b75","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"category_type":"Dasar","item_name":"Air Minum","nominal_satuan":10000,"frekuensi":"Mingguan","multiplier":4,"target_anggaran":40000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Senin \u0026 Kamis)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"0f5c70b8-7b77-4244-89e3-6c77a0ba131f","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"category_type":"Dasar","item_name":"Paket data","nominal_satuan":75000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":75000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 10)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"5fee46a1-22af-44ab-87ab-6dfd05a9d269","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"category_type":"Pribadi","item_name":"Perawatan diri","nominal_satuan":200000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":200000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"be6fa705-57b8-42ee-b2db-621121e65d85","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"category_type":"Pribadi","item_name":"Potong rambut","nominal_satuan":40000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":40000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"304c9ac6-fe18-41d4-ab48-822449418eba","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"category_type":"Dasar","item_name":"Sewa Kos","nominal_satuan":1600000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":1600000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 5)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"ea48dab7-ebcb-4bd9-8f9c-20331e3a7216","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"category_type":"Hiburan","item_name":"Jajan dan Lainnya","nominal_satuan":75000,"frekuensi":"Mingguan","multiplier":4,"target_anggaran":300000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Weekend)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"048783b4-cb28-4fde-a9fb-a28473416c7d","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"category_type":"Dasar","item_name":"Dana Cadangan","nominal_satuan":300000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":300000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"a99da754-fe4a-4a00-96bb-ed89b8ec04e8","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"category_type":"Insidental","item_name":"Hadiah sidang","nominal_satuan":325000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":325000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"a15b2333-c499-4e9b-86e6-18dd955e0af8","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"category_type":"Insidental","item_name":"Beli panci listrik","nominal_satuan":150000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":150000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 10)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"1d3b3194-bf66-4f11-8f9c-cd6108aa4629","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"category_type":"Dasar","item_name":"Jalan jalan Jakarta","nominal_satuan":620000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":620000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"27fbfb73-b87d-463b-8a26-81dd0c99876f","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"category_type":"Insidental","item_name":"Beli sepeda","nominal_satuan":3850000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":3850000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"2af880fb-6a43-40f9-83bb-11921c0955c3","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"category_type":"Insidental","item_name":"Pindah bulan depan","nominal_satuan":380000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":380000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"143c81cc-c9ca-4f76-8d1a-dcd00b254f00","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"category_type":"Dasar","item_name":"Makan","nominal_satuan":50000,"frekuensi":"Harian","multiplier":16,"target_anggaran":800000,"realisasi_used":0,"timing_pattern":"Rata-rata Harian (Flat)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"e849bb87-6966-40f7-bdfd-36f89ccd8674","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"category_type":"Dasar","item_name":"Transportasi","nominal_satuan":60000,"frekuensi":"Mingguan","multiplier":2,"target_anggaran":120000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Senin \u0026 Kamis)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"2576cfc1-a540-4dd4-9110-f06a64d492cc","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"category_type":"Dasar","item_name":"Air Minum","nominal_satuan":20000,"frekuensi":"Mingguan","multiplier":1,"target_anggaran":20000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Senin \u0026 Kamis)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"8a93f9ee-208c-4f25-a781-3b34d2a7860f","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"category_type":"Dasar","item_name":"Paket data","nominal_satuan":75000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":75000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 10)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"904cd941-f9ef-4592-b923-b759d7038ddd","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"category_type":"Pribadi","item_name":"Perawatan diri","nominal_satuan":200000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":200000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"82fad313-bd89-4eca-a8e8-2b0f20adba8e","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"category_type":"Pribadi","item_name":"Potong rambut","nominal_satuan":40000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":40000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"005454d0-be4d-4cb6-afa5-5a0e98ffe897","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"category_type":"Dasar","item_name":"Sewa Kos","nominal_satuan":1600000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":1600000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 5)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"9273c490-bc53-4c4b-9f03-1f1f8a24bd77","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"category_type":"Hiburan","item_name":"Jajan dan Lainnya","nominal_satuan":75000,"frekuensi":"Mingguan","multiplier":3,"target_anggaran":225000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Weekend)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"2b74ac3d-61c1-4cfc-8de1-1117a67c12de","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"category_type":"Dasar","item_name":"Dana Cadangan","nominal_satuan":730000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":730000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"a9184aa1-6562-4f14-a2dd-c9fe50d07747","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"category_type":"Dasar","item_name":"Maketin barang ke Tegal","nominal_satuan":80000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":80000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"a1a78ee5-01ea-475c-b51c-7814299b6ba1","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"category_type":"Dasar","item_name":"Ngecilin Baju","nominal_satuan":150000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":150000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"c5819a06-c084-4179-9c5f-82961f1db2cb","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"category_type":"Dasar","item_name":"Selama di Hotel","nominal_satuan":250000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":250000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"d0b0f385-0927-4702-9348-ffdf849f5f56","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"category_type":"Dasar","item_name":"Selama di Tegal","nominal_satuan":300000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":300000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"99513db4-d99c-43a1-a5d1-37fa25305524","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"category_type":"Dasar","item_name":"PP Jogja Tegal","nominal_satuan":700000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":700000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"08471783-9e18-440a-97e6-bc1197657553","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"category_type":"Alokasi Surplus","item_name":"Invest","nominal_satuan":2500000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":2500000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":"goal-dana-darurat","notes":"Diimpor dari sheet 2026"},{"budget_id":"3bb58573-c6d6-4a53-a975-98f3659a063d","user_id":"usr_admin_zidanmuzaki13","period_month":"Juni","period_year":2026,"category_type":"Dasar","item_name":"Makan","nominal_satuan":50000,"frekuensi":"Harian","multiplier":30,"target_anggaran":1500000,"realisasi_used":0,"timing_pattern":"Rata-rata Harian (Flat)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"98767598-4bcc-4ecd-9951-69c937daab48","user_id":"usr_admin_zidanmuzaki13","period_month":"Juni","period_year":2026,"category_type":"Dasar","item_name":"Transportasi","nominal_satuan":50000,"frekuensi":"Mingguan","multiplier":4,"target_anggaran":200000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Senin \u0026 Kamis)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"ef5f7d09-03d9-445d-88f6-9f4c265f099b","user_id":"usr_admin_zidanmuzaki13","period_month":"Juni","period_year":2026,"category_type":"Dasar","item_name":"Air Minum","nominal_satuan":20000,"frekuensi":"Mingguan","multiplier":3,"target_anggaran":60000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Senin \u0026 Kamis)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"528882dd-a590-452d-b8aa-b512742c2b64","user_id":"usr_admin_zidanmuzaki13","period_month":"Juni","period_year":2026,"category_type":"Dasar","item_name":"Paket data","nominal_satuan":75000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":75000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 10)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"d4fc6d78-2304-459c-80c1-bc8f54f55658","user_id":"usr_admin_zidanmuzaki13","period_month":"Juni","period_year":2026,"category_type":"Pribadi","item_name":"Perawatan diri","nominal_satuan":200000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":200000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"6353ec78-80e5-4432-a289-cf67a62591b5","user_id":"usr_admin_zidanmuzaki13","period_month":"Juni","period_year":2026,"category_type":"Pribadi","item_name":"Potong rambut","nominal_satuan":40000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":40000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"699f1396-f770-4b9f-9478-bc9358a67b3a","user_id":"usr_admin_zidanmuzaki13","period_month":"Juni","period_year":2026,"category_type":"Dasar","item_name":"Sewa Kos","nominal_satuan":1600000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":1600000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 5)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"a7ed5e9f-2d7e-4a13-a255-4ee5c5395ae8","user_id":"usr_admin_zidanmuzaki13","period_month":"Juni","period_year":2026,"category_type":"Hiburan","item_name":"Jajan dan Lainnya","nominal_satuan":75000,"frekuensi":"Mingguan","multiplier":4,"target_anggaran":300000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Weekend)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"3ded7598-e9a6-4e6b-99ff-7bb7f39275d5","user_id":"usr_admin_zidanmuzaki13","period_month":"Juni","period_year":2026,"category_type":"Dasar","item_name":"Dana Cadangan","nominal_satuan":200000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":200000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"bc3dd387-08df-48d7-8c96-9e475f1f1a08","user_id":"usr_admin_zidanmuzaki13","period_month":"Juni","period_year":2026,"category_type":"Dasar","item_name":"Paylater","nominal_satuan":300000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":300000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"ea45a3fe-c90b-4cf2-983a-931bad914a10","user_id":"usr_admin_zidanmuzaki13","period_month":"Juni","period_year":2026,"category_type":"Dasar","item_name":"Casing + TG + Jersey Sepeda","nominal_satuan":550000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":550000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"c71b799c-125d-4668-b481-d06a425a5ddc","user_id":"usr_admin_zidanmuzaki13","period_month":"Juni","period_year":2026,"category_type":"Insidental","item_name":"Beli HP Zakiya","nominal_satuan":2125000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":2125000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"e75e9303-6750-4488-a986-061a60598487","user_id":"usr_admin_zidanmuzaki13","period_month":"Juli","period_year":2026,"category_type":"Dasar","item_name":"Makan","nominal_satuan":50000,"frekuensi":"Harian","multiplier":30,"target_anggaran":1500000,"realisasi_used":0,"timing_pattern":"Rata-rata Harian (Flat)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"47947098-ad53-40b7-9f1a-7c36baa6d395","user_id":"usr_admin_zidanmuzaki13","period_month":"Juli","period_year":2026,"category_type":"Dasar","item_name":"Transportasi","nominal_satuan":40000,"frekuensi":"Mingguan","multiplier":4,"target_anggaran":160000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Senin \u0026 Kamis)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"5ca43fd5-5f33-44ab-a21a-5a35ab42aab4","user_id":"usr_admin_zidanmuzaki13","period_month":"Juli","period_year":2026,"category_type":"Dasar","item_name":"Air Minum","nominal_satuan":20000,"frekuensi":"Mingguan","multiplier":3,"target_anggaran":60000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Senin \u0026 Kamis)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"71098e76-7bc1-4839-9c05-5def4959a02a","user_id":"usr_admin_zidanmuzaki13","period_month":"Juli","period_year":2026,"category_type":"Dasar","item_name":"Paket data","nominal_satuan":80000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":80000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 10)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"ae301344-c51e-4d74-8021-7b6d8901ebfd","user_id":"usr_admin_zidanmuzaki13","period_month":"Juli","period_year":2026,"category_type":"Pribadi","item_name":"Perawatan diri","nominal_satuan":200000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":200000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"36136dd3-5bd6-44c7-bd56-fea9d84873fe","user_id":"usr_admin_zidanmuzaki13","period_month":"Juli","period_year":2026,"category_type":"Pribadi","item_name":"Potong rambut","nominal_satuan":50000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":50000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"2bce0c8e-6086-497f-bf0d-a010f3d9b595","user_id":"usr_admin_zidanmuzaki13","period_month":"Juli","period_year":2026,"category_type":"Dasar","item_name":"Sewa Kos","nominal_satuan":1600000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":1600000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 5)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"1201b345-af5c-412c-b654-3f7b96c535f4","user_id":"usr_admin_zidanmuzaki13","period_month":"Juli","period_year":2026,"category_type":"Hiburan","item_name":"Jajan dan Lainnya","nominal_satuan":75000,"frekuensi":"Mingguan","multiplier":4,"target_anggaran":300000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Weekend)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"1a5cc21d-4ed8-4af1-ad82-38578be4d310","user_id":"usr_admin_zidanmuzaki13","period_month":"Juli","period_year":2026,"category_type":"Dasar","item_name":"Dana Cadangan","nominal_satuan":200000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":200000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"916b1aae-0ae4-4ac6-b772-18fba144ec02","user_id":"usr_admin_zidanmuzaki13","period_month":"Juli","period_year":2026,"category_type":"Insidental","item_name":"Ortu","nominal_satuan":1000000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":1000000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"bd0fb21f-df3d-482c-8285-0ee0ea13672c","user_id":"usr_admin_zidanmuzaki13","period_month":"Juli","period_year":2026,"category_type":"Insidental","item_name":"Zidni","nominal_satuan":500000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":500000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"c44dc3bc-5482-4672-9163-51ab60fbb7d5","user_id":"usr_admin_zidanmuzaki13","period_month":"Juli","period_year":2026,"category_type":"Dasar","item_name":"Paylater","nominal_satuan":2610000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":2610000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"9c68caa5-fd3e-4616-857f-7f15e442569c","user_id":"usr_admin_zidanmuzaki13","period_month":"Juli","period_year":2026,"category_type":"Insidental","item_name":"UKT Zidni","nominal_satuan":750000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":750000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"76694a4b-8977-4f86-ab6b-301b2804a2b5","user_id":"usr_admin_zidanmuzaki13","period_month":"Juli","period_year":2026,"category_type":"Alokasi Surplus","item_name":"Invest","nominal_satuan":4440000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":4440000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":"goal-dana-darurat","notes":"Diimpor dari sheet 2026"}],
@@ -74,7 +76,7 @@ const I18N = {
     statusOverbudget: 'OVERBUDGET',
     statusHemat: 'HEMAT',
     notesHeader: 'Catatan & Justifikasi Kas',
-    notesAutoSaved: 'Tersimpan Otomatis',
+    notesAutoSaved: 'Tersimpan ke Server',
     notesPlaceholder: 'Tulis alasan jika overbudget atau catatan kas mendesak bulan ini...',
     flowTitle: 'Alur Perhitungan Saldo Ideal',
     flowBadge: 'Formula Ringkas',
@@ -193,7 +195,7 @@ const I18N = {
     statusOverbudget: 'OVERBUDGET',
     statusHemat: 'ON-TRACK',
     notesHeader: 'Cash & Overbudget Notes',
-    notesAutoSaved: 'Auto-Saved',
+    notesAutoSaved: 'Synced to Server',
     notesPlaceholder: 'Write reasons for overbudget or urgent expenses this month...',
     flowTitle: 'Cashflow Projection Formula',
     flowBadge: 'Summary Formula',
@@ -561,30 +563,93 @@ function saveUserDataToStorage() {
   } catch (e) {}
 }
 
-function loadCashAccountsFromStorage() {
+// -----------------------------------------------------------------------------
+// CLOUD MULTI-DEVICE DATA SYNC (CASH ACCOUNTS & NOTES)
+// -----------------------------------------------------------------------------
+async function fetchCashAccountsCloud() {
   if (!currentUser) return;
   try {
-    const saved = localStorage.getItem(getUserStorageKey('cash_accounts'));
-    if (saved) {
-      appState.cashAccounts = JSON.parse(saved);
-      const bankInput = document.getElementById('cash-bank-input');
-      const walletInput = document.getElementById('cash-wallet-input');
-      const emoneyInput = document.getElementById('cash-emoney-input');
-      const otherInput = document.getElementById('cash-other-input');
-      if (bankInput) bankInput.value = appState.cashAccounts.bank || '';
-      if (walletInput) walletInput.value = appState.cashAccounts.wallet || '';
-      if (emoneyInput) emoneyInput.value = appState.cashAccounts.emoney || '';
-      if (otherInput) otherInput.value = appState.cashAccounts.other || '';
-    }
-
-    const notesEl = document.getElementById('cash-reality-notes');
-    const badgeNotes = document.getElementById('cash-notes-period-badge');
-    if (badgeNotes) badgeNotes.textContent = getMonthDisplayName(appState.currentMonth) + ' ' + appState.currentYear;
-    if (notesEl) {
-      const savedNotes = localStorage.getItem(getUserStorageKey('notes_' + appState.currentMonth + '_' + appState.currentYear)) || '';
-      notesEl.value = savedNotes;
+    const res = await authFetch('/cash-accounts');
+    if (res && res.ok) {
+      const data = await res.json();
+      if (data.status === 'SUCCESS' && data.cash_accounts) {
+        appState.cashAccounts = {
+          bank: Number(data.cash_accounts.bank) || 0,
+          wallet: Number(data.cash_accounts.wallet) || 0,
+          emoney: Number(data.cash_accounts.emoney) || 0,
+          other: Number(data.cash_accounts.other) || 0
+        };
+      }
     }
   } catch (e) {}
+
+  const bankInput = document.getElementById('cash-bank-input');
+  const walletInput = document.getElementById('cash-wallet-input');
+  const emoneyInput = document.getElementById('cash-emoney-input');
+  const otherInput = document.getElementById('cash-other-input');
+
+  if (bankInput) bankInput.value = appState.cashAccounts.bank || '';
+  if (walletInput) walletInput.value = appState.cashAccounts.wallet || '';
+  if (emoneyInput) emoneyInput.value = appState.cashAccounts.emoney || '';
+  if (otherInput) otherInput.value = appState.cashAccounts.other || '';
+
+  renderCashReality();
+}
+
+let cashSyncDebounceTimer = null;
+function syncCashAccountsToServer() {
+  if (!currentUser) return;
+  clearTimeout(cashSyncDebounceTimer);
+  cashSyncDebounceTimer = setTimeout(() => {
+    authFetch('/cash-accounts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(appState.cashAccounts)
+    }).catch(() => {});
+  }, 400);
+}
+
+async function fetchMonthNotesCloud() {
+  if (!currentUser) return;
+  const notesEl = document.getElementById('cash-reality-notes');
+  const badgeNotes = document.getElementById('cash-notes-period-badge');
+  if (badgeNotes) badgeNotes.textContent = getMonthDisplayName(appState.currentMonth) + ' ' + appState.currentYear;
+
+  try {
+    const res = await authFetch('/month-notes?period_month=' + encodeURIComponent(appState.currentMonth) + '&period_year=' + encodeURIComponent(appState.currentYear));
+    if (res && res.ok) {
+      const data = await res.json();
+      if (data.status === 'SUCCESS' && data.notes !== undefined) {
+        if (notesEl) notesEl.value = data.notes;
+        return;
+      }
+    }
+  } catch (e) {}
+
+  if (notesEl) {
+    const savedNotes = localStorage.getItem(getUserStorageKey('notes_' + appState.currentMonth + '_' + appState.currentYear)) || '';
+    notesEl.value = savedNotes;
+  }
+}
+
+let notesSyncDebounceTimer = null;
+function syncMonthNotesToServer() {
+  if (!currentUser) return;
+  const notesEl = document.getElementById('cash-reality-notes');
+  if (!notesEl) return;
+
+  clearTimeout(notesSyncDebounceTimer);
+  notesSyncDebounceTimer = setTimeout(() => {
+    authFetch('/month-notes', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        period_month: appState.currentMonth,
+        period_year: appState.currentYear,
+        notes: notesEl.value
+      })
+    }).catch(() => {});
+  }, 500);
 }
 
 // -----------------------------------------------------------------------------
@@ -644,6 +709,12 @@ function autoSyncSurplusBudget() {
     if (!surplusBudget.linked_goal_id && appState.financialGoals.length > 0) {
       surplusBudget.linked_goal_id = appState.financialGoals[0].goal_id;
     }
+
+    authFetch('/budgets?budget_id=' + surplusBudget.budget_id, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(surplusBudget)
+    }).catch(() => {});
   } else {
     surplusBudget = {
       budget_id: 'bgt_surplus_' + appState.currentMonth + '_' + appState.currentYear,
@@ -663,14 +734,12 @@ function autoSyncSurplusBudget() {
       linked_goal_id: appState.financialGoals.length > 0 ? appState.financialGoals[0].goal_id : null
     };
     appState.budgets.push(surplusBudget);
-  }
 
-  if (currentUser.user_id === 'usr_admin_zidanmuzaki13') {
-    const embeddedMatch = EMBEDDED_ADMIN_DATA.budgets.find(b => b.category_type === 'Alokasi Surplus' && b.period_month.toLowerCase() === appState.currentMonth.toLowerCase() && Number(b.period_year) === Number(appState.currentYear));
-    if (embeddedMatch) {
-      embeddedMatch.nominal_satuan = calculatedSurplus;
-      embeddedMatch.target_anggaran = calculatedSurplus;
-    }
+    authFetch('/budgets', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(surplusBudget)
+    }).catch(() => {});
   }
 
   saveUserDataToStorage();
@@ -862,9 +931,9 @@ function generateAiAnalytics() {
 
     if (diagEl) {
       diagEl.innerHTML = 
-        '<div style="margin-bottom: 4px;">&bull; Basic: ' + formatIDR(catSpend.Dasar) + ' | Fun/Personal: ' + formatIDR(catSpend.Pribadi + catSpend.Hiburan) + ' | Surplus: ' + formatIDR(catSpend['Alokasi Surplus']) + '</div>' +
-        '<div style="margin-bottom: 4px;">&bull; ' + overText + '</div>' +
-        '<div>&bull; ' + adviceText + '</div>';
+        '<div style="margin-bottom: 4px;">- Basic: ' + formatIDR(catSpend.Dasar) + ' | Fun/Personal: ' + formatIDR(catSpend.Pribadi + catSpend.Hiburan) + ' | Surplus: ' + formatIDR(catSpend['Alokasi Surplus']) + '</div>' +
+        '<div style="margin-bottom: 4px;">- ' + overText + '</div>' +
+        '<div>- ' + adviceText + '</div>';
     }
   } else {
     overText = overBudgets.length > 0 
@@ -877,9 +946,9 @@ function generateAiAnalytics() {
 
     if (diagEl) {
       diagEl.innerHTML = 
-        '<div style="margin-bottom: 4px;">&bull; Pokok: ' + formatIDR(catSpend.Dasar) + ' | Pribadi/Hiburan: ' + formatIDR(catSpend.Pribadi + catSpend.Hiburan) + ' | Surplus: ' + formatIDR(catSpend['Alokasi Surplus']) + '</div>' +
-        '<div style="margin-bottom: 4px;">&bull; ' + overText + '</div>' +
-        '<div>&bull; ' + adviceText + '</div>';
+        '<div style="margin-bottom: 4px;">- Pokok: ' + formatIDR(catSpend.Dasar) + ' | Pribadi/Hiburan: ' + formatIDR(catSpend.Pribadi + catSpend.Hiburan) + ' | Surplus: ' + formatIDR(catSpend['Alokasi Surplus']) + '</div>' +
+        '<div style="margin-bottom: 4px;">- ' + overText + '</div>' +
+        '<div>- ' + adviceText + '</div>';
     }
   }
 
@@ -895,6 +964,9 @@ function filterAnalyticsCategory(category) {
   renderAnalyticsExpensesStream();
 }
 
+// -----------------------------------------------------------------------------
+// REALIZED EXPENSES STREAM WITH EDIT & DELETE ACTION BUTTONS
+// -----------------------------------------------------------------------------
 function renderAnalyticsExpensesStream() {
   const container = document.getElementById('analytics-expenses-stream-list');
   if (!container) return;
@@ -928,17 +1000,25 @@ function renderAnalyticsExpensesStream() {
     const posName = b ? b.item_name : (tx.description || 'Transaction');
 
     return (
-      '<div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); margin-bottom: 6px;">' +
+      '<div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); margin-bottom: 8px;">' +
         '<div>' +
-          '<div style="font-weight: 700; font-size: 0.82rem; color: var(--text-primary);">' + (tx.description || posName) + '</div>' +
-          '<div style="font-size: 0.68rem; color: var(--text-secondary); display: flex; align-items: center; gap: 4px; margin-top: 1px;">' +
-            '<span class="item-category-pill" style="font-size: 0.62rem; padding: 1px 4px;">' + catName + '</span>' +
+          '<div style="font-weight: 700; font-size: 0.84rem; color: var(--text-primary);">' + (tx.description || posName) + '</div>' +
+          '<div style="font-size: 0.68rem; color: var(--text-secondary); display: flex; align-items: center; gap: 4px; margin-top: 2px;">' +
+            '<span class="item-category-pill" style="font-size: 0.62rem; padding: 1px 5px;">' + catName + '</span>' +
             '<span>Pos: ' + posName + '</span> &bull; <span>' + (tx.transaction_date || '2026-08-22') + '</span>' +
+          '</div>' +
+          '<div class="expense-item-actions">' +
+            '<button type="button" class="btn-icon-action" onclick="openEditExpenseModalById(\'' + tx.transaction_id + '\')">' +
+              '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg> ' + (currentLang === 'en' ? 'Edit' : 'Edit') +
+            '</button>' +
+            '<button type="button" class="btn-icon-action delete" onclick="deleteExpenseTransaction(\'' + tx.transaction_id + '\')">' +
+              '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg> ' + (currentLang === 'en' ? 'Delete' : 'Hapus') +
+            '</button>' +
           '</div>' +
         '</div>' +
         '<div style="text-align: right;">' +
-          '<div style="font-weight: 700; font-size: 0.85rem; color: var(--accent-warning);">- ' + formatIDR(tx.amount) + '</div>' +
-          '<div style="font-size: 0.65rem; color: var(--text-secondary);">' + (tx.payment_method_platform || 'Manual') + '</div>' +
+          '<div style="font-weight: 700; font-size: 0.88rem; color: var(--accent-warning);">- ' + formatIDR(tx.amount) + '</div>' +
+          '<div style="font-size: 0.65rem; color: var(--text-secondary); margin-top: 2px;">' + (tx.payment_method_platform || 'Manual') + '</div>' +
         '</div>' +
       '</div>'
     );
@@ -1009,6 +1089,144 @@ async function submitQuickExpense() {
   const alertMsg = currentLang === 'en'
     ? 'Expense of ' + formatIDR(amount) + ' successfully realized to ' + (b ? b.item_name : '') + '!'
     : 'Pengeluaran ' + formatIDR(amount) + ' berhasil dicatat dan direalisasikan ke pos ' + (b ? b.item_name : '') + '!';
+  alert(alertMsg);
+}
+
+// -----------------------------------------------------------------------------
+// EXPENSE TRANSACTION EDIT & DELETE HANDLERS
+// -----------------------------------------------------------------------------
+function openEditExpenseModalById(txId) {
+  const tx = appState.transactions.find(t => t.transaction_id === txId);
+  if (!tx) return;
+
+  const select = document.getElementById('edit-expense-budget-select');
+  if (select) {
+    select.innerHTML = (appState.budgets || []).map(b => 
+      '<option value="' + b.budget_id + '" ' + (b.budget_id === tx.budget_id ? 'selected' : '') + '>' + b.item_name + ' (' + b.category_type + ' - Target ' + formatIDR(b.target_anggaran) + ')</option>'
+    ).join('');
+  }
+
+  document.getElementById('edit-expense-id').value = tx.transaction_id;
+  document.getElementById('edit-expense-desc-input').value = tx.description || '';
+  document.getElementById('edit-expense-amount-input').value = tx.amount || 0;
+  document.getElementById('edit-expense-date-input').value = tx.transaction_date || '2026-08-22';
+  document.getElementById('edit-expense-method-select').value = tx.payment_method_platform || 'BCA / QRIS';
+
+  document.getElementById('edit-expense-modal').classList.add('active');
+}
+
+async function submitEditExpense() {
+  const txId = document.getElementById('edit-expense-id').value;
+  const desc = document.getElementById('edit-expense-desc-input').value.trim();
+  const budgetId = document.getElementById('edit-expense-budget-select').value;
+  const amount = parseFloat(document.getElementById('edit-expense-amount-input').value) || 0;
+  const date = document.getElementById('edit-expense-date-input').value || '2026-08-22';
+  const method = document.getElementById('edit-expense-method-select').value;
+
+  if (amount <= 0) {
+    alert(currentLang === 'en' ? 'Please enter a valid expense amount!' : 'Harap isi nominal pengeluaran yang valid!');
+    return;
+  }
+
+  const tx = appState.transactions.find(t => t.transaction_id === txId);
+  if (!tx) return;
+
+  const oldAmount = Number(tx.amount) || 0;
+  const oldBudgetId = tx.budget_id;
+
+  // Adjust budgets
+  if (oldBudgetId === budgetId) {
+    const b = appState.budgets.find(item => item.budget_id === budgetId);
+    if (b) {
+      b.realisasi_used = (Number(b.realisasi_used) || 0) - oldAmount + amount;
+      b.balance = Number(b.target_anggaran) - b.realisasi_used;
+    }
+  } else {
+    const oldB = appState.budgets.find(item => item.budget_id === oldBudgetId);
+    if (oldB) {
+      oldB.realisasi_used = (Number(oldB.realisasi_used) || 0) - oldAmount;
+      if (oldB.realisasi_used < 0) oldB.realisasi_used = 0;
+      oldB.balance = Number(oldB.target_anggaran) - oldB.realisasi_used;
+    }
+    const newB = appState.budgets.find(item => item.budget_id === budgetId);
+    if (newB) {
+      newB.realisasi_used = (Number(newB.realisasi_used) || 0) + amount;
+      newB.balance = Number(newB.target_anggaran) - newB.realisasi_used;
+    }
+  }
+
+  tx.description = desc;
+  tx.budget_id = budgetId;
+  tx.amount = amount;
+  tx.transaction_date = date;
+  tx.payment_method_platform = method;
+
+  saveUserDataToStorage();
+
+  authFetch('/transactions?transaction_id=' + txId, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      transaction_id: txId,
+      description: desc,
+      budget_id: budgetId,
+      amount: amount,
+      transaction_date: date,
+      payment_method_platform: method
+    })
+  }).catch(() => {});
+
+  document.getElementById('edit-expense-modal').classList.remove('active');
+  refreshAllData();
+  generateAiAnalytics();
+
+  const alertMsg = currentLang === 'en' ? 'Expense updated successfully!' : 'Pengeluaran berhasil diperbarui!';
+  alert(alertMsg);
+}
+
+async function deleteExpenseFromModal() {
+  const txId = document.getElementById('edit-expense-id').value;
+  if (!txId) return;
+  document.getElementById('edit-expense-modal').classList.remove('active');
+  await deleteExpenseTransaction(txId);
+}
+
+async function deleteExpenseTransaction(txId) {
+  const confirmMsg = currentLang === 'en'
+    ? 'Are you sure you want to delete this expense transaction?\nThe realized amount will be restored to your budget balance.'
+    : 'Apakah Anda yakin ingin menghapus catatan pengeluaran ini?\nNominal realisasi akan dikembalikan ke saldo pos anggaran Anda.';
+  if (!confirm(confirmMsg)) return;
+
+  const tx = appState.transactions.find(t => t.transaction_id === txId);
+  if (tx) {
+    const amt = Number(tx.amount) || 0;
+    const b = appState.budgets.find(item => item.budget_id === tx.budget_id);
+    if (b) {
+      b.realisasi_used = (Number(b.realisasi_used) || 0) - amt;
+      if (b.realisasi_used < 0) b.realisasi_used = 0;
+      b.balance = Number(b.target_anggaran) - b.realisasi_used;
+    }
+
+    if (tx.goal_id) {
+      const g = appState.financialGoals.find(item => item.goal_id === tx.goal_id);
+      if (g) {
+        g.current_amount = (Number(g.current_amount) || 0) - amt;
+        if (g.current_amount < 0) g.current_amount = 0;
+      }
+    }
+  }
+
+  appState.transactions = appState.transactions.filter(t => t.transaction_id !== txId);
+  saveUserDataToStorage();
+
+  authFetch('/transactions?transaction_id=' + txId, {
+    method: 'DELETE'
+  }).catch(() => {});
+
+  refreshAllData();
+  generateAiAnalytics();
+
+  const alertMsg = currentLang === 'en' ? 'Expense deleted successfully.' : 'Catatan pengeluaran berhasil dihapus.';
   alert(alertMsg);
 }
 
@@ -1092,9 +1310,9 @@ async function processInterimStatement() {
   let totalAmt = 0;
   const lines = raw.split(/\r?\n/);
 
-  lines.forEach(l => {
+  for (const l of lines) {
     const cleanL = l.trim();
-    if (!cleanL || cleanL.startsWith('---')) return;
+    if (!cleanL || cleanL.startsWith('---')) continue;
 
     const lower = cleanL.toLowerCase();
     let matchedItem = null;
@@ -1135,7 +1353,7 @@ async function processInterimStatement() {
           if (g) g.current_amount = (Number(g.current_amount) || 0) + amt;
         }
 
-        appState.transactions.unshift({
+        const newStatementTx = {
           transaction_id: 'tx_' + Math.random().toString(36).substring(2, 9),
           user_id: currentUser.user_id,
           transaction_date: '2026-08-22',
@@ -1145,10 +1363,18 @@ async function processInterimStatement() {
           amount: amt,
           payment_method_platform: 'BCA Statement',
           description: cleanL.substring(0, 45)
-        });
+        };
+
+        appState.transactions.unshift(newStatementTx);
+
+        authFetch('/transactions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newStatementTx)
+        }).catch(() => {});
       }
     }
-  });
+  }
 
   saveUserDataToStorage();
   refreshAllData();
@@ -1433,7 +1659,8 @@ async function submitLandingLogin() {
 
     setTimeout(() => {
       syncAuthAndScreenState();
-      loadCashAccountsFromStorage();
+      fetchCashAccountsCloud();
+      fetchMonthNotesCloud();
       refreshAllData();
     }, 300);
   } else {
@@ -1515,7 +1742,8 @@ async function submitLandingRegister() {
 
     setTimeout(() => {
       syncAuthAndScreenState();
-      loadCashAccountsFromStorage();
+      fetchCashAccountsCloud();
+      fetchMonthNotesCloud();
       refreshAllData();
     }, 600);
   }
@@ -1584,15 +1812,27 @@ function switchView(viewId) {
 }
 
 // -----------------------------------------------------------------------------
-// ADMIN PANEL & USER TAKE-OUT HANDLERS
+// ADMIN PANEL & USER TAKE-OUT HANDLERS (SERVER BACKED)
 // -----------------------------------------------------------------------------
 async function fetchAdminData() {
   if (!currentUser || currentUser.email !== 'zidanmuzaki2002@gmail.com') return;
 
   let allUsers = [];
   try {
-    allUsers = JSON.parse(localStorage.getItem('flowtrack_all_registered_users') || '[]');
+    const res = await authFetch('/admin/users');
+    if (res && res.ok) {
+      const data = await res.json();
+      if (data.status === 'SUCCESS' && Array.isArray(data.users)) {
+        allUsers = data.users;
+      }
+    }
   } catch (e) {}
+
+  if (allUsers.length === 0) {
+    try {
+      allUsers = JSON.parse(localStorage.getItem('flowtrack_all_registered_users') || '[]');
+    } catch (e) {}
+  }
 
   if (!allUsers.some(u => u.email === 'zidanmuzaki2002@gmail.com')) {
     allUsers.unshift({ user_id: 'usr_admin_zidanmuzaki13', username: 'zidanmuzaki13', email: 'zidanmuzaki2002@gmail.com', role: 'admin' });
@@ -1602,7 +1842,16 @@ async function fetchAdminData() {
   if (statUsers) statUsers.textContent = allUsers.length;
 
   let localFeedbacks = [];
-  try { localFeedbacks = JSON.parse(localStorage.getItem('flowtrack_local_feedbacks') || '[]'); } catch (e) {}
+  try {
+    const resFb = await authFetch('/feedbacks');
+    if (resFb && resFb.ok) {
+      const dataFb = await resFb.json();
+      if (dataFb.status === 'SUCCESS' && Array.isArray(dataFb.feedbacks)) {
+        localFeedbacks = dataFb.feedbacks;
+      }
+    }
+  } catch (e) {}
+
   const avgRating = localFeedbacks.length > 0
     ? (localFeedbacks.reduce((sum, f) => sum + (f.rating || 5), 0) / localFeedbacks.length).toFixed(1)
     : '5.0';
@@ -1641,6 +1890,12 @@ async function takeOutUser(userId, username) {
   if (!confirm(confirmMsg)) return;
 
   try {
+    await authFetch('/admin/take-out-user', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ target_user_id: userId })
+    });
+
     let allUsers = JSON.parse(localStorage.getItem('flowtrack_all_registered_users') || '[]');
     allUsers = allUsers.filter(u => u.user_id !== userId);
     localStorage.setItem('flowtrack_all_registered_users', JSON.stringify(allUsers));
@@ -1651,7 +1906,7 @@ async function takeOutUser(userId, username) {
 }
 
 // -----------------------------------------------------------------------------
-// FEEDBACK ENGINE
+// FEEDBACK ENGINE (SERVER BACKED & MULTI-DEVICE SYNCED)
 // -----------------------------------------------------------------------------
 function setFeedbackRating(ratingNum) {
   document.getElementById('feedback-rating-val').value = ratingNum;
@@ -1692,6 +1947,14 @@ async function submitUserFeedback() {
     created_at: new Date().toISOString()
   };
 
+  try {
+    await authFetch('/feedbacks', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newFeedback)
+    });
+  } catch (e) {}
+
   let localFeedbacks = [];
   try { localFeedbacks = JSON.parse(localStorage.getItem('flowtrack_local_feedbacks') || '[]'); } catch (e) {}
   localFeedbacks.unshift(newFeedback);
@@ -1712,19 +1975,47 @@ async function fetchUserFeedbacks() {
   const container = document.getElementById('user-sent-feedback-list');
   if (!container) return;
 
-  let localFeedbacks = [];
-  try { localFeedbacks = JSON.parse(localStorage.getItem('flowtrack_local_feedbacks') || '[]'); } catch (e) {}
-  const userLocal = localFeedbacks.filter(f => f.user_id === currentUser.user_id);
-  renderFeedbacksList(container, userLocal, false);
+  let feedbacks = [];
+  try {
+    const res = await authFetch('/feedbacks');
+    if (res && res.ok) {
+      const data = await res.json();
+      if (data.status === 'SUCCESS' && Array.isArray(data.feedbacks)) {
+        feedbacks = data.feedbacks;
+      }
+    }
+  } catch (e) {}
+
+  if (feedbacks.length === 0) {
+    try {
+      const localFeedbacks = JSON.parse(localStorage.getItem('flowtrack_local_feedbacks') || '[]');
+      feedbacks = localFeedbacks.filter(f => f.user_id === currentUser.user_id);
+    } catch (e) {}
+  }
+
+  renderFeedbacksList(container, feedbacks, false);
 }
 
 async function fetchAdminFeedbacks() {
   const container = document.getElementById('admin-feedback-inbox-list');
   if (!container) return;
 
-  let localFeedbacks = [];
-  try { localFeedbacks = JSON.parse(localStorage.getItem('flowtrack_local_feedbacks') || '[]'); } catch (e) {}
-  renderFeedbacksList(container, localFeedbacks, true);
+  let feedbacks = [];
+  try {
+    const res = await authFetch('/feedbacks');
+    if (res && res.ok) {
+      const data = await res.json();
+      if (data.status === 'SUCCESS' && Array.isArray(data.feedbacks)) {
+        feedbacks = data.feedbacks;
+      }
+    }
+  } catch (e) {}
+
+  if (feedbacks.length === 0) {
+    try { feedbacks = JSON.parse(localStorage.getItem('flowtrack_local_feedbacks') || '[]'); } catch (e) {}
+  }
+
+  renderFeedbacksList(container, feedbacks, true);
 }
 
 function renderFeedbacksList(container, feedbacks, isAdminView) {
@@ -1769,6 +2060,14 @@ function renderFeedbacksList(container, feedbacks, isAdminView) {
 }
 
 async function toggleFeedbackStatus(feedbackId) {
+  try {
+    await authFetch('/feedbacks?feedback_id=' + feedbackId, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: 'Selesai' })
+    });
+  } catch (e) {}
+
   let localFeedbacks = [];
   try { localFeedbacks = JSON.parse(localStorage.getItem('flowtrack_local_feedbacks') || '[]'); } catch (e) {}
   const target = localFeedbacks.find(f => f.feedback_id === feedbackId);
@@ -1781,6 +2080,12 @@ async function toggleFeedbackStatus(feedbackId) {
 
 async function deleteFeedback(feedbackId) {
   if (!confirm(currentLang === 'en' ? 'Delete this feedback?' : 'Hapus feedback ini?')) return;
+  try {
+    await authFetch('/feedbacks?feedback_id=' + feedbackId, {
+      method: 'DELETE'
+    });
+  } catch (e) {}
+
   let localFeedbacks = [];
   try { localFeedbacks = JSON.parse(localStorage.getItem('flowtrack_local_feedbacks') || '[]'); } catch (e) {}
   localFeedbacks = localFeedbacks.filter(f => f.feedback_id !== feedbackId);
@@ -1793,9 +2098,10 @@ async function deleteFeedback(feedbackId) {
 // -----------------------------------------------------------------------------
 async function refreshAllData() {
   if (!currentUser) return;
-  loadCashAccountsFromStorage();
   applyStaticTranslations();
   await Promise.all([
+    fetchCashAccountsCloud(),
+    fetchMonthNotesCloud(),
     fetchIncomes(),
     fetchBudgets(),
     fetchFinancialGoals(),
@@ -1813,29 +2119,29 @@ async function refreshAllData() {
 async function fetchIncomes() {
   let loaded = false;
 
-  const localSaved = localStorage.getItem(getUserStorageKey('incomes_' + appState.currentMonth + '_' + appState.currentYear));
-  if (localSaved) {
-    try {
-      const parsed = JSON.parse(localSaved);
-      if (Array.isArray(parsed) && parsed.length > 0) {
-        appState.incomes = parsed;
+  try {
+    const res = await authFetch('/incomes?period_month=' + encodeURIComponent(appState.currentMonth) + '&period_year=' + encodeURIComponent(appState.currentYear));
+    if (res && res.ok) {
+      const text = await res.text();
+      const data = JSON.parse(text);
+      if (data.status === 'SUCCESS' && Array.isArray(data.incomes)) {
+        appState.incomes = data.incomes;
         loaded = true;
       }
-    } catch (e) {}
-  }
+    }
+  } catch (err) {}
 
   if (!loaded) {
-    try {
-      const res = await authFetch('/incomes?period_month=' + encodeURIComponent(appState.currentMonth) + '&period_year=' + encodeURIComponent(appState.currentYear));
-      if (res && res.ok) {
-        const text = await res.text();
-        const data = JSON.parse(text);
-        if (data.status === 'SUCCESS' && Array.isArray(data.incomes) && data.incomes.length > 0) {
-          appState.incomes = data.incomes;
+    const localSaved = localStorage.getItem(getUserStorageKey('incomes_' + appState.currentMonth + '_' + appState.currentYear));
+    if (localSaved) {
+      try {
+        const parsed = JSON.parse(localSaved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          appState.incomes = parsed;
           loaded = true;
         }
-      }
-    } catch (err) {}
+      } catch (e) {}
+    }
   }
 
   if (!loaded) {
@@ -1854,29 +2160,29 @@ async function fetchIncomes() {
 async function fetchBudgets() {
   let loaded = false;
 
-  const localSaved = localStorage.getItem(getUserStorageKey('budgets_' + appState.currentMonth + '_' + appState.currentYear));
-  if (localSaved) {
-    try {
-      const parsed = JSON.parse(localSaved);
-      if (Array.isArray(parsed) && parsed.length > 0) {
-        appState.budgets = parsed;
+  try {
+    const res = await authFetch('/budgets?period_month=' + encodeURIComponent(appState.currentMonth) + '&period_year=' + encodeURIComponent(appState.currentYear));
+    if (res && res.ok) {
+      const text = await res.text();
+      const data = JSON.parse(text);
+      if (data.status === 'SUCCESS' && Array.isArray(data.budgets)) {
+        appState.budgets = data.budgets;
         loaded = true;
       }
-    } catch (e) {}
-  }
+    }
+  } catch (err) {}
 
   if (!loaded) {
-    try {
-      const res = await authFetch('/budgets?period_month=' + encodeURIComponent(appState.currentMonth) + '&period_year=' + encodeURIComponent(appState.currentYear));
-      if (res && res.ok) {
-        const text = await res.text();
-        const data = JSON.parse(text);
-        if (data.status === 'SUCCESS' && Array.isArray(data.budgets) && data.budgets.length > 0) {
-          appState.budgets = data.budgets;
+    const localSaved = localStorage.getItem(getUserStorageKey('budgets_' + appState.currentMonth + '_' + appState.currentYear));
+    if (localSaved) {
+      try {
+        const parsed = JSON.parse(localSaved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          appState.budgets = parsed;
           loaded = true;
         }
-      }
-    } catch (err) {}
+      } catch (e) {}
+    }
   }
 
   if (!loaded) {
@@ -1898,41 +2204,51 @@ async function fetchBudgets() {
 }
 
 async function fetchFinancialGoals() {
-  const localSaved = localStorage.getItem(getUserStorageKey('goals'));
-  if (localSaved) {
-    try { appState.financialGoals = JSON.parse(localSaved); } catch (e) {}
-  } else {
-    try {
-      const res = await authFetch('/financial-goals');
-      if (res && res.ok) {
-        const text = await res.text();
-        const data = JSON.parse(text);
-        if (data.status === 'SUCCESS' && Array.isArray(data.goals)) {
-          appState.financialGoals = data.goals;
-        }
+  let loaded = false;
+  try {
+    const res = await authFetch('/financial-goals');
+    if (res && res.ok) {
+      const text = await res.text();
+      const data = JSON.parse(text);
+      if (data.status === 'SUCCESS' && Array.isArray(data.goals)) {
+        appState.financialGoals = data.goals;
+        loaded = true;
       }
-    } catch (err) {}
+    }
+  } catch (err) {}
+
+  if (!loaded) {
+    const localSaved = localStorage.getItem(getUserStorageKey('goals'));
+    if (localSaved) {
+      try { appState.financialGoals = JSON.parse(localSaved); } catch (e) {}
+    }
   }
+
   renderGoalsList();
   populateGoalDropdowns();
 }
 
 async function fetchTransactions() {
-  const localSaved = localStorage.getItem(getUserStorageKey('transactions'));
-  if (localSaved) {
-    try { appState.transactions = JSON.parse(localSaved); } catch (e) {}
-  } else {
-    try {
-      const res = await authFetch('/transactions');
-      if (res && res.ok) {
-        const text = await res.text();
-        const data = JSON.parse(text);
-        if (data.status === 'SUCCESS' && Array.isArray(data.transactions)) {
-          appState.transactions = data.transactions;
-        }
+  let loaded = false;
+  try {
+    const res = await authFetch('/transactions');
+    if (res && res.ok) {
+      const text = await res.text();
+      const data = JSON.parse(text);
+      if (data.status === 'SUCCESS' && Array.isArray(data.transactions)) {
+        appState.transactions = data.transactions;
+        loaded = true;
       }
-    } catch (err) {}
+    }
+  } catch (err) {}
+
+  if (!loaded) {
+    const localSaved = localStorage.getItem(getUserStorageKey('transactions'));
+    if (localSaved) {
+      try { appState.transactions = JSON.parse(localSaved); } catch (e) {}
+    }
   }
+
   renderTransactionsTable();
   if (appState.activeView === 'view-analytics') {
     renderAnalyticsExpensesStream();
@@ -2738,7 +3054,7 @@ async function submitEditBudget() {
 
   saveUserDataToStorage();
 
-  authFetch('/budgets', {
+  authFetch('/budgets?budget_id=' + item.budget_id, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -2835,7 +3151,7 @@ async function deleteSelectedBudget() {
   }
 }
 
-// Financial Goal Handlers (Simplified: No goal code required)
+// Financial Goal Handlers
 function openAddGoalModal() {
   document.getElementById('goal-name-input').value = '';
   document.getElementById('goal-target-input').value = '';
@@ -3103,6 +3419,7 @@ document.addEventListener('DOMContentLoaded', () => {
     appState.cashAccounts.emoney = parseFloat(emoneyInput ? emoneyInput.value : 0) || 0;
     appState.cashAccounts.other = parseFloat(otherInput ? otherInput.value : 0) || 0;
     saveUserDataToStorage();
+    syncCashAccountsToServer();
     renderCashReality();
   }
 
@@ -3115,6 +3432,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (notesInput) {
     notesInput.addEventListener('input', () => {
       saveUserDataToStorage();
+      syncMonthNotesToServer();
     });
   }
 
@@ -3166,7 +3484,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (currentUser) {
-    loadCashAccountsFromStorage();
+    fetchCashAccountsCloud();
+    fetchMonthNotesCloud();
     refreshAllData();
   }
 });
@@ -3214,6 +3533,10 @@ window.filterAnalyticsCategory = filterAnalyticsCategory;
 window.renderAnalyticsExpensesStream = renderAnalyticsExpensesStream;
 window.openAddExpenseModal = openAddExpenseModal;
 window.submitQuickExpense = submitQuickExpense;
+window.openEditExpenseModalById = openEditExpenseModalById;
+window.submitEditExpense = submitEditExpense;
+window.deleteExpenseFromModal = deleteExpenseFromModal;
+window.deleteExpenseTransaction = deleteExpenseTransaction;
 window.loadBcaSampleStatement = loadBcaSampleStatement;
 window.processInterimStatement = processInterimStatement;
 window.toggleFlowFormula = toggleFlowFormula;

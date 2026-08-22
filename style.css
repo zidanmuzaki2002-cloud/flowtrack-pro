@@ -1026,8 +1026,9 @@ button {
   background: var(--bg-card);
   border-top: 1px solid var(--border-subtle);
   display: flex;
-  justify-content: space-around;
-  padding: 8px 0 6px 0;
+  justify-content: space-between;
+  align-items: stretch;
+  padding: 6px 4px 6px 4px;
   z-index: 50;
   box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.05);
 }
@@ -1040,10 +1041,13 @@ button {
 }
 
 .nav-item {
+  flex: 1 1 0;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3px;
+  justify-content: center;
+  gap: 2px;
   color: var(--text-secondary);
   font-size: 0.68rem;
   font-weight: 600;
@@ -1051,7 +1055,47 @@ button {
   background: none;
   border: none;
   transition: all 0.2s ease;
-  padding: 2px 8px;
+  padding: 4px 2px;
+  text-align: center;
+}
+
+.expense-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.btn-icon-action {
+  background: var(--bg-main);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  border-radius: 6px;
+  padding: 3px 6px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  transition: all 0.15s ease;
+}
+
+.btn-icon-action:hover {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border-color: var(--primary-accent);
+}
+
+.btn-icon-action.delete {
+  color: #EF4444;
+  border-color: rgba(239, 68, 68, 0.2);
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.btn-icon-action.delete:hover {
+  background: #EF4444;
+  color: #FFFFFF;
 }
 
 .nav-volumetric-badge {
