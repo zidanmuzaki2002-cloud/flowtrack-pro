@@ -1,8 +1,8 @@
 // ==============================================================================
 // FlowTrack Pro: Mobile-First Client Logic & Resilient Local-Cloud Sync Engine
-// Features: Analisis Pengeluaran & AI Advisor, Realized Expense Stream,
-// Interim Bank Statement Sync, Zero-Based Control Balance, Auto-Surplus Engine,
-// Multi-Date Calendar Picker (1-31 Burn Engine), Dynamic 3-Phase Engine,
+// Features: Language Switcher (ID / EN), Compact Control Balance,
+// Streamlined Realized Expenses + AI Financial Advisor, Interim Sync,
+// Zero-Based Control Balance, Multi-Date Calendar Picker (1-31 Burn Engine),
 // Permanent LocalStorage Persistence, Multi-Tenant Auth & Take-Out Management
 // ==============================================================================
 
@@ -11,6 +11,11 @@ const API_BASE = window.location.origin;
 const MONTH_NAMES = [
   'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
   'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+];
+
+const MONTH_NAMES_EN = [
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December'
 ];
 
 const OPERATING_ANCHOR_YEAR = 2026;
@@ -25,6 +30,217 @@ const EMBEDDED_ADMIN_DATA = {
   budgets: [{"budget_id":"67af5a6e-3fe1-4eb8-95c1-7fdfcd9addd4","user_id":"usr_admin_zidanmuzaki13","period_month":"Januari","period_year":2026,"category_type":"Dasar","item_name":"Makan","nominal_satuan":50000,"frekuensi":"Harian","multiplier":8,"target_anggaran":400000,"realisasi_used":0,"timing_pattern":"Rata-rata Harian (Flat)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"4bb12f92-5fdb-49a9-9f99-3a0a54b03dbe","user_id":"usr_admin_zidanmuzaki13","period_month":"Januari","period_year":2026,"category_type":"Dasar","item_name":"Transportasi","nominal_satuan":40000,"frekuensi":"Mingguan","multiplier":2,"target_anggaran":80000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Senin \u0026 Kamis)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"d37b8700-52fc-4c12-a343-07f44a6f8078","user_id":"usr_admin_zidanmuzaki13","period_month":"Januari","period_year":2026,"category_type":"Dasar","item_name":"Air Minum","nominal_satuan":10000,"frekuensi":"Mingguan","multiplier":2,"target_anggaran":20000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Senin \u0026 Kamis)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"b58f8804-75a0-4ae4-8248-058a9446a1e2","user_id":"usr_admin_zidanmuzaki13","period_month":"Januari","period_year":2026,"category_type":"Dasar","item_name":"Paket data","nominal_satuan":75000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":75000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 10)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"7346f85a-38ef-4ea0-92e8-46ae37a82c96","user_id":"usr_admin_zidanmuzaki13","period_month":"Januari","period_year":2026,"category_type":"Pribadi","item_name":"Perawatan diri","nominal_satuan":250000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":250000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"8b4ee81b-4dc2-44d1-9a5b-ef312863fb64","user_id":"usr_admin_zidanmuzaki13","period_month":"Januari","period_year":2026,"category_type":"Pribadi","item_name":"Potong rambut","nominal_satuan":35000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":35000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"b3608a40-69c7-4916-b489-43b504a1dfd3","user_id":"usr_admin_zidanmuzaki13","period_month":"Januari","period_year":2026,"category_type":"Dasar","item_name":"Sewa Kos","nominal_satuan":1500000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":1500000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 5)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"dfb2c6d9-11bb-47f7-ab6d-86f7eff49378","user_id":"usr_admin_zidanmuzaki13","period_month":"Januari","period_year":2026,"category_type":"Hiburan","item_name":"Jajan dan Lainnya","nominal_satuan":150000,"frekuensi":"Mingguan","multiplier":2,"target_anggaran":300000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Weekend)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"440b1a64-80af-4b2d-be40-61ab6d3b3230","user_id":"usr_admin_zidanmuzaki13","period_month":"Januari","period_year":2026,"category_type":"Dasar","item_name":"Dana Cadangan","nominal_satuan":400000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":400000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"8b8425cb-d4a9-4254-833a-cae3a1e9b170","user_id":"usr_admin_zidanmuzaki13","period_month":"Januari","period_year":2026,"category_type":"Dasar","item_name":"Paylater","nominal_satuan":270000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":270000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"da9b2d3e-2127-4f53-99c5-d2c33c6d5ae6","user_id":"usr_admin_zidanmuzaki13","period_month":"Januari","period_year":2026,"category_type":"Insidental","item_name":"Persiapan OJT","nominal_satuan":1000000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":1000000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"3f6e1565-711e-4b87-9a7b-8240a53cfe57","user_id":"usr_admin_zidanmuzaki13","period_month":"Januari","period_year":2026,"category_type":"Alokasi Surplus","item_name":"Invest","nominal_satuan":3200000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":3200000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":"goal-dana-darurat","notes":"Diimpor dari sheet 2026"},{"budget_id":"4ab9e743-83f7-4ca4-a29d-b17fc9bfcb27","user_id":"usr_admin_zidanmuzaki13","period_month":"Februari","period_year":2026,"category_type":"Dasar","item_name":"Makan","nominal_satuan":50000,"frekuensi":"Harian","multiplier":8,"target_anggaran":400000,"realisasi_used":0,"timing_pattern":"Rata-rata Harian (Flat)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"66150e41-41d3-430a-baaf-36e17e0e92b0","user_id":"usr_admin_zidanmuzaki13","period_month":"Februari","period_year":2026,"category_type":"Dasar","item_name":"Transportasi","nominal_satuan":40000,"frekuensi":"Mingguan","multiplier":2,"target_anggaran":80000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Senin \u0026 Kamis)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"606d21c9-3b5a-4ef2-92a4-5ce9b7e5c727","user_id":"usr_admin_zidanmuzaki13","period_month":"Februari","period_year":2026,"category_type":"Dasar","item_name":"Air Minum","nominal_satuan":10000,"frekuensi":"Mingguan","multiplier":2,"target_anggaran":20000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Senin \u0026 Kamis)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"7fe218b2-6dc6-403f-9d1d-a0d7611a4cd7","user_id":"usr_admin_zidanmuzaki13","period_month":"Februari","period_year":2026,"category_type":"Dasar","item_name":"Paket data","nominal_satuan":75000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":75000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 10)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"7d33eca7-c153-4939-b3d8-1721bc15713a","user_id":"usr_admin_zidanmuzaki13","period_month":"Februari","period_year":2026,"category_type":"Pribadi","item_name":"Perawatan diri","nominal_satuan":250000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":250000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"029039bc-40a2-4d81-9dd8-b6fa76c0c34a","user_id":"usr_admin_zidanmuzaki13","period_month":"Februari","period_year":2026,"category_type":"Pribadi","item_name":"Potong rambut","nominal_satuan":35000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":35000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"7186b4da-d717-466c-9a86-5cf1a73337d0","user_id":"usr_admin_zidanmuzaki13","period_month":"Februari","period_year":2026,"category_type":"Dasar","item_name":"Sewa Kos","nominal_satuan":1500000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":1500000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 5)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"09a8c25f-b87a-46f0-8c80-b18175b3143c","user_id":"usr_admin_zidanmuzaki13","period_month":"Februari","period_year":2026,"category_type":"Hiburan","item_name":"Jajan dan Lainnya","nominal_satuan":150000,"frekuensi":"Mingguan","multiplier":2,"target_anggaran":300000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Weekend)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"4419543a-6a96-4126-aafa-b8156dc6a2be","user_id":"usr_admin_zidanmuzaki13","period_month":"Februari","period_year":2026,"category_type":"Dasar","item_name":"Dana Cadangan","nominal_satuan":400000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":400000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"d1772225-f3fe-44eb-a0b6-d8f95ed1f033","user_id":"usr_admin_zidanmuzaki13","period_month":"Februari","period_year":2026,"category_type":"Dasar","item_name":"Paylater","nominal_satuan":270000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":270000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"bcd43408-0eba-4262-8596-4351aabf0e5b","user_id":"usr_admin_zidanmuzaki13","period_month":"Februari","period_year":2026,"category_type":"Insidental","item_name":"Persiapan OJT","nominal_satuan":1000000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":1000000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"599148f5-1ad8-4306-8cff-8ca6e96a746e","user_id":"usr_admin_zidanmuzaki13","period_month":"Februari","period_year":2026,"category_type":"Alokasi Surplus","item_name":"Invest","nominal_satuan":3200000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":3200000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":"goal-dana-darurat","notes":"Diimpor dari sheet 2026"},{"budget_id":"952a9379-8e18-4be9-bc54-0c9a40def6bb","user_id":"usr_admin_zidanmuzaki13","period_month":"Maret","period_year":2026,"category_type":"Dasar","item_name":"Makan","nominal_satuan":50000,"frekuensi":"Harian","multiplier":31,"target_anggaran":1550000,"realisasi_used":0,"timing_pattern":"Rata-rata Harian (Flat)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"e187c8cb-22cb-4e1a-afd0-f66ade00d5f6","user_id":"usr_admin_zidanmuzaki13","period_month":"Maret","period_year":2026,"category_type":"Dasar","item_name":"Transportasi","nominal_satuan":35000,"frekuensi":"Mingguan","multiplier":4,"target_anggaran":140000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Senin \u0026 Kamis)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"ebf4d924-db4a-43a4-a184-68b26c1a7dfc","user_id":"usr_admin_zidanmuzaki13","period_month":"Maret","period_year":2026,"category_type":"Dasar","item_name":"Air Minum","nominal_satuan":10000,"frekuensi":"Mingguan","multiplier":4,"target_anggaran":40000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Senin \u0026 Kamis)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"dbb75461-41a4-49eb-8a3c-b2412bc7bba9","user_id":"usr_admin_zidanmuzaki13","period_month":"Maret","period_year":2026,"category_type":"Dasar","item_name":"Paket data","nominal_satuan":75000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":75000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 10)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"449fea21-ed5d-410f-b8af-06c44b23dfa6","user_id":"usr_admin_zidanmuzaki13","period_month":"Maret","period_year":2026,"category_type":"Pribadi","item_name":"Perawatan diri","nominal_satuan":200000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":200000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"2f4f4dfe-69fb-457f-a7a3-45a41ff5380d","user_id":"usr_admin_zidanmuzaki13","period_month":"Maret","period_year":2026,"category_type":"Pribadi","item_name":"Potong rambut","nominal_satuan":40000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":40000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"9b1b113b-eacb-40ec-b884-a1662edb6a7f","user_id":"usr_admin_zidanmuzaki13","period_month":"Maret","period_year":2026,"category_type":"Dasar","item_name":"Sewa Kos","nominal_satuan":1175000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":1175000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 5)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"c8bc392a-1439-422b-918b-2bed9d308603","user_id":"usr_admin_zidanmuzaki13","period_month":"Maret","period_year":2026,"category_type":"Hiburan","item_name":"Jajan dan Lainnya","nominal_satuan":75000,"frekuensi":"Mingguan","multiplier":4,"target_anggaran":300000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Weekend)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"1f30e796-6be8-483f-8bc0-9360e26febe7","user_id":"usr_admin_zidanmuzaki13","period_month":"Maret","period_year":2026,"category_type":"Dasar","item_name":"Dana Cadangan","nominal_satuan":300000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":300000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"0a3bff5f-7783-4e1d-abf8-51f703ab26e5","user_id":"usr_admin_zidanmuzaki13","period_month":"Maret","period_year":2026,"category_type":"Dasar","item_name":"Paketin ke Jakarta","nominal_satuan":80000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":80000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"fcd68ae5-7b83-4dd4-ac17-a3c5a6ee4e4c","user_id":"usr_admin_zidanmuzaki13","period_month":"Maret","period_year":2026,"category_type":"Alokasi Surplus","item_name":"Invest","nominal_satuan":500000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":500000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":"goal-dana-darurat","notes":"Diimpor dari sheet 2026"},{"budget_id":"e4e2423e-8436-4dfc-a7a0-585bf3f0ba6d","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"category_type":"Dasar","item_name":"Makan","nominal_satuan":50000,"frekuensi":"Harian","multiplier":30,"target_anggaran":1500000,"realisasi_used":0,"timing_pattern":"Rata-rata Harian (Flat)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"d6a18251-ee17-462b-bbcc-db59cd354031","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"category_type":"Dasar","item_name":"Transportasi","nominal_satuan":35000,"frekuensi":"Mingguan","multiplier":4,"target_anggaran":140000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Senin \u0026 Kamis)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"e2570e62-eb4e-465c-801c-360c33184b75","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"category_type":"Dasar","item_name":"Air Minum","nominal_satuan":10000,"frekuensi":"Mingguan","multiplier":4,"target_anggaran":40000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Senin \u0026 Kamis)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"0f5c70b8-7b77-4244-89e3-6c77a0ba131f","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"category_type":"Dasar","item_name":"Paket data","nominal_satuan":75000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":75000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 10)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"5fee46a1-22af-44ab-87ab-6dfd05a9d269","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"category_type":"Pribadi","item_name":"Perawatan diri","nominal_satuan":200000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":200000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"be6fa705-57b8-42ee-b2db-621121e65d85","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"category_type":"Pribadi","item_name":"Potong rambut","nominal_satuan":40000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":40000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"304c9ac6-fe18-41d4-ab48-822449418eba","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"category_type":"Dasar","item_name":"Sewa Kos","nominal_satuan":1600000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":1600000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 5)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"ea48dab7-ebcb-4bd9-8f9c-20331e3a7216","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"category_type":"Hiburan","item_name":"Jajan dan Lainnya","nominal_satuan":75000,"frekuensi":"Mingguan","multiplier":4,"target_anggaran":300000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Weekend)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"048783b4-cb28-4fde-a9fb-a28473416c7d","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"category_type":"Dasar","item_name":"Dana Cadangan","nominal_satuan":300000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":300000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"a99da754-fe4a-4a00-96bb-ed89b8ec04e8","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"category_type":"Insidental","item_name":"Hadiah sidang","nominal_satuan":325000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":325000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"a15b2333-c499-4e9b-86e6-18dd955e0af8","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"category_type":"Insidental","item_name":"Beli panci listrik","nominal_satuan":150000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":150000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 10)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"1d3b3194-bf66-4f11-8f9c-cd6108aa4629","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"category_type":"Dasar","item_name":"Jalan jalan Jakarta","nominal_satuan":620000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":620000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"27fbfb73-b87d-463b-8a26-81dd0c99876f","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"category_type":"Insidental","item_name":"Beli sepeda","nominal_satuan":3850000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":3850000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"2af880fb-6a43-40f9-83bb-11921c0955c3","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"category_type":"Insidental","item_name":"Pindah bulan depan","nominal_satuan":380000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":380000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"143c81cc-c9ca-4f76-8d1a-dcd00b254f00","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"category_type":"Dasar","item_name":"Makan","nominal_satuan":50000,"frekuensi":"Harian","multiplier":16,"target_anggaran":800000,"realisasi_used":0,"timing_pattern":"Rata-rata Harian (Flat)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"e849bb87-6966-40f7-bdfd-36f89ccd8674","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"category_type":"Dasar","item_name":"Transportasi","nominal_satuan":60000,"frekuensi":"Mingguan","multiplier":2,"target_anggaran":120000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Senin \u0026 Kamis)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"2576cfc1-a540-4dd4-9110-f06a64d492cc","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"category_type":"Dasar","item_name":"Air Minum","nominal_satuan":20000,"frekuensi":"Mingguan","multiplier":1,"target_anggaran":20000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Senin \u0026 Kamis)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"8a93f9ee-208c-4f25-a781-3b34d2a7860f","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"category_type":"Dasar","item_name":"Paket data","nominal_satuan":75000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":75000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 10)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"904cd941-f9ef-4592-b923-b759d7038ddd","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"category_type":"Pribadi","item_name":"Perawatan diri","nominal_satuan":200000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":200000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"82fad313-bd89-4eca-a8e8-2b0f20adba8e","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"category_type":"Pribadi","item_name":"Potong rambut","nominal_satuan":40000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":40000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"005454d0-be4d-4cb6-afa5-5a0e98ffe897","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"category_type":"Dasar","item_name":"Sewa Kos","nominal_satuan":1600000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":1600000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 5)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"9273c490-bc53-4c4b-9f03-1f1f8a24bd77","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"category_type":"Hiburan","item_name":"Jajan dan Lainnya","nominal_satuan":75000,"frekuensi":"Mingguan","multiplier":3,"target_anggaran":225000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Weekend)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"2b74ac3d-61c1-4cfc-8de1-1117a67c12de","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"category_type":"Dasar","item_name":"Dana Cadangan","nominal_satuan":730000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":730000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"a9184aa1-6562-4f14-a2dd-c9fe50d07747","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"category_type":"Dasar","item_name":"Maketin barang ke Tegal","nominal_satuan":80000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":80000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"a1a78ee5-01ea-475c-b51c-7814299b6ba1","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"category_type":"Dasar","item_name":"Ngecilin Baju","nominal_satuan":150000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":150000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"c5819a06-c084-4179-9c5f-82961f1db2cb","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"category_type":"Dasar","item_name":"Selama di Hotel","nominal_satuan":250000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":250000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"d0b0f385-0927-4702-9348-ffdf849f5f56","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"category_type":"Dasar","item_name":"Selama di Tegal","nominal_satuan":300000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":300000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"99513db4-d99c-43a1-a5d1-37fa25305524","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"category_type":"Dasar","item_name":"PP Jogja Tegal","nominal_satuan":700000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":700000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"08471783-9e18-440a-97e6-bc1197657553","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"category_type":"Alokasi Surplus","item_name":"Invest","nominal_satuan":2500000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":2500000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":"goal-dana-darurat","notes":"Diimpor dari sheet 2026"},{"budget_id":"3bb58573-c6d6-4a53-a975-98f3659a063d","user_id":"usr_admin_zidanmuzaki13","period_month":"Juni","period_year":2026,"category_type":"Dasar","item_name":"Makan","nominal_satuan":50000,"frekuensi":"Harian","multiplier":30,"target_anggaran":1500000,"realisasi_used":0,"timing_pattern":"Rata-rata Harian (Flat)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"98767598-4bcc-4ecd-9951-69c937daab48","user_id":"usr_admin_zidanmuzaki13","period_month":"Juni","period_year":2026,"category_type":"Dasar","item_name":"Transportasi","nominal_satuan":50000,"frekuensi":"Mingguan","multiplier":4,"target_anggaran":200000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Senin \u0026 Kamis)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"ef5f7d09-03d9-445d-88f6-9f4c265f099b","user_id":"usr_admin_zidanmuzaki13","period_month":"Juni","period_year":2026,"category_type":"Dasar","item_name":"Air Minum","nominal_satuan":20000,"frekuensi":"Mingguan","multiplier":3,"target_anggaran":60000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Senin \u0026 Kamis)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"528882dd-a590-452d-b8aa-b512742c2b64","user_id":"usr_admin_zidanmuzaki13","period_month":"Juni","period_year":2026,"category_type":"Dasar","item_name":"Paket data","nominal_satuan":75000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":75000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 10)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"d4fc6d78-2304-459c-80c1-bc8f54f55658","user_id":"usr_admin_zidanmuzaki13","period_month":"Juni","period_year":2026,"category_type":"Pribadi","item_name":"Perawatan diri","nominal_satuan":200000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":200000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"6353ec78-80e5-4432-a289-cf67a62591b5","user_id":"usr_admin_zidanmuzaki13","period_month":"Juni","period_year":2026,"category_type":"Pribadi","item_name":"Potong rambut","nominal_satuan":40000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":40000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"699f1396-f770-4b9f-9478-bc9358a67b3a","user_id":"usr_admin_zidanmuzaki13","period_month":"Juni","period_year":2026,"category_type":"Dasar","item_name":"Sewa Kos","nominal_satuan":1600000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":1600000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 5)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"a7ed5e9f-2d7e-4a13-a255-4ee5c5395ae8","user_id":"usr_admin_zidanmuzaki13","period_month":"Juni","period_year":2026,"category_type":"Hiburan","item_name":"Jajan dan Lainnya","nominal_satuan":75000,"frekuensi":"Mingguan","multiplier":4,"target_anggaran":300000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Weekend)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"3ded7598-e9a6-4e6b-99ff-7bb7f39275d5","user_id":"usr_admin_zidanmuzaki13","period_month":"Juni","period_year":2026,"category_type":"Dasar","item_name":"Dana Cadangan","nominal_satuan":200000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":200000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"bc3dd387-08df-48d7-8c96-9e475f1f1a08","user_id":"usr_admin_zidanmuzaki13","period_month":"Juni","period_year":2026,"category_type":"Dasar","item_name":"Paylater","nominal_satuan":300000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":300000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"ea45a3fe-c90b-4cf2-983a-931bad914a10","user_id":"usr_admin_zidanmuzaki13","period_month":"Juni","period_year":2026,"category_type":"Dasar","item_name":"Casing + TG + Jersey Sepeda","nominal_satuan":550000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":550000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"c71b799c-125d-4668-b481-d06a425a5ddc","user_id":"usr_admin_zidanmuzaki13","period_month":"Juni","period_year":2026,"category_type":"Insidental","item_name":"Beli HP Zakiya","nominal_satuan":2125000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":2125000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"e75e9303-6750-4488-a986-061a60598487","user_id":"usr_admin_zidanmuzaki13","period_month":"Juli","period_year":2026,"category_type":"Dasar","item_name":"Makan","nominal_satuan":50000,"frekuensi":"Harian","multiplier":30,"target_anggaran":1500000,"realisasi_used":0,"timing_pattern":"Rata-rata Harian (Flat)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"47947098-ad53-40b7-9f1a-7c36baa6d395","user_id":"usr_admin_zidanmuzaki13","period_month":"Juli","period_year":2026,"category_type":"Dasar","item_name":"Transportasi","nominal_satuan":40000,"frekuensi":"Mingguan","multiplier":4,"target_anggaran":160000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Senin \u0026 Kamis)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"5ca43fd5-5f33-44ab-a21a-5a35ab42aab4","user_id":"usr_admin_zidanmuzaki13","period_month":"Juli","period_year":2026,"category_type":"Dasar","item_name":"Air Minum","nominal_satuan":20000,"frekuensi":"Mingguan","multiplier":3,"target_anggaran":60000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Senin \u0026 Kamis)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"71098e76-7bc1-4839-9c05-5def4959a02a","user_id":"usr_admin_zidanmuzaki13","period_month":"Juli","period_year":2026,"category_type":"Dasar","item_name":"Paket data","nominal_satuan":80000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":80000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 10)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"ae301344-c51e-4d74-8021-7b6d8901ebfd","user_id":"usr_admin_zidanmuzaki13","period_month":"Juli","period_year":2026,"category_type":"Pribadi","item_name":"Perawatan diri","nominal_satuan":200000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":200000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"36136dd3-5bd6-44c7-bd56-fea9d84873fe","user_id":"usr_admin_zidanmuzaki13","period_month":"Juli","period_year":2026,"category_type":"Pribadi","item_name":"Potong rambut","nominal_satuan":50000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":50000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"2bce0c8e-6086-497f-bf0d-a010f3d9b595","user_id":"usr_admin_zidanmuzaki13","period_month":"Juli","period_year":2026,"category_type":"Dasar","item_name":"Sewa Kos","nominal_satuan":1600000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":1600000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 5)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"1201b345-af5c-412c-b654-3f7b96c535f4","user_id":"usr_admin_zidanmuzaki13","period_month":"Juli","period_year":2026,"category_type":"Hiburan","item_name":"Jajan dan Lainnya","nominal_satuan":75000,"frekuensi":"Mingguan","multiplier":4,"target_anggaran":300000,"realisasi_used":0,"timing_pattern":"Hari Tertentu Tiap Minggu (Weekend)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"1a5cc21d-4ed8-4af1-ad82-38578be4d310","user_id":"usr_admin_zidanmuzaki13","period_month":"Juli","period_year":2026,"category_type":"Dasar","item_name":"Dana Cadangan","nominal_satuan":200000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":200000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"916b1aae-0ae4-4ac6-b772-18fba144ec02","user_id":"usr_admin_zidanmuzaki13","period_month":"Juli","period_year":2026,"category_type":"Insidental","item_name":"Ortu","nominal_satuan":1000000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":1000000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"bd0fb21f-df3d-482c-8285-0ee0ea13672c","user_id":"usr_admin_zidanmuzaki13","period_month":"Juli","period_year":2026,"category_type":"Insidental","item_name":"Zidni","nominal_satuan":500000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":500000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"c44dc3bc-5482-4672-9163-51ab60fbb7d5","user_id":"usr_admin_zidanmuzaki13","period_month":"Juli","period_year":2026,"category_type":"Dasar","item_name":"Paylater","nominal_satuan":2610000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":2610000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"9c68caa5-fd3e-4616-857f-7f15e442569c","user_id":"usr_admin_zidanmuzaki13","period_month":"Juli","period_year":2026,"category_type":"Insidental","item_name":"UKT Zidni","nominal_satuan":750000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":750000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":null,"notes":"Diimpor dari sheet 2026"},{"budget_id":"76694a4b-8977-4f86-ab6b-301b2804a2b5","user_id":"usr_admin_zidanmuzaki13","period_month":"Juli","period_year":2026,"category_type":"Alokasi Surplus","item_name":"Invest","nominal_satuan":4440000,"frekuensi":"Bulanan","multiplier":1,"target_anggaran":4440000,"realisasi_used":0,"timing_pattern":"Tanggal Spesifik (Tgl 1)","linked_goal_id":"goal-dana-darurat","notes":"Diimpor dari sheet 2026"}],
   goals: []
 };
+
+// -----------------------------------------------------------------------------
+// BILINGUAL I18N SYSTEM (BAHASA INDONESIA & ENGLISH)
+// -----------------------------------------------------------------------------
+let currentLang = localStorage.getItem('flowtrack_lang') || 'id';
+
+const I18N = {
+  id: {
+    navDashboard: 'Dashboard',
+    navBudgets: 'Anggaran',
+    navExpenses: 'Pengeluaran',
+    navGoals: 'Goals',
+    navMutasi: 'Mutasi',
+    navAdmin: 'Admin',
+    navFeedback: 'Feedback',
+    operatingModeEvaluation: 'ðŸ“œ Mode Evaluasi (Bulan Ditutup)',
+    operatingModePlanning: 'ðŸ“… Mode Perencanaan (Awal Bulan)',
+    operatingModeProjection: 'âš¡ Proyeksi Saldo Ideal',
+    heroSubtitleProjection: 'PROYEKSI SALDO IDEAL',
+    heroSubtitleEvaluation: 'EVALUASI ARUS KAS AKHIR BULAN',
+    heroSubtitlePlanning: 'PERENCANAAN ANGGARAN AWAL',
+    timeElapsed: 'Waktu Berjalan',
+    cashRealityTitle: 'Input Realita Kas Anda',
+    cashRealitySub: 'Saldo Dompet & Rekening',
+    totalCashTitle: 'Total Kas Riil Tersedia:',
+    statusOverbudget: 'OVERBUDGET',
+    statusHemat: 'HEMAT',
+    notesTitle: 'Catatan & Justifikasi Kas',
+    notesSub: 'Tersimpan Otomatis',
+    notesPlaceholder: 'Tulis alasan jika overbudget atau catatan kas mendesak bulan ini...',
+    cbTitle: 'Control Balance (Zero-Based)',
+    cbBtnSync: 'Alokasikan Surplus',
+    cbLblIncome: 'Pemasukan',
+    cbLblBudget: 'Total Anggaran',
+    cbLblDiff: 'Sisa / Selisih',
+    cbBalanced: 'Seimbang Rp 0',
+    cbSurplusUnallocated: 'Surplus Belum Dialokasikan',
+    cbDeficit: 'Defisit / Over-Allocated',
+    cbExplBalanced: 'Zero-Based Sempurna! Seluruh pemasukan telah habis dialokasikan ke pos kebutuhan dan surplus tabungan.',
+    cbExplSurplus: 'Masih ada sisa pemasukan yang belum dialokasikan. Klik Alokasikan Surplus di samping.',
+    cbExplDeficit: 'Total target anggaran melebihi pemasukan. Kurangi pos pengeluaran atau sesuaikan nominal.',
+    incomesTitle: 'Pemasukan Bulan Ini',
+    btnAddIncome: '+ Pemasukan',
+    budgetsTitle: 'Daftar Pos Pengeluaran',
+    btnAddBudget: 'âž• + Pos Anggaran',
+    goalsTitle: 'Portofolio & Target Keuangan',
+    btnAddGoal: 'ðŸŽ¯ + Goal Baru',
+    goalsDesc: 'Kelola sasaran tabungan dan investasi jangka panjang Anda. Pos anggaran kategori Alokasi Surplus terhubung langsung ke sasaran target di sini.',
+    realizedTitle: 'Daftar Seluruh Pengeluaran Realized',
+    btnAddExpense: 'âž• + Catat Pengeluaran',
+    interimTitle: 'âš¡ Rekonsiliasi Mutasi Sementara (s/d Hari Ini)',
+    interimDesc: 'Unggah mutasi rekening (format .CSV atau .PDF) yang diunduh sementara dari mobile banking hingga tanggal hari ini untuk menyinkronkan seluruh pengeluaran real.',
+    btnProcessInterim: 'ðŸš€ Proses Mutasi Realisasi',
+    btnSampleInterim: 'Sample',
+    aiBadge: 'ðŸ¤– AI Financial Advisor',
+    analyticsMonthTitle: 'Analisis Realisasi Pengeluaran',
+    btnRefreshAi: 'âœ¨ Refresh AI',
+    aiLblScore: 'Skor Disiplin',
+    aiLblRealized: 'Total Realisasi',
+    aiLblAvg: 'Rata-rata/Hari',
+    aiDiagHeader: 'ðŸ’¡ Diagnosa & Rekomendasi Cerdas AI:',
+    dayWord: 'Hari',
+    ofWord: 'dari',
+    daysWord: 'hari',
+    perDayWord: '/hari',
+    safeDailyWord: 'alokasi aman belanja harian'
+  },
+  en: {
+    navDashboard: 'Dashboard',
+    navBudgets: 'Budgets',
+    navExpenses: 'Expenses',
+    navGoals: 'Goals',
+    navMutasi: 'Statement',
+    navAdmin: 'Admin',
+    navFeedback: 'Feedback',
+    operatingModeEvaluation: 'ðŸ“œ Evaluation Mode (Closed Month)',
+    operatingModePlanning: 'ðŸ“… Planning Mode (Start of Month)',
+    operatingModeProjection: 'âš¡ Operating Projection',
+    heroSubtitleProjection: 'IDEAL BALANCE PROJECTION',
+    heroSubtitleEvaluation: 'MONTH-END CASHFLOW EVALUATION',
+    heroSubtitlePlanning: 'EARLY BUDGET PLANNING',
+    timeElapsed: 'Time Elapsed',
+    cashRealityTitle: 'Input Real Cash Accounts',
+    cashRealitySub: 'Wallet, Bank & E-Money Balances',
+    totalCashTitle: 'Total Actual Cash Available:',
+    statusOverbudget: 'OVERBUDGET',
+    statusHemat: 'ON-TRACK',
+    notesTitle: 'Cash & Overbudget Notes',
+    notesSub: 'Auto-Saved',
+    notesPlaceholder: 'Write reasons for overbudget or urgent expenses this month...',
+    cbTitle: 'Zero-Based Control Balance',
+    cbBtnSync: 'Allocate Surplus',
+    cbLblIncome: 'Total Income',
+    cbLblBudget: 'Total Budget',
+    cbLblDiff: 'Net Difference',
+    cbBalanced: 'Balanced Rp 0',
+    cbSurplusUnallocated: 'Unallocated Surplus',
+    cbDeficit: 'Deficit / Over-Allocated',
+    cbExplBalanced: 'Perfect Zero-Based! All income has been fully assigned to expenses and surplus savings.',
+    cbExplSurplus: 'You have unallocated income remaining. Click Allocate Surplus to balance.',
+    cbExplDeficit: 'Total budget exceeds income. Reduce expense limits or adjust amounts.',
+    incomesTitle: 'Monthly Income Sources',
+    btnAddIncome: '+ Add Income',
+    budgetsTitle: 'Budget Expense Categories',
+    btnAddBudget: 'âž• + Add Budget',
+    goalsTitle: 'Financial Portfolio & Target Goals',
+    btnAddGoal: 'ðŸŽ¯ + New Goal',
+    goalsDesc: 'Manage your long-term savings and investment milestones. Surplus Allocation budgets link directly to these targets.',
+    realizedTitle: 'Realized Expense Transactions',
+    btnAddExpense: 'âž• + Log Expense',
+    interimTitle: 'âš¡ Interim Statement Sync (To Date)',
+    interimDesc: 'Upload interim bank statement (.CSV or .PDF) downloaded up to today to synchronize all realized expenses.',
+    btnProcessInterim: 'ðŸš€ Process Statement Sync',
+    btnSampleInterim: 'Sample',
+    aiBadge: 'ðŸ¤– AI Financial Advisor',
+    analyticsMonthTitle: 'Realized Spending Analysis',
+    btnRefreshAi: 'âœ¨ Refresh AI',
+    aiLblScore: 'Discipline Score',
+    aiLblRealized: 'Total Realized',
+    aiLblAvg: 'Daily Average',
+    aiDiagHeader: 'ðŸ’¡ AI Diagnostics & Actionable Advice:',
+    dayWord: 'Day',
+    ofWord: 'of',
+    daysWord: 'days',
+    perDayWord: '/day',
+    safeDailyWord: 'safe daily allowance'
+  }
+};
+
+function t(key) {
+  const dict = I18N[currentLang] || I18N['id'];
+  return dict[key] !== undefined ? dict[key] : key;
+}
+
+function setLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem('flowtrack_lang', lang);
+
+  const btnId = document.getElementById('btn-lang-id');
+  const btnEn = document.getElementById('btn-lang-en');
+  if (lang === 'id') {
+    if (btnId) btnId.classList.add('active');
+    if (btnEn) btnEn.classList.remove('active');
+  } else {
+    if (btnEn) btnEn.classList.add('active');
+    if (btnId) btnId.classList.remove('active');
+  }
+
+  applyStaticTranslations();
+  renderHeroCard();
+  renderCashReality();
+  renderControlBalance();
+  renderBudgetsLists();
+  renderGoalsList();
+  if (appState.activeView === 'view-analytics') {
+    generateAiAnalytics();
+  }
+}
+
+function applyStaticTranslations() {
+  const dict = I18N[currentLang] || I18N['id'];
+  
+  // Navigation Bar
+  const navMap = {
+    'nav-lbl-dashboard': dict.navDashboard,
+    'nav-lbl-budgets': dict.navBudgets,
+    'nav-lbl-expenses': dict.navExpenses,
+    'nav-lbl-goals': dict.navGoals,
+    'nav-lbl-mutasi': dict.navMutasi,
+    'nav-lbl-admin': dict.navAdmin,
+    'nav-lbl-feedback': dict.navFeedback
+  };
+
+  for (const [id, text] of Object.entries(navMap)) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = text;
+  }
+
+  // Control Balance Labels
+  const cbMap = {
+    'txt-cb-title': dict.cbTitle,
+    'txt-cb-btn-sync': dict.cbBtnSync,
+    'txt-cb-lbl-income': dict.cbLblIncome,
+    'txt-cb-lbl-budget': dict.cbLblBudget,
+    'txt-cb-lbl-diff': dict.cbLblDiff,
+    'txt-incomes-title': dict.incomesTitle,
+    'txt-btn-add-income': dict.btnAddIncome,
+    'txt-budgets-title': dict.budgetsTitle,
+    'txt-btn-add-budget': dict.btnAddBudget,
+    'txt-goals-title': dict.goalsTitle,
+    'txt-btn-add-goal': dict.btnAddGoal,
+    'txt-goals-desc': dict.goalsDesc,
+    'txt-realized-title': dict.realizedTitle,
+    'txt-btn-add-expense': dict.btnAddExpense,
+    'txt-interim-title': dict.interimTitle,
+    'txt-interim-desc': dict.interimDesc,
+    'txt-btn-process-interim': dict.btnProcessInterim,
+    'txt-btn-sample-interim': dict.btnSampleInterim,
+    'txt-ai-badge': dict.aiBadge,
+    'txt-btn-refresh-ai': dict.btnRefreshAi,
+    'txt-ai-lbl-score': dict.aiLblScore,
+    'txt-ai-lbl-realized': dict.aiLblRealized,
+    'txt-ai-lbl-avg': dict.aiLblAvg,
+    'txt-ai-diag-header': dict.aiDiagHeader
+  };
+
+  for (const [id, text] of Object.entries(cbMap)) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = text;
+  }
+}
 
 // -----------------------------------------------------------------------------
 // USER SESSION & AUTHENTICATION STATE
@@ -93,6 +309,14 @@ function getDaysInMonth(year, monthName) {
   return new Date(year, m, 0).getDate();
 }
 
+function getMonthDisplayName(monthName) {
+  if (currentLang === 'en') {
+    const idx = MONTH_NAMES.findIndex(m => m.toLowerCase() === monthName.toLowerCase());
+    return idx >= 0 ? MONTH_NAMES_EN[idx] : monthName;
+  }
+  return monthName;
+}
+
 // -----------------------------------------------------------------------------
 // PERMANENT LOCAL STORAGE PERSISTENCE ENGINE (ANTI-LOST GUARANTEE)
 // -----------------------------------------------------------------------------
@@ -137,7 +361,7 @@ function loadCashAccountsFromStorage() {
     // Load Month Justification Notes & Update Badge
     const notesEl = document.getElementById('cash-reality-notes');
     const badgeNotes = document.getElementById('cash-notes-period-badge');
-    if (badgeNotes) badgeNotes.textContent = appState.currentMonth + ' ' + appState.currentYear;
+    if (badgeNotes) badgeNotes.textContent = getMonthDisplayName(appState.currentMonth) + ' ' + appState.currentYear;
     if (notesEl) {
       const savedNotes = localStorage.getItem(getUserStorageKey('notes_' + appState.currentMonth + '_' + appState.currentYear)) || '';
       notesEl.value = savedNotes;
@@ -168,30 +392,30 @@ function renderControlBalance() {
       badge.style.background = 'rgba(16, 185, 129, 0.25)';
       badge.style.color = '#34D399';
       badge.style.borderColor = 'rgba(52, 211, 153, 0.4)';
-      badge.textContent = 'âœ… Seimbang Rp 0';
+      badge.textContent = t('cbBalanced');
     }
     if (expl) {
-      expl.innerHTML = 'ðŸŽ¯ <strong>Zero-Based Sempurna!</strong> Seluruh pemasukan (Rp ' + formatIDR(totalIncome).replace('Rp ', '') + ') telah habis dialokasikan ke pos kebutuhan dan surplus tabungan.';
+      expl.innerHTML = '<strong>' + t('cbBalanced') + '</strong> &bull; ' + t('cbExplBalanced');
     }
   } else if (diff > 0) {
     if (badge) {
       badge.style.background = 'rgba(245, 158, 11, 0.25)';
       badge.style.color = '#FBBF24';
       badge.style.borderColor = 'rgba(251, 191, 36, 0.4)';
-      badge.textContent = 'âš ï¸ Surplus Belum Dialokasikan';
+      badge.textContent = t('cbSurplusUnallocated');
     }
     if (expl) {
-      expl.innerHTML = 'Masih ada sisa <strong>' + formatIDR(diff) + '</strong> pemasukan yang belum dialokasikan. Klik "âš¡ Alokasikan Surplus" di samping.';
+      expl.innerHTML = '<strong>+' + formatIDR(diff) + '</strong> &bull; ' + t('cbExplSurplus');
     }
   } else {
     if (badge) {
       badge.style.background = 'rgba(239, 68, 68, 0.25)';
       badge.style.color = '#F87171';
       badge.style.borderColor = 'rgba(248, 113, 113, 0.4)';
-      badge.textContent = 'ðŸš¨ Defisit / Over-Allocated';
+      badge.textContent = t('cbDeficit');
     }
     if (expl) {
-      expl.innerHTML = 'Total target anggaran melebihi pemasukan sebesar <strong>' + formatIDR(Math.abs(diff)) + '</strong>. Kurangi pos pengeluaran atau klik sesuaikan.';
+      expl.innerHTML = '<strong>-' + formatIDR(Math.abs(diff)) + '</strong> &bull; ' + t('cbExplDeficit');
     }
   }
 }
@@ -219,7 +443,7 @@ function autoSyncSurplusBudget() {
       period_month: appState.currentMonth,
       period_year: appState.currentYear,
       category_type: 'Alokasi Surplus',
-      item_name: 'Alokasi Surplus (Tabungan & Investasi)',
+      item_name: currentLang === 'en' ? 'Surplus Allocation (Savings & Investment)' : 'Alokasi Surplus (Tabungan & Investasi)',
       nominal_satuan: calculatedSurplus,
       frekuensi: 'Bulanan',
       multiplier: 1,
@@ -243,7 +467,10 @@ function autoSyncSurplusBudget() {
 
   saveUserDataToStorage();
   refreshAllData();
-  alert('Alokasi Surplus otomatis disesuaikan menjadi ' + formatIDR(calculatedSurplus) + '!\nControl Balance kini bernilai Rp 0 (Zero-Based).');
+  const alertMsg = currentLang === 'en'
+    ? 'Surplus Allocation automatically balanced to ' + formatIDR(calculatedSurplus) + '!\nControl Balance is now Rp 0 (Zero-Based).'
+    : 'Alokasi Surplus otomatis disesuaikan menjadi ' + formatIDR(calculatedSurplus) + '!\nControl Balance kini bernilai Rp 0 (Zero-Based).';
+  alert(alertMsg);
 }
 
 function ensureMonthlySurplusBudgetExists() {
@@ -261,7 +488,7 @@ function ensureMonthlySurplusBudgetExists() {
       period_month: appState.currentMonth,
       period_year: appState.currentYear,
       category_type: 'Alokasi Surplus',
-      item_name: 'Alokasi Surplus (Tabungan & Investasi)',
+      item_name: currentLang === 'en' ? 'Surplus Allocation (Savings & Investment)' : 'Alokasi Surplus (Tabungan & Investasi)',
       nominal_satuan: calculatedSurplus,
       frekuensi: 'Bulanan',
       multiplier: 1,
@@ -283,7 +510,11 @@ function ensureMonthlySurplusBudgetExists() {
 // -----------------------------------------------------------------------------
 function generateAiAnalytics() {
   const monthTitle = document.getElementById('analytics-month-title');
-  if (monthTitle) monthTitle.textContent = 'Analisis Realisasi Pengeluaran (' + appState.currentMonth + ' ' + appState.currentYear + ')';
+  if (monthTitle) {
+    monthTitle.textContent = currentLang === 'en' 
+      ? 'Realized Spending Analysis (' + getMonthDisplayName(appState.currentMonth) + ' ' + appState.currentYear + ')'
+      : 'Analisis Realisasi Pengeluaran (' + appState.currentMonth + ' ' + appState.currentYear + ')';
+  }
 
   const totalIncome = (appState.incomes || []).reduce((sum, i) => sum + Number(i.amount), 0);
   const totalTarget = (appState.budgets || []).reduce((sum, b) => sum + (Number(b.target_anggaran) || 0), 0);
@@ -321,7 +552,7 @@ function generateAiAnalytics() {
     scoreEl.style.color = healthScore >= 80 ? '#34D399' : (healthScore >= 60 ? '#FBBF24' : '#F87171');
   }
   if (realizedEl) realizedEl.textContent = formatIDR(totalRealized);
-  if (dailyEl) dailyEl.textContent = formatIDR(dailyAvg) + '/hari';
+  if (dailyEl) dailyEl.textContent = formatIDR(dailyAvg) + t('perDayWord');
 
   // Category breakdown
   let catSpend = { Dasar: 0, Pribadi: 0, Hiburan: 0, Insidental: 0, 'Alokasi Surplus': 0 };
@@ -331,24 +562,44 @@ function generateAiAnalytics() {
   });
 
   const overBudgets = (appState.budgets || []).filter(b => Number(b.realisasi_used) > Number(b.target_anggaran));
-  const activeBudgets = (appState.budgets || []).filter(b => Number(b.realisasi_used) > 0);
 
-  let overText = overBudgets.length > 0 
-    ? 'Terdapat <strong>' + overBudgets.length + ' pos overbudget</strong> (' + overBudgets.map(b => b.item_name).join(', ') + '). Perlu pengetatan segera.'
-    : 'Semua pos pengeluaran berjalan <strong>sangat tertib dan aman</strong> di bawah plafon target.';
-
+  let overText = '';
   let adviceText = '';
-  if (healthScore >= 80) {
-    adviceText = 'Disiplin finansial Anda <strong>sangat baik</strong>! Sisa waktu ' + remainingDays + ' hari lagi di bulan ini, batas aman belanja harian Anda adalah <strong>' + formatIDR(safeDailyAllowance) + ' / hari</strong> untuk mempertahankan surplus.';
-  } else {
-    adviceText = 'Pengeluaran mendekati batas burn rate ideal. Disarankan membatasi pos hiburan & jajan pribadi, dengan alokasi maksimal <strong>' + formatIDR(safeDailyAllowance) + ' / hari</strong> hingga akhir bulan.';
-  }
 
-  if (diagEl) {
-    diagEl.innerHTML = 
-      '<div style="margin-bottom: 6px;">ðŸ“Š <strong>Pola Pengeluaran Real:</strong> Kebutuhan Pokok: ' + formatIDR(catSpend.Dasar) + ' â€¢ Pribadi & Hiburan: ' + formatIDR(catSpend.Pribadi + catSpend.Hiburan) + ' â€¢ Tabungan/Surplus: ' + formatIDR(catSpend['Alokasi Surplus']) + '</div>' +
-      '<div style="margin-bottom: 6px;">âš ï¸ <strong>Diagnosa Pos:</strong> ' + overText + '</div>' +
-      '<div>ðŸŽ¯ <strong>Rekomendasi AI:</strong> ' + adviceText + '</div>';
+  if (currentLang === 'en') {
+    overText = overBudgets.length > 0 
+      ? 'There are <strong>' + overBudgets.length + ' overbudget categories</strong> (' + overBudgets.map(b => b.item_name).join(', ') + '). Immediate adjustment advised.'
+      : 'All expense items are running <strong>safely and within target limits</strong>.';
+
+    if (healthScore >= 80) {
+      adviceText = 'Financial discipline is <strong>excellent</strong>! With ' + remainingDays + ' days left this month, your maximum safe daily spending is <strong>' + formatIDR(safeDailyAllowance) + ' / day</strong> to maintain target surplus.';
+    } else {
+      adviceText = 'Spending is nearing ideal burn ceiling. We recommend reducing personal entertainment expenses, capping daily spend at <strong>' + formatIDR(safeDailyAllowance) + ' / day</strong> through month-end.';
+    }
+
+    if (diagEl) {
+      diagEl.innerHTML = 
+        '<div style="margin-bottom: 8px;"><strong>&bull; Realized Distribution:</strong> Basic: ' + formatIDR(catSpend.Dasar) + ' &bull; Personal & Fun: ' + formatIDR(catSpend.Pribadi + catSpend.Hiburan) + ' &bull; Savings/Surplus: ' + formatIDR(catSpend['Alokasi Surplus']) + '</div>' +
+        '<div style="margin-bottom: 8px;"><strong>&bull; Status Check:</strong> ' + overText + '</div>' +
+        '<div><strong>&bull; Actionable Advice:</strong> ' + adviceText + '</div>';
+    }
+  } else {
+    overText = overBudgets.length > 0 
+      ? 'Terdapat <strong>' + overBudgets.length + ' pos overbudget</strong> (' + overBudgets.map(b => b.item_name).join(', ') + '). Perlu pengetatan segera.'
+      : 'Semua pos pengeluaran berjalan <strong>sangat tertib dan aman</strong> di bawah plafon target.';
+
+    if (healthScore >= 80) {
+      adviceText = 'Disiplin finansial Anda <strong>sangat baik</strong>! Sisa waktu ' + remainingDays + ' hari lagi di bulan ini, batas aman belanja harian Anda adalah <strong>' + formatIDR(safeDailyAllowance) + ' / hari</strong> untuk mempertahankan surplus.';
+    } else {
+      adviceText = 'Pengeluaran mendekati batas burn rate ideal. Disarankan membatasi pos hiburan & jajan pribadi, dengan alokasi maksimal <strong>' + formatIDR(safeDailyAllowance) + ' / hari</strong> hingga akhir bulan.';
+    }
+
+    if (diagEl) {
+      diagEl.innerHTML = 
+        '<div style="margin-bottom: 8px;"><strong>&bull; Pola Pengeluaran Real:</strong> Kebutuhan Pokok: ' + formatIDR(catSpend.Dasar) + ' &bull; Pribadi & Hiburan: ' + formatIDR(catSpend.Pribadi + catSpend.Hiburan) + ' &bull; Tabungan/Surplus: ' + formatIDR(catSpend['Alokasi Surplus']) + '</div>' +
+        '<div style="margin-bottom: 8px;"><strong>&bull; Diagnosa Pos:</strong> ' + overText + '</div>' +
+        '<div><strong>&bull; Rekomendasi AI:</strong> ' + adviceText + '</div>';
+    }
   }
 
   renderAnalyticsExpensesStream();
@@ -368,7 +619,7 @@ function renderAnalyticsExpensesStream() {
   if (!container) return;
 
   const currentMonthTx = (appState.transactions || []).filter(tx => {
-    return true; // Show all active transactions or match period
+    return true; // Show active transactions
   });
 
   const filteredTx = appState.activeAnalyticsCategory === 'Semua'
@@ -379,22 +630,26 @@ function renderAnalyticsExpensesStream() {
       });
 
   if (filteredTx.length === 0) {
+    const emptyTitle = currentLang === 'en' ? 'No Realized Expenses Recorded Yet' : 'Belum Ada Pengeluaran Realized Dicatat';
+    const emptyDesc = currentLang === 'en' ? 'Log your daily expenses or upload an interim bank statement.' : 'Catat pengeluaran harian Anda atau unggah mutasi e-banking sementara.';
+    const btnText = currentLang === 'en' ? '+ Log Realized Expense' : '+ Catat Pengeluaran Realized';
+
     container.innerHTML = 
       '<div class="empty-state-box" style="padding: 24px 16px; text-align: center;">' +
         '<div class="empty-icon" style="margin-bottom: 8px;">' +
           '<svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>' +
         '</div>' +
-        '<div class="empty-title" style="font-weight: 700; font-size: 0.9rem; color: var(--text-primary); margin-bottom: 4px;">Belum Ada Pengeluaran Realized Dicatat</div>' +
-        '<div class="empty-desc" style="font-size: 0.75rem; color: var(--text-secondary); max-width: 280px; margin: 0 auto 12px; line-height: 1.4;">Catat pengeluaran harian Anda atau unggah mutasi e-banking sementara.</div>' +
-        '<button class="btn-primary" style="padding: 8px 14px; font-size: 0.75rem;" onclick="openAddExpenseModal()">+ Catat Pengeluaran Realized</button>' +
+        '<div class="empty-title" style="font-weight: 700; font-size: 0.9rem; color: var(--text-primary); margin-bottom: 4px;">' + emptyTitle + '</div>' +
+        '<div class="empty-desc" style="font-size: 0.75rem; color: var(--text-secondary); max-width: 280px; margin: 0 auto 12px; line-height: 1.4;">' + emptyDesc + '</div>' +
+        '<button class="btn-primary" style="padding: 8px 14px; font-size: 0.75rem;" onclick="openAddExpenseModal()">' + btnText + '</button>' +
       '</div>';
     return;
   }
 
   container.innerHTML = filteredTx.map(tx => {
     const b = appState.budgets.find(item => item.budget_id === tx.budget_id);
-    const catName = b ? b.category_type : 'Pengeluaran';
-    const posName = b ? b.item_name : (tx.description || 'Transaksi');
+    const catName = b ? b.category_type : (currentLang === 'en' ? 'Expense' : 'Pengeluaran');
+    const posName = b ? b.item_name : (tx.description || 'Transaction');
 
     return (
       '<div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); margin-bottom: 8px;">' +
@@ -402,7 +657,7 @@ function renderAnalyticsExpensesStream() {
           '<div style="font-weight: 700; font-size: 0.85rem; color: var(--text-primary);">' + (tx.description || posName) + '</div>' +
           '<div style="font-size: 0.7rem; color: var(--text-secondary); display: flex; align-items: center; gap: 6px; margin-top: 2px;">' +
             '<span class="item-category-pill" style="font-size: 0.65rem; padding: 1px 5px;">' + catName + '</span>' +
-            '<span>Pos: ' + posName + '</span> â€¢ <span>' + (tx.transaction_date || '2026-08-22') + '</span>' +
+            '<span>Pos: ' + posName + '</span> &bull; <span>' + (tx.transaction_date || '2026-08-22') + '</span>' +
           '</div>' +
         '</div>' +
         '<div style="text-align: right;">' +
@@ -436,7 +691,7 @@ async function submitQuickExpense() {
   const method = document.getElementById('expense-method-select').value;
 
   if (amount <= 0) {
-    alert('Harap isi nominal pengeluaran yang valid!');
+    alert(currentLang === 'en' ? 'Please enter a valid expense amount!' : 'Harap isi nominal pengeluaran yang valid!');
     return;
   }
 
@@ -460,7 +715,7 @@ async function submitQuickExpense() {
     transaction_type: 'Expense',
     amount: amount,
     payment_method_platform: method,
-    description: desc || (b ? b.item_name : 'Pengeluaran')
+    description: desc || (b ? b.item_name : (currentLang === 'en' ? 'Expense' : 'Pengeluaran'))
   };
 
   appState.transactions.unshift(newTx);
@@ -475,7 +730,10 @@ async function submitQuickExpense() {
   document.getElementById('add-expense-modal').classList.remove('active');
   refreshAllData();
   generateAiAnalytics();
-  alert('Pengeluaran ' + formatIDR(amount) + ' berhasil dicatat dan direalisasikan ke pos ' + (b ? b.item_name : '') + '!');
+  const alertMsg = currentLang === 'en'
+    ? 'Expense of ' + formatIDR(amount) + ' successfully realized to ' + (b ? b.item_name : '') + '!'
+    : 'Pengeluaran ' + formatIDR(amount) + ' berhasil dicatat dan direalisasikan ke pos ' + (b ? b.item_name : '') + '!';
+  alert(alertMsg);
 }
 
 // -----------------------------------------------------------------------------
@@ -499,7 +757,7 @@ async function processInterimStatement() {
 
   const raw = textarea.value.trim();
   if (!raw) {
-    alert('Harap pilih file CSV/PDF atau tempel mutasi bank sementara terlebih dahulu!');
+    alert(currentLang === 'en' ? 'Please upload a CSV/PDF or paste statement text first!' : 'Harap pilih file CSV/PDF atau tempel mutasi bank sementara terlebih dahulu!');
     return;
   }
 
@@ -556,7 +814,10 @@ async function processInterimStatement() {
   refreshAllData();
   generateAiAnalytics();
   textarea.value = '';
-  alert('Rekonsiliasi Mutasi Sementara Berhasil!\n\nâ€¢ Mutasi Dicocokkan: ' + matched + ' transaksi\nâ€¢ Total Realisasi Terekonsiliasi: ' + formatIDR(totalAmt));
+  const successMsg = currentLang === 'en'
+    ? 'Interim Statement Reconciled Successfully!\n\nâ€¢ Matched: ' + matched + ' transactions\nâ€¢ Total Realized: ' + formatIDR(totalAmt)
+    : 'Rekonsiliasi Mutasi Sementara Berhasil!\n\nâ€¢ Mutasi Dicocokkan: ' + matched + ' transaksi\nâ€¢ Total Realisasi Terekonsiliasi: ' + formatIDR(totalAmt);
+  alert(successMsg);
 }
 
 // -----------------------------------------------------------------------------
@@ -633,14 +894,14 @@ function updateDateSummaryText(target) {
   if (!summaryEl) return;
 
   if (state.mode === 'flat') {
-    summaryEl.textContent = 'Flat Harian';
+    summaryEl.textContent = currentLang === 'en' ? 'Flat Daily' : 'Flat Harian';
   } else {
     if (state.selectedDates.length === 0) {
-      summaryEl.textContent = 'Pilih Tanggal...';
+      summaryEl.textContent = currentLang === 'en' ? 'Select Dates...' : 'Pilih Tanggal...';
     } else if (state.selectedDates.length === 1) {
-      summaryEl.textContent = 'Tanggal ' + state.selectedDates[0];
+      summaryEl.textContent = (currentLang === 'en' ? 'Date ' : 'Tanggal ') + state.selectedDates[0];
     } else {
-      summaryEl.textContent = 'Tgl ' + state.selectedDates.join(', ') + ' (' + state.selectedDates.length + 'x)';
+      summaryEl.textContent = (currentLang === 'en' ? 'Dates ' : 'Tgl ') + state.selectedDates.join(', ') + ' (' + state.selectedDates.length + 'x)';
     }
   }
 }
@@ -704,7 +965,7 @@ function syncAuthAndScreenState() {
 
 function updateHeaderRealTimeDate() {
   const badgeEl = document.getElementById('header-date-badge');
-  if (badgeEl) badgeEl.textContent = '22 Agu 2026';
+  if (badgeEl) badgeEl.textContent = currentLang === 'en' ? '22 Aug 2026' : '22 Agu 2026';
   syncAuthAndScreenState();
 }
 
@@ -831,7 +1092,7 @@ async function submitLandingLogin() {
   if (loginSuccess) {
     if (alertEl) {
       alertEl.className = 'auth-alert-msg success';
-      alertEl.textContent = 'Selamat datang kembali, ' + currentUser.username + '!';
+      alertEl.textContent = (currentLang === 'en' ? 'Welcome back, ' : 'Selamat datang kembali, ') + currentUser.username + '!';
       alertEl.style.display = 'block';
     }
 
@@ -843,7 +1104,7 @@ async function submitLandingLogin() {
   } else {
     if (alertEl) {
       alertEl.className = 'auth-alert-msg error';
-      alertEl.textContent = 'Email/Username atau Password salah!';
+      alertEl.textContent = currentLang === 'en' ? 'Invalid Email/Username or Password!' : 'Email/Username atau Password salah!';
       alertEl.style.display = 'block';
     }
   }
@@ -864,7 +1125,7 @@ async function submitLandingRegister() {
   if (!username || !email || !password) {
     if (alertEl) {
       alertEl.className = 'auth-alert-msg error';
-      alertEl.textContent = 'Harap lengkapi seluruh kolom registrasi!';
+      alertEl.textContent = currentLang === 'en' ? 'Please fill out all registration fields!' : 'Harap lengkapi seluruh kolom registrasi!';
       alertEl.style.display = 'block';
     }
     return;
@@ -916,7 +1177,7 @@ async function submitLandingRegister() {
   if (regSuccess) {
     if (alertEl) {
       alertEl.className = 'auth-alert-msg success';
-      alertEl.textContent = 'Akun ' + currentUser.username + ' berhasil dibuat! Memulai dengan kanvas bersih...';
+      alertEl.textContent = (currentLang === 'en' ? 'Account ' : 'Akun ') + currentUser.username + (currentLang === 'en' ? ' created successfully!' : ' berhasil dibuat!');
       alertEl.style.display = 'block';
     }
 
@@ -929,7 +1190,8 @@ async function submitLandingRegister() {
 }
 
 function handleLogout() {
-  if (confirm('Keluar dari sesi akun saat ini?')) {
+  const confirmMsg = currentLang === 'en' ? 'Log out from current account session?' : 'Keluar dari sesi akun saat ini?';
+  if (confirm(confirmMsg)) {
     localStorage.removeItem('flowtrack_user');
     localStorage.removeItem('flowtrack_token');
     currentUser = null;
@@ -950,7 +1212,7 @@ function openAuthModal() {
 // -----------------------------------------------------------------------------
 function switchView(viewId) {
   if (viewId === 'view-admin' && (!currentUser || currentUser.email !== 'zidanmuzaki2002@gmail.com')) {
-    alert('Akses Ditolak: Halaman Admin Panel hanya khusus untuk zidanmuzaki2002@gmail.com');
+    alert(currentLang === 'en' ? 'Access Denied: Admin Panel is restricted to superadmin.' : 'Akses Ditolak: Halaman Admin Panel hanya khusus untuk zidanmuzaki2002@gmail.com');
     return;
   }
 
@@ -1053,9 +1315,10 @@ async function fetchAdminData() {
 }
 
 async function takeOutUser(userId, username) {
-  if (!confirm('KONFIRMASI TAKE OUT PENGGUNA:\n\nApakah Anda yakin ingin menghapus pengguna \'' + username + '\'?\nSemua data pos anggaran dan histori milik pengguna ini akan dihapus permanen.')) {
-    return;
-  }
+  const confirmMsg = currentLang === 'en'
+    ? 'CONFIRM TAKE OUT USER:\n\nAre you sure you want to take out user \'' + username + '\'?\nAll budget categories and history belonging to this user will be permanently deleted.'
+    : 'KONFIRMASI TAKE OUT PENGGUNA:\n\nApakah Anda yakin ingin menghapus pengguna \'' + username + '\'?\nSemua data pos anggaran dan histori milik pengguna ini akan dihapus permanen.';
+  if (!confirm(confirmMsg)) return;
 
   try {
     let localUsers = JSON.parse(localStorage.getItem('flowtrack_local_users') || '[]');
@@ -1071,7 +1334,7 @@ async function takeOutUser(userId, username) {
     });
   } catch (err) {}
 
-  alert('Pengguna \'' + username + '\' berhasil di-take out dari sistem.');
+  alert(currentLang === 'en' ? 'User \'' + username + '\' has been removed.' : 'Pengguna \'' + username + '\' berhasil di-take out dari sistem.');
   fetchAdminData();
 }
 
@@ -1098,7 +1361,7 @@ async function submitUserFeedback() {
   if (!subject || !message) {
     if (alertEl) {
       alertEl.className = 'auth-alert-msg error';
-      alertEl.textContent = 'Harap isi subjek dan pesan feedback Anda!';
+      alertEl.textContent = currentLang === 'en' ? 'Please fill out subject and message!' : 'Harap isi subjek dan pesan feedback Anda!';
       alertEl.style.display = 'block';
     }
     return;
@@ -1132,7 +1395,7 @@ async function submitUserFeedback() {
 
   if (alertEl) {
     alertEl.className = 'auth-alert-msg success';
-    alertEl.textContent = 'Terima kasih! Masukan Anda telah berhasil dikirim ke Admin untuk perbaikan sistem.';
+    alertEl.textContent = currentLang === 'en' ? 'Thank you! Your feedback has been sent to admin.' : 'Terima kasih! Masukan Anda telah berhasil dikirim ke Admin untuk perbaikan sistem.';
     alertEl.style.display = 'block';
   }
 
@@ -1189,7 +1452,7 @@ async function fetchAdminFeedbacks() {
 
 function renderFeedbacksList(container, feedbacks, isAdminView) {
   if (!feedbacks || feedbacks.length === 0) {
-    container.innerHTML = '<div style="font-size: 0.75rem; color: var(--text-secondary); padding: 8px 0;">Belum ada feedback yang dikirim.</div>';
+    container.innerHTML = '<div style="font-size: 0.75rem; color: var(--text-secondary); padding: 8px 0;">' + (currentLang === 'en' ? 'No feedback recorded yet.' : 'Belum ada feedback yang dikirim.') + '</div>';
     return;
   }
 
@@ -1213,8 +1476,8 @@ function renderFeedbacksList(container, feedbacks, isAdminView) {
           '<div>' +
             '<div style="font-weight: 700; font-size: 0.85rem; color: var(--text-primary);">' + f.subject + '</div>' +
             '<div style="font-size: 0.7rem; color: var(--text-secondary);">' +
-              (isAdminView ? ('Dari: <strong>' + (f.username || f.email) + '</strong> (' + f.email + ') â€¢ ') : '') +
-              f.category + ' â€¢ <span style="color: #F59E0B; font-size: 0.85rem;">' + starsHtml + '</span> â€¢ ' + dateStr +
+              (isAdminView ? ('Dari: <strong>' + (f.username || f.email) + '</strong> (' + f.email + ') &bull; ') : '') +
+              f.category + ' &bull; <span style="color: #F59E0B; font-size: 0.85rem;">' + starsHtml + '</span> &bull; ' + dateStr +
             '</div>' +
           '</div>' +
           '<span style="font-size: 0.68rem; padding: 2px 6px; border-radius: 4px; background: ' + statusBg + '; color: ' + statusColor + '; font-weight: 600;">' + (f.status || 'Baru') + '</span>' +
@@ -1264,6 +1527,7 @@ async function deleteFeedback(feedbackId) {
 async function refreshAllData() {
   if (!currentUser) return;
   loadCashAccountsFromStorage();
+  applyStaticTranslations();
   await Promise.all([
     fetchIncomes(),
     fetchBudgets(),
@@ -1532,20 +1796,24 @@ function renderHeroCard() {
   const timeProgressBar = document.getElementById('time-progress-bar');
   const modeBadge = document.getElementById('header-mode-badge');
 
-  if (periodLabel) periodLabel.textContent = appState.currentMonth + ' ' + appState.currentYear;
+  if (periodLabel) periodLabel.textContent = getMonthDisplayName(appState.currentMonth) + ' ' + appState.currentYear;
 
   if (appState.monthStatus === 'PAST_EVALUATION') {
     if (heroCard) heroCard.className = 'card hero-card evaluation-mode';
-    if (heroSubtitle) heroSubtitle.textContent = 'EVALUASI ARUS KAS AKHIR BULAN';
+    if (heroSubtitle) heroSubtitle.textContent = t('heroSubtitleEvaluation');
     if (modeBadge) {
       modeBadge.className = 'mode-badge evaluation';
-      modeBadge.textContent = 'Mode Evaluasi';
+      modeBadge.textContent = t('operatingModeEvaluation');
     }
 
     const netSurplus = d.calculation_breakdown.total_pendapatan - d.actual_vs_ideal_comparison.total_realisasi_used_to_date;
     if (heroAmount) heroAmount.textContent = formatIDR(netSurplus);
 
-    if (timeProgressLabel) timeProgressLabel.textContent = 'Bulan Ditutup (Evaluasi Penuh ' + d.period.total_days_in_month + ' Hari - 100%)';
+    if (timeProgressLabel) {
+      timeProgressLabel.textContent = currentLang === 'en'
+        ? 'Month Closed (100% Completed &bull; ' + d.period.total_days_in_month + ' Days)'
+        : 'Bulan Ditutup (Evaluasi Penuh ' + d.period.total_days_in_month + ' Hari - 100%)';
+    }
     if (timeProgressBar) {
       timeProgressBar.style.width = '100%';
       timeProgressBar.style.background = netSurplus >= 0 ? '#10B981' : '#EF4444';
@@ -1558,23 +1826,27 @@ function renderHeroCard() {
     if (elBurn) elBurn.textContent = formatIDR(d.actual_vs_ideal_comparison.total_realisasi_used_to_date);
 
     const elIncLbl = document.getElementById('hero-stat-income-label');
-    if (elIncLbl) elIncLbl.textContent = 'Total Pemasukan';
+    if (elIncLbl) elIncLbl.textContent = currentLang === 'en' ? 'Total Income' : 'Total Pemasukan';
 
     const elBurnLbl = document.getElementById('hero-stat-burn-label');
-    if (elBurnLbl) elBurnLbl.textContent = 'Total Realisasi Terpakai';
+    if (elBurnLbl) elBurnLbl.textContent = currentLang === 'en' ? 'Total Realized Spent' : 'Total Realisasi Terpakai';
 
   } else if (appState.monthStatus === 'FUTURE_PLANNING') {
     if (heroCard) heroCard.className = 'card hero-card';
-    if (heroSubtitle) heroSubtitle.textContent = 'PERENCANAAN ANGGARAN AWAL';
+    if (heroSubtitle) heroSubtitle.textContent = t('heroSubtitlePlanning');
     if (modeBadge) {
       modeBadge.className = 'mode-badge planning';
-      modeBadge.textContent = 'Mode Perencanaan';
+      modeBadge.textContent = t('operatingModePlanning');
     }
 
     const ideal = d.calculation_breakdown.total_pendapatan - d.calculation_breakdown.total_target_bulanan_100pct;
     if (heroAmount) heroAmount.textContent = formatIDR(ideal);
 
-    if (timeProgressLabel) timeProgressLabel.textContent = 'Fase Perencanaan Awal (Hari ke-0 dari ' + d.period.total_days_in_month + ' hari)';
+    if (timeProgressLabel) {
+      timeProgressLabel.textContent = currentLang === 'en'
+        ? 'Planning Phase (Day 0 of ' + d.period.total_days_in_month + ' days)'
+        : 'Fase Perencanaan Awal (Hari ke-0 dari ' + d.period.total_days_in_month + ' hari)';
+    }
     if (timeProgressBar) {
       timeProgressBar.style.width = '0%';
       timeProgressBar.style.background = '#4F46E5';
@@ -1587,17 +1859,17 @@ function renderHeroCard() {
     if (elBurn) elBurn.textContent = formatIDR(d.calculation_breakdown.total_target_bulanan_100pct);
 
     const elIncLbl = document.getElementById('hero-stat-income-label');
-    if (elIncLbl) elIncLbl.textContent = 'Rencana Pemasukan';
+    if (elIncLbl) elIncLbl.textContent = currentLang === 'en' ? 'Planned Income' : 'Rencana Pemasukan';
 
     const elBurnLbl = document.getElementById('hero-stat-burn-label');
-    if (elBurnLbl) elBurnLbl.textContent = 'Total Target Anggaran';
+    if (elBurnLbl) elBurnLbl.textContent = currentLang === 'en' ? 'Total Target Budget' : 'Total Target Anggaran';
 
   } else {
     if (heroCard) heroCard.className = 'card hero-card';
-    if (heroSubtitle) heroSubtitle.textContent = 'PROYEKSI SALDO IDEAL';
+    if (heroSubtitle) heroSubtitle.textContent = t('heroSubtitleProjection');
     if (modeBadge) {
       modeBadge.className = 'mode-badge projection';
-      modeBadge.textContent = 'Proyeksi Berjalan';
+      modeBadge.textContent = t('operatingModeProjection');
     }
 
     const ideal = d.calculation_breakdown.proyeksi_saldo_ideal;
@@ -1607,7 +1879,11 @@ function renderHeroCard() {
     const totalDays = d.period.total_days_in_month;
     const ratioPct = d.period.time_elapsed_percentage;
 
-    if (timeProgressLabel) timeProgressLabel.textContent = 'Hari ke-' + currentDay + ' dari ' + totalDays + ' hari (' + ratioPct + ')';
+    if (timeProgressLabel) {
+      timeProgressLabel.textContent = currentLang === 'en'
+        ? 'Day ' + currentDay + ' of ' + totalDays + ' days (' + ratioPct + ')'
+        : 'Hari ke-' + currentDay + ' dari ' + totalDays + ' hari (' + ratioPct + ')';
+    }
     if (timeProgressBar) {
       timeProgressBar.style.width = ratioPct;
       timeProgressBar.style.background = 'linear-gradient(90deg, #10B981, #34D399)';
@@ -1620,10 +1896,10 @@ function renderHeroCard() {
     if (elBurn) elBurn.textContent = formatIDR(d.calculation_breakdown.proportional_burn_rate_variable);
 
     const elIncLbl = document.getElementById('hero-stat-income-label');
-    if (elIncLbl) elIncLbl.textContent = 'Total Pemasukan';
+    if (elIncLbl) elIncLbl.textContent = currentLang === 'en' ? 'Total Income' : 'Total Pemasukan';
 
     const elBurnLbl = document.getElementById('hero-stat-burn-label');
-    if (elBurnLbl) elBurnLbl.textContent = 'Target Burn Jatuh Tempo';
+    if (elBurnLbl) elBurnLbl.textContent = currentLang === 'en' ? 'Target Burn To Date' : 'Target Burn Jatuh Tempo';
   }
 }
 
@@ -1658,26 +1934,30 @@ function renderCashReality() {
   if (isOverbudget) {
     if (resultBox) resultBox.className = 'reality-status-box overbudget';
     if (statusBadge) statusBadge.className = 'status-badge overbudget';
-    if (statusLabel) statusLabel.textContent = 'OVERBUDGET';
+    if (statusLabel) statusLabel.textContent = t('statusOverbudget');
     if (diffFigure) {
       diffFigure.className = 'difference-figure overbudget';
       diffFigure.textContent = formatIDR(diff);
     }
     if (descText) {
       descText.className = 'status-description-text overbudget';
-      descText.innerHTML = 'Total kas Anda saat ini <strong>' + formatIDR(Math.abs(diff)) + ' lebih rendah</strong> dari batas proyeksi ideal hari ini. Disarankan membatasi pengeluaran.';
+      descText.innerHTML = currentLang === 'en'
+        ? 'Total available cash is <strong>' + formatIDR(Math.abs(diff)) + ' below</strong> today\'s ideal burn rate projection. Expense reduction recommended.'
+        : 'Total kas Anda saat ini <strong>' + formatIDR(Math.abs(diff)) + ' lebih rendah</strong> dari batas proyeksi ideal hari ini. Disarankan membatasi pengeluaran.';
     }
   } else {
     if (resultBox) resultBox.className = 'reality-status-box hemat';
     if (statusBadge) statusBadge.className = 'status-badge hemat';
-    if (statusLabel) statusLabel.textContent = 'HEMAT';
+    if (statusLabel) statusLabel.textContent = t('statusHemat');
     if (diffFigure) {
       diffFigure.className = 'difference-figure hemat';
       diffFigure.textContent = diff === 0 ? 'Rp 0' : '+' + formatIDR(diff);
     }
     if (descText) {
       descText.className = 'status-description-text hemat';
-      descText.innerHTML = 'Arus kas Anda sangat sehat! Total kas Anda <strong>' + formatIDR(diff) + ' lebih surplus</strong> dibanding target burn rate proporsional hari ini.';
+      descText.innerHTML = currentLang === 'en'
+        ? 'Excellent cash health! Total cash is <strong>' + formatIDR(diff) + ' higher</strong> than today\'s proportional burn rate target.'
+        : 'Arus kas Anda sangat sehat! Total kas Anda <strong>' + formatIDR(diff) + ' lebih surplus</strong> dibanding target burn rate proporsional hari ini.';
     }
   }
 }
@@ -1698,7 +1978,7 @@ function renderFlowFormula() {
 
   if (elInc) elInc.textContent = formatIDR(b.total_pendapatan);
   if (elBul) elBul.textContent = '- ' + formatIDR(b.total_target_bulanan_100pct);
-  if (elSubHar) elSubHar.textContent = 'Kebutuhan Pos Terjadwal';
+  if (elSubHar) elSubHar.textContent = currentLang === 'en' ? 'Scheduled Due Categories' : 'Kebutuhan Pos Terjadwal';
   if (elHar) elHar.textContent = '- ' + formatIDR(b.proportional_burn_rate_variable);
   if (elRes) elRes.textContent = formatIDR(b.proyeksi_saldo_ideal);
 }
@@ -1712,12 +1992,12 @@ function renderIncomesLists() {
   const allIncomes = Array.isArray(appState.incomes) ? appState.incomes : [];
 
   const html = allIncomes.length === 0 
-    ? '<div style="font-size: 0.75rem; color: var(--text-secondary); padding: 8px 0;">Belum ada sumber pemasukan bulan ini. Klik "+ Pemasukan".</div>'
+    ? '<div style="font-size: 0.75rem; color: var(--text-secondary); padding: 8px 0;">' + (currentLang === 'en' ? 'No income sources logged this month. Click "+ Add Income".' : 'Belum ada sumber pemasukan bulan ini. Klik "+ Pemasukan".') + '</div>'
     : allIncomes.map(inc => 
         '<div style="display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px dashed var(--border-subtle); font-size: 0.8rem;">' +
           '<div>' +
             '<span style="font-weight: 600; color: var(--text-primary);">' + inc.source_name + '</span>' +
-            '<span style="font-size: 0.7rem; color: var(--text-secondary); margin-left: 6px;">(' + inc.period_month + ' ' + inc.period_year + ')</span>' +
+            '<span style="font-size: 0.7rem; color: var(--text-secondary); margin-left: 6px;">(' + getMonthDisplayName(inc.period_month) + ' ' + inc.period_year + ')</span>' +
           '</div>' +
           '<div style="display: flex; align-items: center; gap: 8px;">' +
             '<span style="font-weight: 700; color: var(--accent-positive);">' + formatIDR(inc.amount) + '</span>' +
@@ -1741,16 +2021,21 @@ function renderBudgetsLists() {
 
   function generateCardsHtml(items) {
     if (items.length === 0) {
+      const emptyTitle = currentLang === 'en' ? 'No Budget Items For This Month' : 'Belum Ada Pos Anggaran di Bulan Ini';
+      const emptyDesc = currentLang === 'en' ? 'Add a new budget category or duplicate budget template from another month.' : 'Tambahkan pos anggaran baru atau salin template anggaran dari bulan lain.';
+      const btnAdd = currentLang === 'en' ? '+ Add Budget Category' : '+ Tambah Pos Anggaran';
+      const btnCopy = currentLang === 'en' ? 'Copy from Another Month' : 'Salin dari Bulan Lain';
+
       return (
         '<div class="empty-state-box" style="padding: 24px 16px; text-align: center;">' +
           '<div class="empty-icon" style="margin-bottom: 8px;">' +
             '<svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>' +
           '</div>' +
-          '<div class="empty-title" style="font-weight: 700; font-size: 0.9rem; color: var(--text-primary); margin-bottom: 4px;">Belum Ada Pos Anggaran di Bulan Ini</div>' +
-          '<div class="empty-desc" style="font-size: 0.75rem; color: var(--text-secondary); max-width: 280px; margin: 0 auto 12px; line-height: 1.4;">Tambahkan pos anggaran baru atau salin template anggaran dari bulan lain.</div>' +
+          '<div class="empty-title" style="font-weight: 700; font-size: 0.9rem; color: var(--text-primary); margin-bottom: 4px;">' + emptyTitle + '</div>' +
+          '<div class="empty-desc" style="font-size: 0.75rem; color: var(--text-secondary); max-width: 280px; margin: 0 auto 12px; line-height: 1.4;">' + emptyDesc + '</div>' +
           '<div style="display: flex; gap: 8px; justify-content: center;">' +
-            '<button class="btn-primary" style="padding: 8px 14px; font-size: 0.75rem;" onclick="openAddBudgetModal()">+ Tambah Pos Anggaran</button>' +
-            '<button class="btn-secondary" style="padding: 8px 14px; font-size: 0.75rem;" onclick="openDuplicateModal()">Salin dari Bulan Lain</button>' +
+            '<button class="btn-primary" style="padding: 8px 14px; font-size: 0.75rem;" onclick="openAddBudgetModal()">' + btnAdd + '</button>' +
+            '<button class="btn-secondary" style="padding: 8px 14px; font-size: 0.75rem;" onclick="openDuplicateModal()">' + btnCopy + '</button>' +
           '</div>' +
         '</div>'
       );
@@ -1759,7 +2044,7 @@ function renderBudgetsLists() {
     return items.map(item => {
       const balance = Number(item.balance !== undefined ? item.balance : (item.target_anggaran - item.realisasi_used));
       const balanceClass = balance >= 0 ? 'positive' : 'negative';
-      const balanceText = balance >= 0 ? ('Sisa ' + formatIDR(balance)) : ('Minus ' + formatIDR(Math.abs(balance)));
+      const balanceText = balance >= 0 ? ((currentLang === 'en' ? 'Remaining ' : 'Sisa ') + formatIDR(balance)) : ('Minus ' + formatIDR(Math.abs(balance)));
       
       let goalBadge = '';
       if (item.category_type === 'Alokasi Surplus' || item.linked_goal_id) {
@@ -1767,13 +2052,13 @@ function renderBudgetsLists() {
           const g = (appState.financialGoals || []).find(x => x.goal_id === item.linked_goal_id);
           goalBadge = '<span style="font-size: 0.68rem; color: #4338CA; background: #EEF2FF; padding: 2px 6px; border-radius: 4px; font-weight: 600; border: 1px solid #C7D2FE;">ðŸŽ¯ ' + (g ? ('[' + g.goal_code + '] ' + g.goal_name) : 'Goal Linked') + '</span>';
         } else if (item.category_type === 'Alokasi Surplus') {
-          goalBadge = '<span style="font-size: 0.68rem; color: #D97706; background: #FEF3C7; padding: 2px 6px; border-radius: 4px; font-weight: 600;">âš ï¸ Klik untuk Hubungkan Goal</span>';
+          goalBadge = '<span style="font-size: 0.68rem; color: #D97706; background: #FEF3C7; padding: 2px 6px; border-radius: 4px; font-weight: 600;">âš ï¸ ' + (currentLang === 'en' ? 'Click to Link Goal' : 'Klik untuk Hubungkan Goal') + '</span>';
         }
       }
 
-      let timingDisplay = item.timing_pattern || 'Flat Harian';
+      let timingDisplay = item.timing_pattern || (currentLang === 'en' ? 'Flat Daily' : 'Flat Harian');
       if (Array.isArray(item.selected_dates) && item.selected_dates.length > 0) {
-        timingDisplay = 'Tgl: ' + item.selected_dates.join(', ');
+        timingDisplay = (currentLang === 'en' ? 'Date: ' : 'Tgl: ') + item.selected_dates.join(', ');
       }
       const timingBadge = '<span class="timing-tag">' + timingDisplay + '</span>';
 
@@ -1790,7 +2075,7 @@ function renderBudgetsLists() {
           '</div>' +
           '<div class="item-right">' +
             '<div class="item-target">' + formatIDR(item.target_anggaran) + '</div>' +
-            '<div class="item-used">Terpakai: ' + formatIDR(item.realisasi_used) + '</div>' +
+            '<div class="item-used">' + (currentLang === 'en' ? 'Used: ' : 'Terpakai: ') + formatIDR(item.realisasi_used) + '</div>' +
             '<div><span class="item-balance-tag ' + balanceClass + '">' + balanceText + '</span></div>' +
           '</div>' +
         '</div>'
@@ -1813,14 +2098,18 @@ function renderGoalsList() {
 
   function generateGoalsHtml(goals) {
     if (goals.length === 0) {
+      const emptyTitle = currentLang === 'en' ? 'No Financial Goals Yet' : 'Belum Ada Target Finansial';
+      const emptyDesc = currentLang === 'en' ? 'Create your long-term savings and investment milestones.' : 'Buat sasaran tabungan dan investasi jangka panjang Anda.';
+      const btnText = currentLang === 'en' ? '+ Add Financial Goal' : '+ Tambah Target Goal';
+
       return (
         '<div class="empty-state-box" style="padding: 24px 16px; text-align: center;">' +
           '<div class="empty-icon" style="margin-bottom: 8px;">' +
             '<svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>' +
           '</div>' +
-          '<div class="empty-title" style="font-weight: 700; font-size: 0.9rem; color: var(--text-primary); margin-bottom: 4px;">Belum Ada Target Finansial</div>' +
-          '<div class="empty-desc" style="font-size: 0.75rem; color: var(--text-secondary); max-width: 280px; margin: 0 auto 12px; line-height: 1.4;">Buat sasaran tabungan dan investasi jangka panjang Anda.</div>' +
-          '<button class="btn-primary" style="padding: 8px 14px; font-size: 0.75rem;" onclick="openAddGoalModal()">+ Tambah Target Goal</button>' +
+          '<div class="empty-title" style="font-weight: 700; font-size: 0.9rem; color: var(--text-primary); margin-bottom: 4px;">' + emptyTitle + '</div>' +
+          '<div class="empty-desc" style="font-size: 0.75rem; color: var(--text-secondary); max-width: 280px; margin: 0 auto 12px; line-height: 1.4;">' + emptyDesc + '</div>' +
+          '<button class="btn-primary" style="padding: 8px 14px; font-size: 0.75rem;" onclick="openAddGoalModal()">' + btnText + '</button>' +
         '</div>'
       );
     }
@@ -1837,10 +2126,10 @@ function renderGoalsList() {
             '<div style="font-size: 0.7rem; font-weight: 700; color: #4F46E5; background: #EEF2FF; padding: 2px 8px; border-radius: 6px;">' + pct + '%</div>' +
           '</div>' +
           '<div style="font-size: 0.72rem; color: var(--text-secondary); margin-bottom: 6px;">' +
-            'Target: <strong>Tahun ' + (g.target_year || g.time_frame || '2027') + '</strong> â€¢ <strong>' + (g.target_instrument || 'Investasi') + '</strong>' +
+            'Target: <strong>' + (currentLang === 'en' ? 'Year ' : 'Tahun ') + (g.target_year || g.time_frame || '2027') + '</strong> &bull; <strong>' + (g.target_instrument || 'Investasi') + '</strong>' +
           '</div>' +
           '<div style="font-size: 0.72rem; color: var(--text-secondary); margin-bottom: 8px;">' +
-            'Terkumpul: <strong style="color: var(--accent-positive);">' + formatIDR(cur) + '</strong> dari target ' + formatIDR(tgt) +
+            (currentLang === 'en' ? 'Collected: ' : 'Terkumpul: ') + '<strong style="color: var(--accent-positive);">' + formatIDR(cur) + '</strong> ' + (currentLang === 'en' ? 'of target ' : 'dari target ') + formatIDR(tgt) +
           '</div>' +
           '<div class="progress-track" style="background: var(--border-subtle); height: 6px;">' +
             '<div class="progress-fill" style="width: ' + pct + '%; background: linear-gradient(90deg, #4F46E5, #818CF8);"></div>' +
@@ -1859,7 +2148,7 @@ function populateGoalDropdowns() {
   const goalSelectAdd = document.getElementById('budget-linked-goal');
   const goalSelectEdit = document.getElementById('edit-budget-linked-goal');
 
-  const optionsHtml = '<option value="">-- Tanpa Relasi Goal --</option>' +
+  const optionsHtml = '<option value="">-- ' + (currentLang === 'en' ? 'No Linked Goal' : 'Tanpa Relasi Goal') + ' --</option>' +
     (appState.financialGoals || []).map(g => 
       '<option value="' + g.goal_id + '">[' + g.goal_code + '] ' + g.goal_name + ' (' + (g.target_instrument || 'Investasi') + ')</option>'
     ).join('');
@@ -1881,8 +2170,8 @@ function renderTransactionsTable() {
         '<div class="empty-icon" style="margin-bottom: 8px;">' +
           '<svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>' +
         '</div>' +
-        '<div class="empty-title" style="font-weight: 700; font-size: 0.9rem; color: var(--text-primary); margin-bottom: 4px;">Belum Ada Riwayat Mutasi</div>' +
-        '<div class="empty-desc" style="font-size: 0.75rem; color: var(--text-secondary); max-width: 280px; margin: 0 auto; line-height: 1.4;">Unggah file CSV/PDF mutasi rekening bank Anda untuk merealisasikan anggaran.</div>' +
+        '<div class="empty-title" style="font-weight: 700; font-size: 0.9rem; color: var(--text-primary); margin-bottom: 4px;">' + (currentLang === 'en' ? 'No Transaction History Yet' : 'Belum Ada Riwayat Mutasi') + '</div>' +
+        '<div class="empty-desc" style="font-size: 0.75rem; color: var(--text-secondary); max-width: 280px; margin: 0 auto; line-height: 1.4;">' + (currentLang === 'en' ? 'Upload CSV/PDF statement or record realized expenses to view history.' : 'Unggah file CSV/PDF mutasi rekening bank Anda untuk merealisasikan anggaran.') + '</div>' +
       '</div>';
     return;
   }
@@ -1895,8 +2184,8 @@ function renderTransactionsTable() {
     return (
       '<div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); margin-bottom: 8px;">' +
         '<div>' +
-          '<div style="font-weight: 600; font-size: 0.82rem; color: var(--text-primary);">' + (tx.description || 'Transaksi') + '</div>' +
-          '<div style="font-size: 0.7rem; color: var(--text-secondary);">' + tx.transaction_date + ' â€¢ ' + (tx.payment_method_platform || 'Bank') + '</div>' +
+          '<div style="font-weight: 600; font-size: 0.82rem; color: var(--text-primary);">' + (tx.description || (currentLang === 'en' ? 'Transaction' : 'Transaksi')) + '</div>' +
+          '<div style="font-size: 0.7rem; color: var(--text-secondary);">' + tx.transaction_date + ' &bull; ' + (tx.payment_method_platform || 'Bank') + '</div>' +
         '</div>' +
         '<div style="font-weight: 700; font-size: 0.85rem; color: ' + amountColor + ';">' +
           amountPrefix + formatIDR(tx.amount) +
@@ -1929,7 +2218,7 @@ function switchModalTab(tab) {
 }
 
 function openAddIncomeModal() {
-  document.getElementById('income-modal-period').textContent = appState.currentMonth + ' ' + appState.currentYear;
+  document.getElementById('income-modal-period').textContent = getMonthDisplayName(appState.currentMonth) + ' ' + appState.currentYear;
   document.getElementById('income-source-input').value = '';
   document.getElementById('income-amount-input').value = '';
   document.getElementById('add-income-modal').classList.add('active');
@@ -1939,7 +2228,7 @@ async function submitAddIncome() {
   const source = document.getElementById('income-source-input').value.trim();
   const amount = parseFloat(document.getElementById('income-amount-input').value) || 0;
   if (!source || amount <= 0) {
-    alert('Harap isi sumber pemasukan dan nominal yang valid!');
+    alert(currentLang === 'en' ? 'Please fill out income source and valid amount!' : 'Harap isi sumber pemasukan dan nominal yang valid!');
     return;
   }
 
@@ -1970,7 +2259,8 @@ async function submitAddIncome() {
 }
 
 async function deleteIncome(id) {
-  if (confirm('Hapus sumber pemasukan ini?')) {
+  const confirmMsg = currentLang === 'en' ? 'Delete this income source?' : 'Hapus sumber pemasukan ini?';
+  if (confirm(confirmMsg)) {
     appState.incomes = appState.incomes.filter(i => i.income_id !== id);
     if (currentUser.user_id === 'usr_admin_zidanmuzaki13') {
       EMBEDDED_ADMIN_DATA.incomes = EMBEDDED_ADMIN_DATA.incomes.filter(i => i.income_id !== id);
@@ -1982,7 +2272,7 @@ async function deleteIncome(id) {
 }
 
 function openAddBudgetModal() {
-  document.getElementById('budget-modal-period').textContent = appState.currentMonth + ' ' + appState.currentYear;
+  document.getElementById('budget-modal-period').textContent = getMonthDisplayName(appState.currentMonth) + ' ' + appState.currentYear;
   document.getElementById('budget-item-name').value = '';
   document.getElementById('budget-nominal-satuan').value = '';
   document.getElementById('budget-multiplier').value = '1';
@@ -2005,20 +2295,20 @@ async function submitAddBudget() {
   const linkedGoal = document.getElementById('budget-linked-goal').value || null;
 
   if (!name || satuan <= 0) {
-    alert('Harap isi nama pos anggaran dan nominal yang valid!');
+    alert(currentLang === 'en' ? 'Please fill out budget name and valid amount!' : 'Harap isi nama pos anggaran dan nominal yang valid!');
     return;
   }
 
   if (cat === 'Alokasi Surplus' && !linkedGoal && appState.financialGoals.length > 0) {
-    alert('Khusus kategori Alokasi Investasi / Surplus, wajib memilih target Goal Finansial!');
+    alert(currentLang === 'en' ? 'Surplus / Investment category requires selecting a Financial Goal target!' : 'Khusus kategori Alokasi Investasi / Surplus, wajib memilih target Goal Finansial!');
     return;
   }
 
-  let timing = 'Rata-rata Harian (Flat)';
+  let timing = currentLang === 'en' ? 'Flat Daily' : 'Rata-rata Harian (Flat)';
   let selectedDates = [];
   if (addModalTiming.mode === 'dates' && addModalTiming.selectedDates.length > 0) {
     selectedDates = [...addModalTiming.selectedDates].sort((a, b) => a - b);
-    timing = 'Tanggal: ' + selectedDates.join(', ');
+    timing = (currentLang === 'en' ? 'Dates: ' : 'Tanggal: ') + selectedDates.join(', ');
   }
 
   const newB = {
@@ -2067,9 +2357,9 @@ async function openBudgetDetailModal(item) {
   switchModalTab('tx');
   populateGoalDropdowns();
 
-  let timingDisplay = item.timing_pattern || 'Flat Harian';
+  let timingDisplay = item.timing_pattern || (currentLang === 'en' ? 'Flat Daily' : 'Flat Harian');
   if (Array.isArray(item.selected_dates) && item.selected_dates.length > 0) {
-    timingDisplay = 'Tgl: ' + item.selected_dates.join(', ');
+    timingDisplay = (currentLang === 'en' ? 'Dates: ' : 'Tgl: ') + item.selected_dates.join(', ');
   }
 
   document.getElementById('detail-budget-title').textContent = item.item_name;
@@ -2114,7 +2404,7 @@ async function openBudgetDetailModal(item) {
   renderCalendarDaysGrid('edit');
 
   const txContainer = document.getElementById('detail-budget-tx-list');
-  txContainer.innerHTML = '<div style="font-size: 0.72rem; color: var(--text-secondary);">Memuat transaksi...</div>';
+  txContainer.innerHTML = '<div style="font-size: 0.72rem; color: var(--text-secondary);">' + (currentLang === 'en' ? 'Loading transactions...' : 'Memuat transaksi...') + '</div>';
 
   try {
     const res = await authFetch('/transactions?budget_id=' + item.budget_id);
@@ -2128,7 +2418,7 @@ async function openBudgetDetailModal(item) {
           row.innerHTML = 
             '<div>' +
               '<div style="font-weight: 600; color: var(--text-primary);">' + (tx.description || 'Transaksi') + '</div>' +
-              '<div style="color: var(--text-secondary); font-size: 0.68rem;">' + tx.transaction_date + ' â€¢ ' + (tx.payment_method_platform || 'Manual') + '</div>' +
+              '<div style="color: var(--text-secondary); font-size: 0.68rem;">' + tx.transaction_date + ' &bull; ' + (tx.payment_method_platform || 'Manual') + '</div>' +
             '</div>' +
             '<div style="font-weight: 700; color: var(--accent-warning);">- ' + formatIDR(tx.amount) + '</div>';
           txContainer.appendChild(row);
@@ -2139,7 +2429,7 @@ async function openBudgetDetailModal(item) {
     }
   } catch (err) {}
 
-  txContainer.innerHTML = '<div style="font-size: 0.72rem; color: var(--text-secondary);">Belum ada mutasi debit tercatat untuk pos ini.</div>';
+  txContainer.innerHTML = '<div style="font-size: 0.72rem; color: var(--text-secondary);">' + (currentLang === 'en' ? 'No debit transactions logged for this category.' : 'Belum ada mutasi debit tercatat untuk pos ini.') + '</div>';
   document.getElementById('budget-detail-modal').classList.add('active');
 }
 
@@ -2155,15 +2445,15 @@ async function submitEditBudget() {
   const linkedGoal = document.getElementById('edit-budget-linked-goal') ? document.getElementById('edit-budget-linked-goal').value || null : item.linked_goal_id;
 
   if (!name || satuan <= 0) {
-    alert('Harap isi nama pos anggaran dan nominal yang valid!');
+    alert(currentLang === 'en' ? 'Please fill out budget name and valid amount!' : 'Harap isi nama pos anggaran dan nominal yang valid!');
     return;
   }
 
-  let timing = 'Rata-rata Harian (Flat)';
+  let timing = currentLang === 'en' ? 'Flat Daily' : 'Rata-rata Harian (Flat)';
   let selectedDates = [];
   if (editModalTiming.mode === 'dates' && editModalTiming.selectedDates.length > 0) {
     selectedDates = [...editModalTiming.selectedDates].sort((a, b) => a - b);
-    timing = 'Tanggal: ' + selectedDates.join(', ');
+    timing = (currentLang === 'en' ? 'Dates: ' : 'Tanggal: ') + selectedDates.join(', ');
   }
 
   const newTarget = satuan * mult;
@@ -2213,7 +2503,7 @@ async function submitEditBudget() {
     })
   }).catch(() => {});
 
-  alert('Pos anggaran \'' + name + '\' berhasil diperbarui!');
+  alert(currentLang === 'en' ? 'Budget category \'' + name + '\' updated successfully!' : 'Pos anggaran \'' + name + '\' berhasil diperbarui!');
   
   // Refresh modal views
   document.getElementById('detail-budget-title').textContent = item.item_name;
@@ -2236,7 +2526,7 @@ async function submitManualTx() {
   const date = document.getElementById('manual-tx-date').value || '2026-08-22';
 
   if (!desc || amount <= 0) {
-    alert('Harap isi keterangan dan nominal pengeluaran!');
+    alert(currentLang === 'en' ? 'Please enter description and valid amount!' : 'Harap isi keterangan dan nominal pengeluaran!');
     return;
   }
 
@@ -2282,7 +2572,8 @@ async function deleteSelectedBudget() {
   const item = appState.selectedBudgetItem;
   if (!item) return;
 
-  if (confirm('Hapus pos anggaran \'' + item.item_name + '\'?')) {
+  const confirmMsg = currentLang === 'en' ? 'Delete budget category \'' + item.item_name + '\'?' : 'Hapus pos anggaran \'' + item.item_name + '\'?';
+  if (confirm(confirmMsg)) {
     appState.budgets = appState.budgets.filter(b => b.budget_id !== item.budget_id);
     if (currentUser.user_id === 'usr_admin_zidanmuzaki13') {
       EMBEDDED_ADMIN_DATA.budgets = EMBEDDED_ADMIN_DATA.budgets.filter(b => b.budget_id !== item.budget_id);
@@ -2312,7 +2603,7 @@ async function submitAddGoal() {
   const inst = document.getElementById('goal-instrument-select').value;
 
   if (!name || target <= 0) {
-    alert('Harap isi nama sasaran dan target nominal!');
+    alert(currentLang === 'en' ? 'Please fill out goal name and target amount!' : 'Harap isi nama sasaran dan target nominal!');
     return;
   }
 
@@ -2322,7 +2613,7 @@ async function submitAddGoal() {
     goal_code: code,
     goal_name: name,
     target_year: targetYear,
-    time_frame: 'Tahun ' + targetYear,
+    time_frame: (currentLang === 'en' ? 'Year ' : 'Tahun ') + targetYear,
     target_amount: target,
     current_amount: initial,
     target_instrument: inst,
@@ -2366,7 +2657,7 @@ async function submitGoalDeposit() {
 
   const amount = parseFloat(document.getElementById('deposit-goal-amount').value) || 0;
   if (amount <= 0) {
-    alert('Masukkan nominal setoran yang valid!');
+    alert(currentLang === 'en' ? 'Please enter a valid deposit amount!' : 'Masukkan nominal setoran yang valid!');
     return;
   }
 
@@ -2388,7 +2679,8 @@ async function deleteSelectedGoal() {
   const g = appState.selectedGoalItem;
   if (!g) return;
 
-  if (confirm('Hapus sasaran keuangan \'' + g.goal_name + '\'?')) {
+  const confirmMsg = currentLang === 'en' ? 'Delete financial goal \'' + g.goal_name + '\'?' : 'Hapus sasaran keuangan \'' + g.goal_name + '\'?';
+  if (confirm(confirmMsg)) {
     appState.financialGoals = appState.financialGoals.filter(item => item.goal_id !== g.goal_id);
     if (currentUser.user_id === 'usr_admin_zidanmuzaki13') {
       EMBEDDED_ADMIN_DATA.goals = EMBEDDED_ADMIN_DATA.goals.filter(item => item.goal_id !== g.goal_id);
@@ -2450,7 +2742,11 @@ async function submitDuplicateMonth() {
     body: JSON.stringify({ source_month: srcMonth, source_year: srcYear, target_month: tgtMonth, target_year: tgtYear })
   }).catch(() => {});
 
-  alert('Berhasil menduplikasi ' + copied + ' pos anggaran dari ' + srcMonth + ' ' + srcYear + ' ke ' + tgtMonth + ' ' + tgtYear + '!');
+  const successMsg = currentLang === 'en'
+    ? 'Successfully duplicated ' + copied + ' budget items from ' + getMonthDisplayName(srcMonth) + ' ' + srcYear + ' to ' + getMonthDisplayName(tgtMonth) + ' ' + tgtYear + '!'
+    : 'Berhasil menduplikasi ' + copied + ' pos anggaran dari ' + srcMonth + ' ' + srcYear + ' ke ' + tgtMonth + ' ' + tgtYear + '!';
+  alert(successMsg);
+
   document.getElementById('duplicate-modal').classList.remove('active');
   appState.currentMonth = tgtMonth;
   appState.currentYear = tgtYear;
@@ -2506,7 +2802,7 @@ function setupStatementUploader() {
     submitBtn.addEventListener('click', async () => {
       const rawContent = textarea.value.trim();
       if (!rawContent) {
-        alert('Silakan pilih file CSV/PDF atau tempel teks mutasi bank terlebih dahulu!');
+        alert(currentLang === 'en' ? 'Please upload statement file or paste text first!' : 'Silakan pilih file CSV/PDF atau tempel teks mutasi bank terlebih dahulu!');
         return;
       }
 
@@ -2564,7 +2860,11 @@ function setupStatementUploader() {
 
       saveUserDataToStorage();
 
-      alert('Rekonsiliasi Mutasi Berhasil!\n\nâ€¢ Periode: ' + targetM + ' ' + targetY + '\nâ€¢ Mutasi Dicocokkan: ' + matchedCount + ' transaksi\nâ€¢ Total Realisasi Terekonsiliasi: ' + formatIDR(totalAmount));
+      const successMsg = currentLang === 'en'
+        ? 'Statement Reconciliation Succeeded!\n\nâ€¢ Period: ' + getMonthDisplayName(targetM) + ' ' + targetY + '\nâ€¢ Matched: ' + matchedCount + ' transactions\nâ€¢ Total Realized: ' + formatIDR(totalAmount)
+        : 'Rekonsiliasi Mutasi Berhasil!\n\nâ€¢ Periode: ' + targetM + ' ' + targetY + '\nâ€¢ Mutasi Dicocokkan: ' + matchedCount + ' transaksi\nâ€¢ Total Realisasi Terekonsiliasi: ' + formatIDR(totalAmount);
+      alert(successMsg);
+
       appState.currentMonth = targetM;
       appState.currentYear = targetY;
       document.getElementById('select-month').value = targetM;
@@ -2595,6 +2895,7 @@ function registerServiceWorker() {
 // -----------------------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
   registerServiceWorker();
+  setLanguage(currentLang);
   updateHeaderRealTimeDate();
   syncAuthAndScreenState();
 
@@ -2715,6 +3016,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Explicit Window Global Export Bindings
+window.setLanguage = setLanguage;
 window.switchLandingAuthTab = switchLandingAuthTab;
 window.submitLandingLogin = submitLandingLogin;
 window.submitLandingRegister = submitLandingRegister;

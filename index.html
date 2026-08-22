@@ -101,6 +101,11 @@
         <div style="font-size: 0.7rem; color: var(--text-secondary); margin-top: 1px;">Smart Cashflow & Burn Tracker</div>
       </div>
       <div class="header-actions">
+        <!-- Language Switcher ID / EN -->
+        <div class="lang-switcher-pill" title="Ganti Bahasa / Switch Language">
+          <button type="button" class="lang-btn active" id="btn-lang-id" onclick="setLanguage('id')">ID</button>
+          <button type="button" class="lang-btn" id="btn-lang-en" onclick="setLanguage('en')">EN</button>
+        </div>
         <div class="user-header-profile" id="user-header-profile" onclick="openAuthModal()" title="Profil Pengguna">
           <div class="user-avatar-circle" id="user-avatar-badge">Z</div>
           <div class="user-header-text">
@@ -399,45 +404,47 @@
       <!-- ===================================================================== -->
       <div class="view-page" id="view-budgets">
         
-        <!-- Control Balance (Zero-Based Budgeting) Widget -->
-        <section class="card" style="background: linear-gradient(135deg, #1E1B4B 0%, #2E1065 50%, #3B0764 100%); color: #FFFFFF; border: none; padding: 16px; margin-bottom: 14px;">
+        <!-- Compact Control Balance (Zero-Based Budgeting) Widget -->
+        <section class="card" style="background: linear-gradient(135deg, #1E1B4B 0%, #312E81 100%); color: #FFFFFF; border: none; padding: 12px 14px; margin-bottom: 12px;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-            <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700; color: #DDD6FE;">Zero-Based Control Balance</div>
-            <span id="control-balance-status-badge" class="mode-badge" style="background: rgba(16, 185, 129, 0.25); color: #34D399; font-weight: 700; font-size: 0.7rem; border: 1px solid rgba(52, 211, 153, 0.4);">
-              Seimbang Rp 0
-            </span>
-          </div>
-
-          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; background: rgba(255, 255, 255, 0.08); padding: 10px; border-radius: var(--radius-md); backdrop-filter: blur(8px); margin-bottom: 10px;">
-            <div>
-              <div style="font-size: 0.65rem; color: #C4B5FD;">Total Pemasukan</div>
-              <div id="cb-total-income" style="font-weight: 700; font-size: 0.85rem; color: #34D399;">Rp 0</div>
+            <div style="font-size: 0.72rem; font-weight: 700; color: #DDD6FE; display: flex; align-items: center; gap: 4px;">
+              <span id="txt-cb-title">Control Balance (Zero-Based)</span>
             </div>
-            <div>
-              <div style="font-size: 0.65rem; color: #C4B5FD;">Total Anggaran</div>
-              <div id="cb-total-budget" style="font-weight: 700; font-size: 0.85rem; color: #FCA5A5;">Rp 0</div>
-            </div>
-            <div>
-              <div style="font-size: 0.65rem; color: #C4B5FD;">Sisa / Selisih</div>
-              <div id="cb-diff-figure" style="font-weight: 700; font-size: 0.85rem; color: #FFFFFF;">Rp 0</div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span id="control-balance-status-badge" class="mode-badge" style="background: rgba(16, 185, 129, 0.25); color: #34D399; font-weight: 700; font-size: 0.68rem; border: 1px solid rgba(52, 211, 153, 0.4); padding: 2px 8px;">
+                Seimbang Rp 0
+              </span>
+              <button type="button" class="btn-primary" style="padding: 3px 8px; font-size: 0.68rem; background: #6366F1; border-color: #818CF8; border-radius: 6px; font-weight: 600;" onclick="autoSyncSurplusBudget()">
+                ⚡ <span id="txt-cb-btn-sync">Alokasikan Surplus</span>
+              </button>
             </div>
           </div>
 
-          <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
-            <div id="cb-explanation-text" style="font-size: 0.72rem; color: #E9D5FF; line-height: 1.3; flex: 1;">
-              Formula Zero-Based: <strong>Pemasukan − Total Anggaran = Rp 0</strong>. Seluruh rupiah dialokasikan dengan tepat.
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; background: rgba(255, 255, 255, 0.08); padding: 8px 10px; border-radius: var(--radius-sm);">
+            <div>
+              <div style="font-size: 0.62rem; color: #C4B5FD;" id="txt-cb-lbl-income">Pemasukan</div>
+              <div id="cb-total-income" style="font-weight: 700; font-size: 0.8rem; color: #34D399;">Rp 0</div>
             </div>
-            <button type="button" class="btn-primary" style="padding: 6px 10px; font-size: 0.7rem; background: #8B5CF6; border-color: #A78BFA; white-space: nowrap;" onclick="autoSyncSurplusBudget()">
-              ⚡ Alokasikan Surplus
-            </button>
+            <div>
+              <div style="font-size: 0.62rem; color: #C4B5FD;" id="txt-cb-lbl-budget">Total Anggaran</div>
+              <div id="cb-total-budget" style="font-weight: 700; font-size: 0.8rem; color: #FCA5A5;">Rp 0</div>
+            </div>
+            <div>
+              <div style="font-size: 0.62rem; color: #C4B5FD;" id="txt-cb-lbl-diff">Sisa / Selisih</div>
+              <div id="cb-diff-figure" style="font-weight: 700; font-size: 0.8rem; color: #FFFFFF;">Rp 0</div>
+            </div>
+          </div>
+
+          <div id="cb-explanation-text" style="font-size: 0.68rem; color: #E9D5FF; margin-top: 6px; line-height: 1.3;">
+            Formula Zero-Based: <strong>Pemasukan − Total Anggaran = Rp 0</strong>.
           </div>
         </section>
 
         <!-- Incomes Manager -->
         <section class="card">
           <div class="section-title">
-            <span>Pemasukan Bulan Ini</span>
-            <button class="quick-btn" onclick="openAddIncomeModal()">+ Pemasukan</button>
+            <span id="txt-incomes-title">Pemasukan Bulan Ini</span>
+            <button class="quick-btn" onclick="openAddIncomeModal()" id="txt-btn-add-income">+ Pemasukan</button>
           </div>
           <div id="incomes-management-list">
             <!-- Populated by app.js -->
@@ -447,8 +454,8 @@
         <!-- Budgets Manager -->
         <section class="card">
           <div class="section-title">
-            <span>Daftar Pos Pengeluaran</span>
-            <button class="quick-btn" onclick="openAddBudgetModal()">
+            <span id="txt-budgets-title">Daftar Pos Pengeluaran</span>
+            <button class="quick-btn" onclick="openAddBudgetModal()" id="txt-btn-add-budget">
               ➕ + Pos Anggaran
             </button>
           </div>
@@ -477,12 +484,12 @@
         
         <section class="card">
           <div class="section-title">
-            <span>Portofolio & Target Keuangan</span>
-            <button class="quick-btn" onclick="openAddGoalModal()">
+            <span id="txt-goals-title">Portofolio & Target Keuangan</span>
+            <button class="quick-btn" onclick="openAddGoalModal()" id="txt-btn-add-goal">
               🎯 + Goal Baru
             </button>
           </div>
-          <div style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 14px; line-height: 1.4;">
+          <div style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 14px; line-height: 1.4;" id="txt-goals-desc">
             Kelola sasaran tabungan dan investasi jangka panjang Anda. Pos anggaran kategori <strong>Alokasi Surplus</strong> terhubung langsung ke sasaran target di sini.
           </div>
           <div id="goals-page-list">
@@ -493,83 +500,15 @@
       </div>
 
       <!-- ===================================================================== -->
-      <!-- PAGE 5: VIEW ANALISIS PENGELUARAN & AI ADVISOR                        -->
+      <!-- PAGE 5: VIEW PENGELUARAN REALIZED & AI ADVISOR                        -->
       <!-- ===================================================================== -->
       <div class="view-page" id="view-analytics">
         
-        <!-- AI Financial Health & Diagnostic Hero Widget -->
-        <section class="card" style="background: linear-gradient(135deg, #0F172A 0%, #1E1B4B 50%, #312E81 100%); color: #FFFFFF; border: none; padding: 18px; position: relative; overflow: hidden; margin-bottom: 14px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-            <div>
-              <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700; color: #818CF8;">🤖 AI Financial Advisor</div>
-              <div style="font-size: 1.1rem; font-weight: 800; color: #FFFFFF;" id="analytics-month-title">Analisis Realisasi Pengeluaran</div>
-            </div>
-            <button type="button" class="btn-primary" style="padding: 6px 12px; font-size: 0.72rem; background: #4F46E5; border-color: #6366F1;" onclick="generateAiAnalytics()">
-              ✨ Refresh AI
-            </button>
-          </div>
-
-          <!-- Score & Metrics Grid -->
-          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; background: rgba(255, 255, 255, 0.07); padding: 12px; border-radius: var(--radius-md); backdrop-filter: blur(8px); margin-bottom: 12px;">
-            <div>
-              <div style="font-size: 0.65rem; color: #A5B4FC;">Skor Disiplin</div>
-              <div id="ai-health-score" style="font-weight: 800; font-size: 1.05rem; color: #34D399;">88 / 100</div>
-            </div>
-            <div>
-              <div style="font-size: 0.65rem; color: #A5B4FC;">Total Realisasi</div>
-              <div id="ai-total-realized" style="font-weight: 800; font-size: 0.95rem; color: #FCA5A5;">Rp 0</div>
-            </div>
-            <div>
-              <div style="font-size: 0.65rem; color: #A5B4FC;">Rata-rata/Hari</div>
-              <div id="ai-daily-avg" style="font-weight: 800; font-size: 0.95rem; color: #FDE047;">Rp 0</div>
-            </div>
-          </div>
-
-          <!-- AI Diagnostic Commentary -->
-          <div style="background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius-md); padding: 12px;">
-            <div style="display: flex; align-items: center; gap: 6px; font-weight: 700; font-size: 0.78rem; color: #C7D2FE; margin-bottom: 6px;">
-              <span>💡 Diagnosa & Rekomendasi Cerdas AI:</span>
-            </div>
-            <div id="ai-diagnostic-text" style="font-size: 0.75rem; color: #E0E7FF; line-height: 1.45;">
-              Memuat diagnosa pengeluaran berbasis data transaksi...
-            </div>
-          </div>
-        </section>
-
-        <!-- Interim Statement Sync Card (Upload Mutasi Sementara s/d Hari Ini) -->
+        <!-- Section 1 (Top): Realized Expenses Stream Manager -->
         <section class="card">
           <div class="section-title">
-            <span>⚡ Rekonsiliasi Mutasi Sementara (s/d Hari Ini)</span>
-            <span style="font-size: 0.7rem; color: var(--primary-accent); font-weight: 600; background: #EEF2FF; padding: 2px 8px; border-radius: 12px;">Interim Sync</span>
-          </div>
-
-          <div style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.4;">
-            Unggah mutasi rekening (format <strong>.CSV</strong> atau <strong>.PDF</strong>) yang diunduh sementara dari mobile banking/e-banking hingga tanggal hari ini untuk menyinkronkan seluruh pengeluaran real.
-          </div>
-
-          <div class="form-group" style="margin-bottom: 8px;">
-            <input type="file" id="interim-statement-file-input" accept=".csv,.pdf,.txt" class="form-input" style="padding: 6px;">
-          </div>
-
-          <div class="form-group" style="margin-bottom: 10px;">
-            <textarea id="interim-statement-textarea" class="form-input" rows="3" style="font-family: monospace; font-size: 0.72rem; resize: vertical;" placeholder="Atau tempel teks mutasi bank di sini..."></textarea>
-          </div>
-
-          <div style="display: flex; gap: 8px;">
-            <button type="button" class="btn-primary" style="flex: 2;" onclick="processInterimStatement()">
-              🚀 Proses Mutasi Realisasi
-            </button>
-            <button type="button" class="btn-secondary" style="flex: 1;" onclick="loadInterimSample()">
-              Sample
-            </button>
-          </div>
-        </section>
-
-        <!-- Realized Expenses Stream Manager -->
-        <section class="card">
-          <div class="section-title">
-            <span>Daftar Seluruh Pengeluaran Realized</span>
-            <button class="quick-btn" onclick="openAddExpenseModal()">
+            <span id="txt-realized-title">Daftar Seluruh Pengeluaran Realized</span>
+            <button class="quick-btn" onclick="openAddExpenseModal()" id="txt-btn-add-expense">
               ➕ + Catat Pengeluaran
             </button>
           </div>
@@ -586,6 +525,74 @@
 
           <div id="analytics-expenses-stream-list">
             <!-- Populated by app.js -->
+          </div>
+        </section>
+
+        <!-- Section 2 (Middle): Interim Statement Sync Card (Upload Mutasi Sementara s/d Hari Ini) -->
+        <section class="card">
+          <div class="section-title">
+            <span id="txt-interim-title">⚡ Rekonsiliasi Mutasi Sementara (s/d Hari Ini)</span>
+            <span style="font-size: 0.7rem; color: var(--primary-accent); font-weight: 600; background: #EEF2FF; padding: 2px 8px; border-radius: 12px;">Interim Sync</span>
+          </div>
+
+          <div style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.4;" id="txt-interim-desc">
+            Unggah mutasi rekening (format <strong>.CSV</strong> atau <strong>.PDF</strong>) yang diunduh sementara dari mobile banking hingga tanggal hari ini untuk menyinkronkan seluruh pengeluaran real.
+          </div>
+
+          <div class="form-group" style="margin-bottom: 8px;">
+            <input type="file" id="interim-statement-file-input" accept=".csv,.pdf,.txt" class="form-input" style="padding: 6px;">
+          </div>
+
+          <div class="form-group" style="margin-bottom: 10px;">
+            <textarea id="interim-statement-textarea" class="form-input" rows="3" style="font-family: monospace; font-size: 0.72rem; resize: vertical;" placeholder="Atau tempel teks mutasi bank di sini..."></textarea>
+          </div>
+
+          <div style="display: flex; gap: 8px;">
+            <button type="button" class="btn-primary" style="flex: 2;" onclick="processInterimStatement()" id="txt-btn-process-interim">
+              🚀 Proses Mutasi Realisasi
+            </button>
+            <button type="button" class="btn-secondary" style="flex: 1;" onclick="loadInterimSample()" id="txt-btn-sample-interim">
+              Sample
+            </button>
+          </div>
+        </section>
+
+        <!-- Section 3 (Bottom): AI Financial Health & Diagnostic Hero Widget (Spacious & Clean) -->
+        <section class="card" style="background: linear-gradient(135deg, #0F172A 0%, #1E1B4B 50%, #312E81 100%); color: #FFFFFF; border: none; padding: 18px; position: relative; overflow: hidden; margin-bottom: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+            <div>
+              <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700; color: #818CF8;" id="txt-ai-badge">🤖 AI Financial Advisor</div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: #FFFFFF;" id="analytics-month-title">Analisis Realisasi Pengeluaran</div>
+            </div>
+            <button type="button" class="btn-primary" style="padding: 6px 12px; font-size: 0.72rem; background: #4F46E5; border-color: #6366F1;" onclick="generateAiAnalytics()" id="txt-btn-refresh-ai">
+              ✨ Refresh AI
+            </button>
+          </div>
+
+          <!-- Score & Metrics Grid -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; background: rgba(255, 255, 255, 0.07); padding: 12px; border-radius: var(--radius-md); backdrop-filter: blur(8px); margin-bottom: 14px;">
+            <div>
+              <div style="font-size: 0.65rem; color: #A5B4FC;" id="txt-ai-lbl-score">Skor Disiplin</div>
+              <div id="ai-health-score" style="font-weight: 800; font-size: 1.05rem; color: #34D399;">88 / 100</div>
+            </div>
+            <div>
+              <div style="font-size: 0.65rem; color: #A5B4FC;" id="txt-ai-lbl-realized">Total Realisasi</div>
+              <div id="ai-total-realized" style="font-weight: 800; font-size: 0.95rem; color: #FCA5A5;">Rp 0</div>
+            </div>
+            <div>
+              <div style="font-size: 0.65rem; color: #A5B4FC;" id="txt-ai-lbl-avg">Rata-rata/Hari</div>
+              <div id="ai-daily-avg" style="font-weight: 800; font-size: 0.95rem; color: #FDE047;">Rp 0</div>
+            </div>
+          </div>
+
+          <!-- AI Diagnostic Commentary -->
+          <div style="background: rgba(0, 0, 0, 0.28); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: var(--radius-md); padding: 14px;">
+            <div style="display: flex; align-items: center; gap: 6px; font-weight: 700; font-size: 0.78rem; color: #C7D2FE; margin-bottom: 8px;">
+              <span id="txt-ai-diag-header">💡 Diagnosa & Rekomendasi Cerdas AI:</span>
+            </div>
+            <div id="ai-diagnostic-text" style="font-size: 0.75rem; color: #E0E7FF; line-height: 1.55;">
+              Memuat diagnosa pengeluaran berbasis data transaksi...
+            </div>
           </div>
         </section>
 
@@ -725,33 +732,33 @@
     <nav class="bottom-nav">
       <button class="nav-item active" data-view="view-dashboard">
         <span class="nav-icon">📊</span>
-        <span>Dashboard</span>
+        <span id="nav-lbl-dashboard">Dashboard</span>
       </button>
       <button class="nav-item" data-view="view-budgets">
         <span class="nav-icon">📝</span>
-        <span>Anggaran</span>
+        <span id="nav-lbl-budgets">Anggaran</span>
       </button>
       <button class="nav-item" data-view="view-analytics">
-        <span class="nav-icon">🔍</span>
-        <span>Analisis AI</span>
+        <span class="nav-icon">💸</span>
+        <span id="nav-lbl-expenses">Pengeluaran</span>
       </button>
       <button class="nav-item" data-view="view-goals">
         <span class="nav-icon">🎯</span>
-        <span>Goals</span>
+        <span id="nav-lbl-goals">Goals</span>
       </button>
       <button class="nav-item" data-view="view-mutasi">
         <span class="nav-icon">💳</span>
-        <span>Mutasi</span>
+        <span id="nav-lbl-mutasi">Mutasi</span>
       </button>
       <!-- CONDITIONAL RENDERING: Rendered ONLY if user.email === 'zidanmuzaki2002@gmail.com' -->
       <button class="nav-item" id="nav-item-admin" data-view="view-admin" style="display: none;">
         <span class="nav-icon">🛡️</span>
-        <span>Admin</span>
+        <span id="nav-lbl-admin">Admin</span>
       </button>
       <!-- CONDITIONAL RENDERING: Rendered ONLY for regular non-admin users -->
       <button class="nav-item" id="nav-item-feedback" data-view="view-feedback" style="display: none;">
         <span class="nav-icon">💬</span>
-        <span>Feedback</span>
+        <span id="nav-lbl-feedback">Feedback</span>
       </button>
     </nav>
 
