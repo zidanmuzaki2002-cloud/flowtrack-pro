@@ -239,66 +239,60 @@
           </div>
         </section>
 
-        <!-- Advanced Visual Arithmetic Flow Widget -->
-        <section class="card">
-          <div class="section-title">
+        <!-- Compact Visual Arithmetic Flow Widget -->
+        <section class="card" style="padding: 14px 16px;">
+          <div class="section-title" style="margin-bottom: 10px;">
             <span>Alur Perhitungan Saldo Ideal</span>
-            <span style="font-size: 0.7rem; color: var(--primary-accent); font-weight: 600; background: var(--primary-accent-bg); padding: 2px 8px; border-radius: 12px;">Visual Arithmetic Flow</span>
+            <span style="font-size: 0.68rem; color: var(--primary-accent); font-weight: 600; background: var(--primary-accent-bg); padding: 2px 8px; border-radius: 10px;">Formula Ringkas</span>
           </div>
 
-          <div class="flow-formula-wrapper">
-            <!-- Step 1: Pemasukan -->
-            <div class="flow-step-card">
-              <div class="flow-step-left">
-                <div class="flow-step-icon income">💰</div>
-                <div>
-                  <div class="flow-step-title">Pemasukan Bersih</div>
-                  <div class="flow-step-subtitle">Total gaji & pemasukan bulan ini</div>
-                </div>
+          <div class="compact-flow-container">
+            <!-- Row 1: Pemasukan -->
+            <div class="compact-flow-row">
+              <div class="c-flow-left">
+                <span class="c-flow-badge plus">+</span>
+                <span class="c-flow-label">Pemasukan Bulan Ini</span>
               </div>
-              <div class="flow-step-val" style="color: var(--accent-positive);" id="flow-val-income">Rp 0</div>
+              <div class="c-flow-value positive" id="flow-val-income">Rp 0</div>
             </div>
 
-            <div class="flow-connector">➖</div>
-
-            <!-- Step 2: Bulanan Tetap (100%) -->
-            <div class="flow-step-card">
-              <div class="flow-step-left">
-                <div class="flow-step-icon bulanan">🏠</div>
+            <!-- Row 2: Kebutuhan Bulanan (100%) -->
+            <div class="compact-flow-row">
+              <div class="c-flow-left">
+                <span class="c-flow-badge minus">−</span>
                 <div>
-                  <div class="flow-step-title">Kebutuhan Bulanan (100%)</div>
-                  <div class="flow-step-subtitle">Sewa Kos, Listrik, Paket Data (Lump-sum)</div>
+                  <span class="c-flow-label">Kebutuhan Bulanan (100%)</span>
+                  <span class="c-flow-sub">Sewa Kos, Listrik, Pulsa</span>
                 </div>
               </div>
-              <div class="flow-step-val" style="color: var(--accent-warning);" id="flow-val-bulanan">- Rp 0</div>
+              <div class="c-flow-value warning" id="flow-val-bulanan">- Rp 0</div>
             </div>
 
-            <div class="flow-connector">➖</div>
-
-            <!-- Step 3: Harian & Mingguan Proporsional -->
-            <div class="flow-step-card">
-              <div class="flow-step-left">
-                <div class="flow-step-icon harian">⏳</div>
+            <!-- Row 3: Pengeluaran Rutin Berjalan (Proportional) -->
+            <div class="compact-flow-row">
+              <div class="c-flow-left">
+                <span class="c-flow-badge minus">−</span>
                 <div>
-                  <div class="flow-step-title">Pengeluaran Rutin Berjalan</div>
-                  <div class="flow-step-subtitle" id="flow-sub-harian">Target Harian/Mingguan x % Hari</div>
+                  <span class="c-flow-label">Pengeluaran Rutin Berjalan</span>
+                  <span class="c-flow-sub" id="flow-sub-harian">Makan, Transport x % Hari</span>
                 </div>
               </div>
-              <div class="flow-step-val" style="color: var(--accent-warning);" id="flow-val-harian">- Rp 0</div>
+              <div class="c-flow-value warning" id="flow-val-harian">- Rp 0</div>
             </div>
 
-            <div class="flow-connector">🟰</div>
+            <!-- Divider Line -->
+            <div class="compact-flow-divider"></div>
 
-            <!-- Step 4: Saldo Ideal -->
-            <div class="flow-step-card" style="background: #EEF2FF; border-color: #C7D2FE;">
-              <div class="flow-step-left">
-                <div class="flow-step-icon result">🎯</div>
+            <!-- Row 4: Hasil Proyeksi Saldo Ideal -->
+            <div class="compact-flow-row result">
+              <div class="c-flow-left">
+                <span class="c-flow-badge equals">=</span>
                 <div>
-                  <div class="flow-step-title" style="color: var(--primary-accent);">Proyeksi Saldo Ideal Saat Ini</div>
-                  <div class="flow-step-subtitle">Batas aman saldo dompet hari ini</div>
+                  <span class="c-flow-label highlight">Proyeksi Saldo Ideal Hari Ini</span>
+                  <span class="c-flow-sub">Batas aman saldo dompet hari ini</span>
                 </div>
               </div>
-              <div class="flow-step-val" style="color: var(--primary-accent); font-size: 1rem;" id="flow-val-result">Rp 0</div>
+              <div class="c-flow-value result" id="flow-val-result">Rp 0</div>
             </div>
           </div>
         </section>
@@ -567,6 +561,86 @@
             <button class="quick-btn" onclick="fetchAdminData()">🔄 Refresh Data</button>
           </div>
           <div id="admin-users-list" style="display: flex; flex-direction: column; gap: 8px;">
+            <!-- Populated by app.js with Take Out action buttons -->
+          </div>
+        </section>
+
+        <!-- Admin User Feedback Inbox Section -->
+        <section class="card">
+          <div class="section-title">
+            <span>📬 Kotak Masukan & Feedback Pengguna</span>
+            <span style="font-size: 0.7rem; color: var(--primary-accent); font-weight: 600; background: var(--primary-accent-bg); padding: 2px 8px; border-radius: 12px;">User Feedback</span>
+          </div>
+          <div style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.4;">
+            Daftar laporan kendala, rating kepuasan, dan saran perbaikan fitur dari seluruh pengguna aplikasi.
+          </div>
+          <div id="admin-feedback-inbox-list" style="display: flex; flex-direction: column; gap: 8px;">
+            <!-- Populated by app.js -->
+          </div>
+        </section>
+
+      </div>
+
+      <!-- ===================================================================== -->
+      <!-- PAGE 7: VIEW USER FEEDBACK (FOR REGULAR NON-ADMIN USERS)               -->
+      <!-- ===================================================================== -->
+      <div class="view-page" id="view-feedback">
+        
+        <section class="card">
+          <div class="section-title">
+            <span>💬 Kirim Feedback & Saran</span>
+            <span class="brand-badge">Bantuan</span>
+          </div>
+          <div style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 14px; line-height: 1.4;">
+            Punya ide fitur baru, menemukan kendala, atau ingin memberikan masukan tampilan? Tuliskan saran Anda langsung ke tim Admin.
+          </div>
+
+          <div id="user-feedback-alert" class="auth-alert-msg"></div>
+
+          <form id="user-feedback-form" onsubmit="event.preventDefault(); submitUserFeedback();">
+            <div class="form-group">
+              <label class="form-label">Kategori Masukan</label>
+              <select id="feedback-category-select" class="form-select">
+                <option value="💡 Ide Fitur Baru">💡 Ide / Usulan Fitur Baru</option>
+                <option value="🐞 Laporan Kendala / Bug">🐞 Laporan Kendala / Bug</option>
+                <option value="🎨 Desain & Tampilan">🎨 Desain & Tampilan</option>
+                <option value="💬 Saran Umum" selected>💬 Saran & Masukan Umum</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Rating Kepuasan Anda</label>
+              <div class="rating-stars-group">
+                <button type="button" class="rating-star-btn active" data-rating="5" onclick="setFeedbackRating(5)">⭐⭐⭐⭐⭐ (5/5)</button>
+                <button type="button" class="rating-star-btn" data-rating="4" onclick="setFeedbackRating(4)">⭐⭐⭐⭐ (4/5)</button>
+                <button type="button" class="rating-star-btn" data-rating="3" onclick="setFeedbackRating(3)">⭐⭐⭐ (3/5)</button>
+              </div>
+              <input type="hidden" id="feedback-rating-val" value="5">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Subjek / Topik</label>
+              <input type="text" id="feedback-subject-input" class="form-input" placeholder="Contoh: Usulan integrasi e-wallet otomatis" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Isi Pesan / Masukan Detail</label>
+              <textarea id="feedback-message-input" class="form-input" rows="4" style="resize: vertical;" placeholder="Tuliskan pengalaman Anda atau detail fitur yang diharapkan..." required></textarea>
+            </div>
+
+            <button type="submit" class="btn-primary" style="margin-top: 6px;">
+              🚀 Kirim Feedback ke Admin
+            </button>
+          </form>
+        </section>
+
+        <!-- User Sent Feedback History -->
+        <section class="card">
+          <div class="section-title">
+            <span>Riwayat Feedback Terkirim</span>
+            <button class="quick-btn" onclick="fetchUserFeedbacks()">🔄 Refresh</button>
+          </div>
+          <div id="user-sent-feedback-list">
             <!-- Populated by app.js -->
           </div>
         </section>
@@ -601,6 +675,11 @@
       <button class="nav-item" id="nav-item-admin" data-view="view-admin" style="display: none;">
         <span class="nav-icon">🛡️</span>
         <span>Admin</span>
+      </button>
+      <!-- CONDITIONAL RENDERING: Rendered ONLY for regular non-admin users -->
+      <button class="nav-item" id="nav-item-feedback" data-view="view-feedback" style="display: none;">
+        <span class="nav-icon">💬</span>
+        <span>Feedback</span>
       </button>
     </nav>
 

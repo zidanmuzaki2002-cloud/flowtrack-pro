@@ -1126,3 +1126,180 @@ button {
   color: #047857;
   border: 1px solid rgba(16, 185, 129, 0.3);
 }
+
+/* ==============================================================================
+   6. USER MANAGEMENT (TAKE OUT) & FEEDBACK MODULE
+   ============================================================================== */
+.btn-danger-sm {
+  background: rgba(239, 68, 68, 0.1);
+  color: #DC2626;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  padding: 4px 10px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-danger-sm:hover {
+  background: #DC2626;
+  color: #FFFFFF;
+}
+
+.btn-success-sm {
+  background: rgba(16, 185, 129, 0.1);
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  padding: 4px 10px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-success-sm:hover {
+  background: #059669;
+  color: #FFFFFF;
+}
+
+.rating-stars-group {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.rating-star-btn {
+  background: var(--bg-main);
+  border: 1px solid var(--border-subtle);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.rating-star-btn.active {
+  background: #FEF3C7;
+  border-color: #F59E0B;
+  color: #B45309;
+  font-weight: 700;
+}
+
+.feedback-item-card {
+  background: var(--bg-main);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  margin-bottom: 8px;
+  transition: all 0.2s ease;
+}
+
+.feedback-item-card:hover {
+  border-color: var(--primary-accent);
+}
+
+/* ==============================================================================
+   7. COMPACT VISUAL ARITHMETIC FLOW FORMULA
+   ============================================================================== */
+.compact-flow-container {
+  background: var(--bg-main);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.compact-flow-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.78rem;
+}
+
+.compact-flow-row.result {
+  background: rgba(79, 70, 229, 0.06);
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px dashed rgba(79, 70, 229, 0.25);
+  margin-top: 2px;
+}
+
+.c-flow-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.c-flow-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+.c-flow-badge.plus {
+  background: var(--accent-positive-bg);
+  color: var(--accent-positive);
+}
+
+.c-flow-badge.minus {
+  background: var(--accent-warning-bg);
+  color: var(--accent-warning);
+}
+
+.c-flow-badge.equals {
+  background: var(--primary-accent);
+  color: #FFFFFF;
+}
+
+.c-flow-label {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.8rem;
+}
+
+.c-flow-label.highlight {
+  color: var(--primary-accent);
+  font-weight: 700;
+}
+
+.c-flow-sub {
+  display: block;
+  font-size: 0.68rem;
+  color: var(--text-secondary);
+  line-height: 1.2;
+}
+
+.c-flow-value {
+  font-weight: 700;
+  font-size: 0.84rem;
+}
+
+.c-flow-value.positive {
+  color: var(--accent-positive);
+}
+
+.c-flow-value.warning {
+  color: var(--accent-warning);
+}
+
+.c-flow-value.result {
+  color: var(--primary-accent);
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.compact-flow-divider {
+  height: 1px;
+  background: var(--border-subtle);
+  margin: 2px 0;
+}
+

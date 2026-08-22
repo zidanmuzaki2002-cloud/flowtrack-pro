@@ -46,6 +46,14 @@
       "destination": "/api/index.js"
     },
     {
+      "source": "/feedback/:path*",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/feedback",
+      "destination": "/api/index.js"
+    },
+    {
       "source": "/health",
       "destination": "/api/index.js"
     }
