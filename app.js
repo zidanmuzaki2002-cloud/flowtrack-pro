@@ -1,7 +1,7 @@
 // ==============================================================================
 // FlowTrack Pro: Mobile-First Client Logic & Resilient Local-Cloud Sync Engine
-// Complete Bilingual I18N Engine (ID / EN), Vector SVG UI, Clean Layouts,
-// Compact Control Balance, Realized Expense Stream + AI Financial Advisor
+// Complete Bilingual I18N Engine (ID / EN), Volumetric 3D Badges,
+// Collapsible Flow Formula, Category Summaries, PDF.js BCA Parser, Unified Pengeluaran
 // ==============================================================================
 
 const API_BASE = window.location.origin;
@@ -20,8 +20,6 @@ const OPERATING_ANCHOR_YEAR = 2026;
 const OPERATING_ANCHOR_MONTH_INDEX = 7; // 7 = Agustus (0-indexed)
 const OPERATING_ANCHOR_DAY = 22;
 
-const now = new Date();
-
 // Embedded Initial Data Store for Instant Performance & Cloud/Vercel Resilience
 const EMBEDDED_ADMIN_DATA = {
   incomes: [{"income_id":"8c096362-a77b-4689-8d1e-36d6c16a3d70","user_id":"usr_admin_zidanmuzaki13","period_month":"Januari","period_year":2026,"source_name":"BCA","amount":2350000},{"income_id":"2624bba6-4e0f-4602-9f20-7b510f0a43e9","user_id":"usr_admin_zidanmuzaki13","period_month":"Januari","period_year":2026,"source_name":"Saham","amount":830000},{"income_id":"1cfc584d-1903-418f-b484-e4d8758b5f17","user_id":"usr_admin_zidanmuzaki13","period_month":"Januari","period_year":2026,"source_name":"BPJS TK","amount":4350000},{"income_id":"bfb58b1c-1faa-40a5-92a1-6ac69a23c99a","user_id":"usr_admin_zidanmuzaki13","period_month":"Februari","period_year":2026,"source_name":"BCA","amount":2350000},{"income_id":"2c0212f1-a04b-49fa-90bf-9a6397435bb2","user_id":"usr_admin_zidanmuzaki13","period_month":"Februari","period_year":2026,"source_name":"Saham","amount":830000},{"income_id":"45a7f7b5-454a-4288-a0cf-f5fd8b5b4bc2","user_id":"usr_admin_zidanmuzaki13","period_month":"Februari","period_year":2026,"source_name":"BPJS TK","amount":4350000},{"income_id":"2764fb5d-8391-4e86-a229-48a326e9b043","user_id":"usr_admin_zidanmuzaki13","period_month":"Maret","period_year":2026,"source_name":"Gaji","amount":4400000},{"income_id":"12543a5c-607e-47eb-8997-8def965648eb","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"source_name":"Gaji","amount":6000000},{"income_id":"90fef87d-0a2a-4b8d-9af9-f6871a7137f0","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"source_name":"Piutang","amount":500000},{"income_id":"4bef9148-900c-42be-8fbc-751dd3491a85","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"source_name":"Sisa Maret","amount":500000},{"income_id":"63f18c4d-6eca-482a-9c61-83910bc10158","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"source_name":"Lynk.id","amount":590000},{"income_id":"200a3b23-330b-4292-b6fb-241223c10578","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"source_name":"PP - MySkill","amount":130000},{"income_id":"28dd1f37-1bd0-477f-83a7-a717186cdc18","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"source_name":"Ambil Dana Darurat","amount":900000},{"income_id":"d64d4fb8-742a-4b4b-a5a2-b5b767176f86","user_id":"usr_admin_zidanmuzaki13","period_month":"April","period_year":2026,"source_name":"Jual sepeda","amount":900000},{"income_id":"83334c39-9e55-4863-88cf-00274b893f54","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"source_name":"Gaji","amount":6000000},{"income_id":"16a9a2f7-e83e-44cc-85f2-0c5c44d23c2b","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"source_name":"Untung WBSA","amount":350000},{"income_id":"32646be2-f8ab-40eb-9b42-4aabaecae3e9","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"source_name":"Lynk.id","amount":375000},{"income_id":"c8f4b6d1-82ac-499c-b186-d50494834920","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"source_name":"PP - Kita Lulus","amount":300000},{"income_id":"a3e5346c-d7d7-498f-8c6a-32f030479db1","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"source_name":"PP- Cocareer","amount":220000},{"income_id":"8cfbf50b-a9b0-42ad-863f-6135fc388c55","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"source_name":"Reimburse","amount":560000},{"income_id":"3f874690-ef56-47c9-91e8-d2270ae9fd6d","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"source_name":"Sisa bulan April","amount":380000},{"income_id":"a1f1fd68-ede5-4b0e-bb2f-69ca0b2a3d24","user_id":"usr_admin_zidanmuzaki13","period_month":"Mei","period_year":2026,"source_name":"PP - Parfum","amount":275000},{"income_id":"8b9f6f6a-e4fc-443a-b8fb-882c18ee0463","user_id":"usr_admin_zidanmuzaki13","period_month":"Juni","period_year":2026,"source_name":"Gaji","amount":6000000},{"income_id":"1e524670-d07f-491e-ae18-68d53bd40624","user_id":"usr_admin_zidanmuzaki13","period_month":"Juni","period_year":2026,"source_name":"PP - Tempat Belajar","amount":350000},{"income_id":"71a4022e-57d5-45a2-8a1b-b3e5116f9c6a","user_id":"usr_admin_zidanmuzaki13","period_month":"Juni","period_year":2026,"source_name":"PP - Barber Daily","amount":300000},{"income_id":"fc7387a3-4c16-4c89-8fda-4688d8913eb8","user_id":"usr_admin_zidanmuzaki13","period_month":"Juni","period_year":2026,"source_name":"Abah","amount":500000},{"income_id":"5e549e83-6006-4e2b-b99b-e977090c8ca4","user_id":"usr_admin_zidanmuzaki13","period_month":"Juli","period_year":2026,"source_name":"Gaji","amount":12500000},{"income_id":"fffe0290-9b8c-4ef4-912d-c54c5f8db425","user_id":"usr_admin_zidanmuzaki13","period_month":"Juli","period_year":2026,"source_name":"PP - Wanda","amount":300000},{"income_id":"016c63b4-3e24-4ae3-a8c4-7271a06e5ffb","user_id":"usr_admin_zidanmuzaki13","period_month":"Juli","period_year":2026,"source_name":"Lynk.id","amount":300000},{"income_id":"6b63b794-56de-4fc3-9650-9f4996d6c543","user_id":"usr_admin_zidanmuzaki13","period_month":"Juli","period_year":2026,"source_name":"Sisa bulan lalu","amount":350000},{"income_id":"c88e95b7-fed6-4bb6-afcb-1ba0b1e2cced","user_id":"usr_admin_zidanmuzaki13","period_month":"Agustus","period_year":2026,"source_name":"Gaji","amount":12500000},{"income_id":"cd823470-be5c-432f-bb81-824a33cda139","user_id":"usr_admin_zidanmuzaki13","period_month":"Agustus","period_year":2026,"source_name":"Jual Smartwatch","amount":322000},{"income_id":"1fd1c29a-150b-4d20-839e-a9a940d1c4d6","user_id":"usr_admin_zidanmuzaki13","period_month":"Agustus","period_year":2026,"source_name":"Sisa Bulan Juli","amount":300000},{"income_id":"9deb37b3-84b8-48a9-a9b7-418205e6e53f","user_id":"usr_admin_zidanmuzaki13","period_month":"Agustus","period_year":2026,"source_name":"Jual MyPertamina","amount":120000},{"income_id":"e50f94de-d6af-45d0-9f18-dd770c0c4293","user_id":"usr_admin_zidanmuzaki13","period_month":"Agustus","period_year":2026,"source_name":"Jual Proyektor","amount":320000}],
@@ -37,11 +35,19 @@ let currentLang = localStorage.getItem('flowtrack_lang') || 'id';
 const I18N = {
   id: {
     appSub: 'Smart Cashflow & Burn Tracker',
+    landingSub: 'Kelola arus kas, proyeksi saldo ideal, dan burn rate proporsional dalam satu aplikasi pintar.',
+    lblLoginEmail: 'Email atau Username',
+    lblLoginPass: 'Password',
+    btnLoginSubmit: 'ðŸ” Masuk Sekarang',
+    lblRegUser: 'Username Baru',
+    lblRegEmail: 'Alamat Email',
+    lblRegPass: 'Password',
+    regHelper: 'âœ¨ Pengguna baru akan otomatis dibuatkan kerangka pos anggaran dengan seluruh nominal 0 (kanvas bersih).',
+    btnRegSubmit: 'ðŸš€ Buat Akun & Mulai',
     navDashboard: 'Dashboard',
     navBudgets: 'Anggaran',
     navExpenses: 'Pengeluaran',
     navGoals: 'Goals',
-    navMutasi: 'Mutasi',
     navAdmin: 'Admin',
     navFeedback: 'Feedback',
     operatingModeEvaluation: 'Mode Evaluasi (Bulan Ditutup)',
@@ -55,6 +61,8 @@ const I18N = {
     heroStatBurnProjection: 'Target Burn Jatuh Tempo',
     heroStatBurnEvaluation: 'Total Realisasi Terpakai',
     heroStatBurnPlanning: 'Total Target Anggaran',
+    heroToggleHintOpen: 'âœ¨ Klik untuk Buka Alur Perhitungan Saldo Ideal â–¾',
+    heroToggleHintClose: 'âœ¨ Klik untuk Tutup Alur Perhitungan Saldo Ideal â–´',
     realityTitle: 'Input Realita Kas Anda',
     realitySub: 'Saldo Dompet & Rekening',
     accBank: 'Saldo di Bank',
@@ -77,18 +85,9 @@ const I18N = {
     flowSubVariable: 'Kebutuhan Pos Terjadwal',
     flowLblResult: 'Proyeksi Saldo Ideal Hari Ini',
     flowSubResult: 'Batas aman saldo dompet hari ini',
-    summaryBudgetTitle: 'Ringkasan Pos Anggaran',
-    btnViewAll: 'Lihat Semua âž”',
-    mutasiCardTitle: 'Upload Mutasi Rekening Bank',
-    mutasiCardSub: 'CSV & PDF Statement',
-    mutasiCardDesc: 'Unggah mutasi rekening bank (format .CSV atau .PDF) untuk merealisasikan pos anggaran bulan target. Sistem akan mencocokkan kata kunci pengeluaran otomatis.',
-    mutasiLblMonth: 'Bulan Mutasi:',
-    mutasiLblYear: 'Tahun Mutasi:',
-    mutasiLblFile: 'Pilih Dokumen Mutasi (.CSV, .PDF, .TXT):',
-    btnLoadSample: 'Muat Contoh Teks Mutasi Rekening Bank',
-    btnProcessMain: 'ðŸš€ Proses Mutasi & Realisasikan Anggaran',
-    txHistoryTitle: 'Riwayat Transaksi Mutasi',
-    txHistorySub: 'Terekonsiliasi',
+    summaryBudgetTitle: 'Ringkasan Pos Anggaran (Per Komponen)',
+    btnQuickBudget: 'Kelola Pos âž”',
+    btnViewAll: 'ðŸ“‹ Lihat Seluruh Rincian Pos di Halaman Anggaran âž”',
     cbTitle: 'Control Balance (Zero-Based)',
     cbBtnSync: 'Alokasikan Surplus',
     cbLblIncome: 'Pemasukan',
@@ -97,38 +96,52 @@ const I18N = {
     cbBalanced: 'Seimbang Rp 0',
     cbSurplusUnallocated: 'Surplus Belum Dialokasikan',
     cbDeficit: 'Defisit / Over-Allocated',
-    cbExplBalanced: 'Zero-Based Sempurna! Seluruh pemasukan telah habis dialokasikan ke pos kebutuhan dan surplus tabungan.',
-    cbExplSurplus: 'Masih ada sisa pemasukan yang belum dialokasikan. Klik Alokasikan Surplus di samping.',
-    cbExplDeficit: 'Total target anggaran melebihi pemasukan. Kurangi pos pengeluaran atau sesuaikan nominal.',
     incomesTitle: 'Pemasukan Bulan Ini',
     btnAddIncome: '+ Pemasukan',
     budgetsTitle: 'Daftar Pos Pengeluaran',
+    btnDupBudget: 'Salin Bulan',
     btnAddBudget: 'âž• + Pos Anggaran',
-    goalsTitle: 'Portofolio & Target Keuangan',
-    btnAddGoal: 'ðŸŽ¯ + Goal Baru',
-    goalsDesc: 'Kelola sasaran tabungan dan investasi jangka panjang Anda. Pos anggaran kategori Alokasi Surplus terhubung langsung ke sasaran target di sini.',
     realizedTitle: 'Daftar Seluruh Pengeluaran Realized',
     btnAddExpense: 'âž• + Catat Pengeluaran',
-    interimTitle: 'âš¡ Rekonsiliasi Mutasi Sementara (s/d Hari Ini)',
-    interimDesc: 'Unggah mutasi rekening (format .CSV atau .PDF) yang diunduh sementara dari mobile banking hingga tanggal hari ini untuk menyinkronkan seluruh pengeluaran real.',
+    interimTitle: 'Upload & Rekonsiliasi Mutasi Bank',
+    interimDesc: 'Unggah mutasi rekening (format .PDF Rekening Tahapan BCA, .CSV, atau .TXT) untuk otomatis membaca transaksi dan merealisasikan pos anggaran.',
+    lblUploadFile: 'Pilih Berkas Mutasi (PDF / CSV / TXT):',
     btnProcessInterim: 'ðŸš€ Proses Mutasi Realisasi',
-    btnSampleInterim: 'Sample',
-    aiBadge: 'ðŸ¤– AI Financial Advisor',
+    btnSampleInterim: 'Contoh BCA',
+    txHistoryTitle: 'Riwayat Transaksi Terekonsiliasi:',
+    aiBadge: 'AI Financial Advisor',
     analyticsMonthTitle: 'Analisis Realisasi Pengeluaran',
     btnRefreshAi: 'âœ¨ Refresh AI',
     aiLblScore: 'Skor Disiplin',
     aiLblRealized: 'Total Realisasi',
-    aiLblAvg: 'Rata-rata/Hari',
-    aiDiagHeader: 'ðŸ’¡ Diagnosa & Rekomendasi Cerdas AI:',
+    aiLblAvg: 'Batas Aman Harian',
+    aiDiagHeader: 'ðŸ’¡ Diagnosa & Rekomendasi AI:',
+    goalsTitle: 'Portofolio & Target Keuangan',
+    btnAddGoal: 'ðŸŽ¯ + Goal Baru',
+    goalsDesc: 'Kelola sasaran tabungan dan investasi jangka panjang Anda. Pos anggaran kategori Alokasi Surplus terhubung langsung ke sasaran target di sini.',
+    adminTitle: 'ðŸ›¡ï¸ Admin Master Control',
+    adminDesc: 'Panel kontrol administrator untuk melihat daftar pengguna terdaftar dan masukan rating dari pengguna.',
+    adminStatUsersLbl: 'ðŸ‘¥ Total Pengguna Terdaftar',
+    adminStatRatingLbl: 'â­ Rata-rata Rating Feedback',
+    adminUsersTitle: 'Direktori Pengguna Terdaftar',
+    btnRefreshAdmin: 'ðŸ”„ Refresh Data',
+    adminFbTitle: 'ðŸ“¬ Kotak Masukan & Feedback Pengguna',
+    feedbackTitle: 'ðŸ’¬ Kirim Feedback & Saran',
+    badgeHelp: 'Bantuan',
+    feedbackDesc: 'Punya ide fitur baru, menemukan kendala, atau ingin memberikan masukan tampilan? Tuliskan saran Anda langsung ke tim Admin.',
+    lblFbCat: 'Kategori Masukan',
+    lblFbRating: 'Rating Kepuasan Anda',
+    lblFbSubj: 'Subjek / Topik',
+    lblFbMsg: 'Isi Pesan / Masukan Detail',
+    btnFbSubmit: 'ðŸš€ Kirim Feedback ke Admin',
+    userFbHistoryTitle: 'Riwayat Feedback Terkirim',
+    btnRefreshUserFb: 'ðŸ”„ Refresh',
     catSemua: 'Semua',
-    catDasar: 'Dasar',
+    catDasar: 'Dasar (Pokok)',
     catPribadi: 'Pribadi',
     catHiburan: 'Hiburan',
     catInsidental: 'Insidental',
     catSurplus: 'Alokasi Goal',
-    freqHarian: 'Harian',
-    freqMingguan: 'Mingguan',
-    freqBulanan: 'Bulanan',
     usedWord: 'Terpakai: ',
     remWord: 'Sisa ',
     minusWord: 'Minus ',
@@ -141,11 +154,19 @@ const I18N = {
   },
   en: {
     appSub: 'Smart Cashflow & Burn Tracker',
+    landingSub: 'Manage cashflow, ideal balance projections, and proportional burn rates in one smart app.',
+    lblLoginEmail: 'Email or Username',
+    lblLoginPass: 'Password',
+    btnLoginSubmit: 'ðŸ” Sign In Now',
+    lblRegUser: 'New Username',
+    lblRegEmail: 'Email Address',
+    lblRegPass: 'Password',
+    regHelper: 'âœ¨ New users will automatically receive a clean budget framework with 0 balance (fresh canvas).',
+    btnRegSubmit: 'ðŸš€ Create Account & Start',
     navDashboard: 'Dashboard',
     navBudgets: 'Budgets',
     navExpenses: 'Expenses',
     navGoals: 'Goals',
-    navMutasi: 'Statement',
     navAdmin: 'Admin',
     navFeedback: 'Feedback',
     operatingModeEvaluation: 'Evaluation Mode (Closed Month)',
@@ -159,6 +180,8 @@ const I18N = {
     heroStatBurnProjection: 'Target Burn To Date',
     heroStatBurnEvaluation: 'Total Realized Spent',
     heroStatBurnPlanning: 'Total Target Budget',
+    heroToggleHintOpen: 'âœ¨ Click to View Cashflow Calculation Flow â–¾',
+    heroToggleHintClose: 'âœ¨ Click to Close Cashflow Calculation Flow â–´',
     realityTitle: 'Input Real Cash Accounts',
     realitySub: 'Wallet, Bank & E-Money Balances',
     accBank: 'Bank Balance',
@@ -181,18 +204,9 @@ const I18N = {
     flowSubVariable: 'Scheduled Due Categories',
     flowLblResult: 'Today\'s Ideal Balance',
     flowSubResult: 'Safe wallet balance limit today',
-    summaryBudgetTitle: 'Budget Summary',
-    btnViewAll: 'View All âž”',
-    mutasiCardTitle: 'Upload Bank Statement',
-    mutasiCardSub: 'CSV & PDF Statement',
-    mutasiCardDesc: 'Upload bank statement (.CSV or .PDF) to realize target month budgets. System automatically matches transaction descriptions.',
-    mutasiLblMonth: 'Statement Month:',
-    mutasiLblYear: 'Statement Year:',
-    mutasiLblFile: 'Select Statement File (.CSV, .PDF, .TXT):',
-    btnLoadSample: 'Load Sample Bank Statement Text',
-    btnProcessMain: 'ðŸš€ Process Statement & Realize Budgets',
-    txHistoryTitle: 'Transaction History',
-    txHistorySub: 'Reconciled',
+    summaryBudgetTitle: 'Budget Summary (By Component)',
+    btnQuickBudget: 'Manage âž”',
+    btnViewAll: 'ðŸ“‹ View All Category Breakdown in Budgets âž”',
     cbTitle: 'Zero-Based Control Balance',
     cbBtnSync: 'Allocate Surplus',
     cbLblIncome: 'Total Income',
@@ -201,38 +215,52 @@ const I18N = {
     cbBalanced: 'Balanced Rp 0',
     cbSurplusUnallocated: 'Unallocated Surplus',
     cbDeficit: 'Deficit / Over-Allocated',
-    cbExplBalanced: 'Perfect Zero-Based! All income has been fully assigned to expenses and surplus savings.',
-    cbExplSurplus: 'You have unallocated income remaining. Click Allocate Surplus to balance.',
-    cbExplDeficit: 'Total budget exceeds income. Reduce expense limits or adjust amounts.',
     incomesTitle: 'Monthly Income Sources',
     btnAddIncome: '+ Add Income',
-    budgetsTitle: 'Budget Expense Categories',
+    budgetsTitle: 'Budget Categories',
+    btnDupBudget: 'Copy Month',
     btnAddBudget: 'âž• + Add Budget',
-    goalsTitle: 'Financial Portfolio & Target Goals',
-    btnAddGoal: 'ðŸŽ¯ + New Goal',
-    goalsDesc: 'Manage your long-term savings and investment milestones. Surplus Allocation budgets link directly to these targets.',
     realizedTitle: 'Realized Expense Transactions',
     btnAddExpense: 'âž• + Log Expense',
-    interimTitle: 'âš¡ Interim Statement Sync (To Date)',
-    interimDesc: 'Upload interim bank statement (.CSV or .PDF) downloaded up to today to synchronize all realized expenses.',
-    btnProcessInterim: 'ðŸš€ Process Statement Sync',
-    btnSampleInterim: 'Sample',
-    aiBadge: 'ðŸ¤– AI Financial Advisor',
+    interimTitle: 'Upload & Reconcile Bank Statement',
+    interimDesc: 'Upload bank statement (.PDF BCA Tahapan, .CSV, or .TXT) to auto-extract transactions and realize budget items.',
+    lblUploadFile: 'Select Statement File (PDF / CSV / TXT):',
+    btnProcessInterim: 'ðŸš€ Process Statement Reconcile',
+    btnSampleInterim: 'Sample BCA',
+    txHistoryTitle: 'Reconciled Transactions History:',
+    aiBadge: 'AI Financial Advisor',
     analyticsMonthTitle: 'Realized Spending Analysis',
     btnRefreshAi: 'âœ¨ Refresh AI',
     aiLblScore: 'Discipline Score',
     aiLblRealized: 'Total Realized',
-    aiLblAvg: 'Daily Average',
+    aiLblAvg: 'Safe Daily Limit',
     aiDiagHeader: 'ðŸ’¡ AI Diagnostics & Actionable Advice:',
+    goalsTitle: 'Financial Portfolio & Target Goals',
+    btnAddGoal: 'ðŸŽ¯ + New Goal',
+    goalsDesc: 'Manage your long-term savings and investment milestones. Surplus Allocation budgets link directly to these targets.',
+    adminTitle: 'ðŸ›¡ï¸ Admin Master Control',
+    adminDesc: 'Administrator dashboard to monitor registered users and feedback satisfaction ratings.',
+    adminStatUsersLbl: 'ðŸ‘¥ Total Registered Users',
+    adminStatRatingLbl: 'â­ Average User Rating',
+    adminUsersTitle: 'Registered Users Directory',
+    btnRefreshAdmin: 'ðŸ”„ Refresh Data',
+    adminFbTitle: 'ðŸ“¬ User Feedback & Inbox',
+    feedbackTitle: 'ðŸ’¬ Send Feedback & Suggestions',
+    badgeHelp: 'Support',
+    feedbackDesc: 'Have a feature idea, found a bug, or want to suggest improvements? Write directly to the Admin team.',
+    lblFbCat: 'Feedback Category',
+    lblFbRating: 'Your Satisfaction Rating',
+    lblFbSubj: 'Subject / Topic',
+    lblFbMsg: 'Detailed Message / Feedback',
+    btnFbSubmit: 'ðŸš€ Send Feedback to Admin',
+    userFbHistoryTitle: 'Sent Feedback History',
+    btnRefreshUserFb: 'ðŸ”„ Refresh',
     catSemua: 'All',
-    catDasar: 'Basic',
+    catDasar: 'Basic Needs',
     catPribadi: 'Personal',
     catHiburan: 'Entertainment',
     catInsidental: 'Incidental',
     catSurplus: 'Goal Surplus',
-    freqHarian: 'Daily',
-    freqMingguan: 'Weekly',
-    freqBulanan: 'Monthly',
     usedWord: 'Used: ',
     remWord: 'Remaining ',
     minusWord: 'Minus ',
@@ -271,6 +299,7 @@ function setLanguage(lang) {
   renderHeroCard();
   renderCashReality();
   renderControlBalance();
+  renderDashboardCategorySummary();
   renderIncomesLists();
   renderBudgetsLists();
   renderGoalsList();
@@ -282,10 +311,9 @@ function setLanguage(lang) {
 
 function updateMonthDropdownLabels() {
   const months = currentLang === 'en' ? MONTH_NAMES_EN : MONTH_NAMES_ID;
-  ['select-month', 'mutasi-target-month', 'dup-source-month', 'dup-target-month'].forEach(selectId => {
+  ['select-month', 'dup-source-month', 'dup-target-month'].forEach(selectId => {
     const el = document.getElementById(selectId);
     if (el) {
-      const curVal = el.value;
       for (let i = 0; i < el.options.length; i++) {
         el.options[i].text = months[i];
       }
@@ -320,14 +348,22 @@ function applyStaticTranslations() {
   const dict = I18N[currentLang] || I18N['id'];
   
   const textMap = {
+    'txt-landing-sub': dict.landingSub,
+    'txt-lbl-login-email': dict.lblLoginEmail,
+    'txt-lbl-login-pass': dict.lblLoginPass,
+    'txt-btn-login-submit': dict.btnLoginSubmit,
+    'txt-lbl-reg-user': dict.lblRegUser,
+    'txt-lbl-reg-email': dict.lblRegEmail,
+    'txt-lbl-reg-pass': dict.lblRegPass,
+    'txt-btn-reg-submit': dict.btnRegSubmit,
     'txt-app-sub': dict.appSub,
     'nav-lbl-dashboard': dict.navDashboard,
     'nav-lbl-budgets': dict.navBudgets,
     'nav-lbl-expenses': dict.navExpenses,
     'nav-lbl-goals': dict.navGoals,
-    'nav-lbl-mutasi': dict.navMutasi,
     'nav-lbl-admin': dict.navAdmin,
     'nav-lbl-feedback': dict.navFeedback,
+    'txt-time-elapsed-lbl': dict.timeElapsed,
     'txt-reality-title': dict.realityTitle,
     'txt-reality-sub': dict.realitySub,
     'txt-acc-bank': dict.accBank,
@@ -347,17 +383,8 @@ function applyStaticTranslations() {
     'txt-flow-lbl-result': dict.flowLblResult,
     'txt-flow-sub-result': dict.flowSubResult,
     'txt-summary-budget-title': dict.summaryBudgetTitle,
+    'txt-btn-quick-budget': dict.btnQuickBudget,
     'txt-btn-view-all': dict.btnViewAll,
-    'txt-mutasi-card-title': dict.mutasiCardTitle,
-    'txt-mutasi-card-sub': dict.mutasiCardSub,
-    'txt-mutasi-card-desc': dict.mutasiCardDesc,
-    'txt-mutasi-lbl-month': dict.mutasiLblMonth,
-    'txt-mutasi-lbl-year': dict.mutasiLblYear,
-    'txt-mutasi-lbl-file': dict.mutasiLblFile,
-    'txt-btn-load-sample': dict.btnLoadSample,
-    'txt-btn-process-main': dict.btnProcessMain,
-    'txt-tx-history-title': dict.txHistoryTitle,
-    'txt-tx-history-sub': dict.txHistorySub,
     'txt-cb-title': dict.cbTitle,
     'txt-cb-btn-sync': dict.cbBtnSync,
     'txt-cb-lbl-income': dict.cbLblIncome,
@@ -366,22 +393,42 @@ function applyStaticTranslations() {
     'txt-incomes-title': dict.incomesTitle,
     'txt-btn-add-income': dict.btnAddIncome,
     'txt-budgets-title': dict.budgetsTitle,
+    'txt-btn-dup-budget': dict.btnDupBudget,
     'txt-btn-add-budget': dict.btnAddBudget,
-    'txt-goals-title': dict.goalsTitle,
-    'txt-btn-add-goal': dict.btnAddGoal,
-    'txt-goals-desc': dict.goalsDesc,
     'txt-realized-title': dict.realizedTitle,
     'txt-btn-add-expense': dict.btnAddExpense,
     'txt-interim-title': dict.interimTitle,
     'txt-interim-desc': dict.interimDesc,
+    'txt-lbl-upload-file': dict.lblUploadFile,
     'txt-btn-process-interim': dict.btnProcessInterim,
     'txt-btn-sample-interim': dict.btnSampleInterim,
+    'txt-tx-history-title': dict.txHistoryTitle,
     'txt-ai-badge': dict.aiBadge,
     'txt-btn-refresh-ai': dict.btnRefreshAi,
     'txt-ai-lbl-score': dict.aiLblScore,
     'txt-ai-lbl-realized': dict.aiLblRealized,
     'txt-ai-lbl-avg': dict.aiLblAvg,
-    'txt-ai-diag-header': dict.aiDiagHeader
+    'txt-ai-diag-header': dict.aiDiagHeader,
+    'txt-goals-title': dict.goalsTitle,
+    'txt-btn-add-goal': dict.btnAddGoal,
+    'txt-goals-desc': dict.goalsDesc,
+    'txt-admin-title': dict.adminTitle,
+    'txt-admin-desc': dict.adminDesc,
+    'txt-admin-stat-users-lbl': dict.adminStatUsersLbl,
+    'txt-admin-stat-rating-lbl': dict.adminStatRatingLbl,
+    'txt-admin-users-title': dict.adminUsersTitle,
+    'txt-btn-refresh-admin': dict.btnRefreshAdmin,
+    'txt-admin-fb-title': dict.adminFbTitle,
+    'txt-feedback-title': dict.feedbackTitle,
+    'txt-badge-help': dict.badgeHelp,
+    'txt-feedback-desc': dict.feedbackDesc,
+    'txt-lbl-fb-cat': dict.lblFbCat,
+    'txt-lbl-fb-rating': dict.lblFbRating,
+    'txt-lbl-fb-subj': dict.lblFbSubj,
+    'txt-lbl-fb-msg': dict.lblFbMsg,
+    'txt-btn-fb-submit': dict.btnFbSubmit,
+    'txt-user-fb-history-title': dict.userFbHistoryTitle,
+    'txt-btn-refresh-user-fb': dict.btnRefreshUserFb
   };
 
   for (const [id, text] of Object.entries(textMap)) {
@@ -391,6 +438,25 @@ function applyStaticTranslations() {
 
   const notesEl = document.getElementById('cash-reality-notes');
   if (notesEl) notesEl.placeholder = dict.notesPlaceholder;
+
+  updateHeroToggleHintText();
+}
+
+function updateHeroToggleHintText() {
+  const hintText = document.getElementById('hero-toggle-hint-text');
+  const formulaSec = document.getElementById('flow-formula-section');
+  if (hintText && formulaSec) {
+    const isVisible = formulaSec.style.display !== 'none';
+    hintText.textContent = isVisible ? t('heroToggleHintClose') : t('heroToggleHintOpen');
+  }
+}
+
+function toggleFlowFormula() {
+  const formulaSec = document.getElementById('flow-formula-section');
+  if (!formulaSec) return;
+  const isHidden = formulaSec.style.display === 'none';
+  formulaSec.style.display = isHidden ? 'block' : 'none';
+  updateHeroToggleHintText();
 }
 
 // -----------------------------------------------------------------------------
@@ -465,9 +531,23 @@ function getUserStorageKey(key) {
   return 'flowtrack_' + uid + '_' + key;
 }
 
+function recordRegisteredUser(userObj) {
+  try {
+    let allUsers = JSON.parse(localStorage.getItem('flowtrack_all_registered_users') || '[]');
+    const existingIdx = allUsers.findIndex(u => u.user_id === userObj.user_id || u.email === userObj.email);
+    if (existingIdx >= 0) {
+      allUsers[existingIdx] = { ...allUsers[existingIdx], ...userObj };
+    } else {
+      allUsers.push(userObj);
+    }
+    localStorage.setItem('flowtrack_all_registered_users', JSON.stringify(allUsers));
+  } catch (e) {}
+}
+
 function saveUserDataToStorage() {
   if (!currentUser) return;
   try {
+    recordRegisteredUser(currentUser);
     localStorage.setItem(getUserStorageKey('cash_accounts'), JSON.stringify(appState.cashAccounts));
     localStorage.setItem(getUserStorageKey('incomes_' + appState.currentMonth + '_' + appState.currentYear), JSON.stringify(appState.incomes));
     localStorage.setItem(getUserStorageKey('budgets_' + appState.currentMonth + '_' + appState.currentYear), JSON.stringify(appState.budgets));
@@ -519,7 +599,6 @@ function renderControlBalance() {
   const elBgt = document.getElementById('cb-total-budget');
   const elDiff = document.getElementById('cb-diff-figure');
   const badge = document.getElementById('control-balance-status-badge');
-  const expl = document.getElementById('cb-explanation-text');
 
   if (elInc) elInc.textContent = formatIDR(totalIncome);
   if (elBgt) elBgt.textContent = formatIDR(totalBudget);
@@ -532,28 +611,19 @@ function renderControlBalance() {
       badge.style.borderColor = 'rgba(52, 211, 153, 0.4)';
       badge.textContent = t('cbBalanced');
     }
-    if (expl) {
-      expl.innerHTML = '<strong>' + t('cbBalanced') + '</strong> &bull; ' + t('cbExplBalanced');
-    }
   } else if (diff > 0) {
     if (badge) {
       badge.style.background = 'rgba(245, 158, 11, 0.25)';
       badge.style.color = '#FBBF24';
       badge.style.borderColor = 'rgba(251, 191, 36, 0.4)';
-      badge.textContent = t('cbSurplusUnallocated');
-    }
-    if (expl) {
-      expl.innerHTML = '<strong>+' + formatIDR(diff) + '</strong> &bull; ' + t('cbExplSurplus');
+      badge.textContent = '+' + formatIDR(diff);
     }
   } else {
     if (badge) {
       badge.style.background = 'rgba(239, 68, 68, 0.25)';
       badge.style.color = '#F87171';
       badge.style.borderColor = 'rgba(248, 113, 113, 0.4)';
-      badge.textContent = t('cbDeficit');
-    }
-    if (expl) {
-      expl.innerHTML = '<strong>-' + formatIDR(Math.abs(diff)) + '</strong> &bull; ' + t('cbExplDeficit');
+      badge.textContent = '-' + formatIDR(Math.abs(diff));
     }
   }
 }
@@ -644,6 +714,51 @@ function ensureMonthlySurplusBudgetExists() {
 }
 
 // -----------------------------------------------------------------------------
+// DASHBOARD CATEGORY SUMMARY RENDERER
+// -----------------------------------------------------------------------------
+function renderDashboardCategorySummary() {
+  const container = document.getElementById('dashboard-category-summary-list');
+  if (!container) return;
+
+  const categories = [
+    { key: 'Dasar', labelId: 'Kebutuhan Pokok & Rutin (Dasar)', labelEn: 'Basic Living & Needs', icon: 'ðŸ¥©', grad: '#3B82F6' },
+    { key: 'Pribadi', labelId: 'Kebutuhan Pribadi & Rumah', labelEn: 'Personal & Household', icon: 'ðŸ§´', grad: '#10B981' },
+    { key: 'Hiburan', labelId: 'Hiburan, Jajan & Lifestyle', labelEn: 'Entertainment & Fun', icon: 'ðŸ¿', grad: '#F59E0B' },
+    { key: 'Insidental', labelId: 'Pengeluaran Insidental / Darurat', labelEn: 'Incidental & Emergencies', icon: 'âš¡', grad: '#EF4444' },
+    { key: 'Alokasi Surplus', labelId: 'Alokasi Surplus & Sasaran Goal', labelEn: 'Surplus & Goals Allocation', icon: 'ðŸŽ¯', grad: '#8B5CF6' }
+  ];
+
+  const html = categories.map(cat => {
+    const items = (appState.budgets || []).filter(b => b.category_type === cat.key);
+    const totalTarget = items.reduce((sum, b) => sum + (Number(b.target_anggaran) || 0), 0);
+    const totalUsed = items.reduce((sum, b) => sum + (Number(b.realisasi_used) || 0), 0);
+    const pct = totalTarget > 0 ? Math.min(100, Math.round((totalUsed / totalTarget) * 100)) : 0;
+    const label = currentLang === 'en' ? cat.labelEn : cat.labelId;
+
+    return (
+      '<div class="cat-summary-card" onclick="switchView(\'view-budgets\')">' +
+        '<div class="cat-summary-header">' +
+          '<div class="cat-summary-title">' +
+            '<span>' + cat.icon + '</span>' +
+            '<span>' + label + '</span>' +
+          '</div>' +
+          '<span style="font-size: 0.72rem; font-weight: 700; color: ' + cat.grad + ';">' + pct + '%</span>' +
+        '</div>' +
+        '<div class="progress-track" style="height: 6px; background: rgba(0,0,0,0.06);">' +
+          '<div class="progress-fill" style="width: ' + pct + '%; background: ' + cat.grad + ';"></div>' +
+        '</div>' +
+        '<div class="cat-summary-stats">' +
+          '<span>' + t('usedWord') + '<strong style="color: var(--text-primary);">' + formatIDR(totalUsed) + '</strong></span>' +
+          '<span>Target: <strong style="color: var(--text-primary);">' + formatIDR(totalTarget) + '</strong></span>' +
+        '</div>' +
+      '</div>'
+    );
+  }).join('');
+
+  container.innerHTML = html;
+}
+
+// -----------------------------------------------------------------------------
 // ANALISIS PENGELUARAN & AI ADVISOR ENGINE
 // -----------------------------------------------------------------------------
 function generateAiAnalytics() {
@@ -662,7 +777,6 @@ function generateAiAnalytics() {
   const currentDay = appState.idealBalanceData ? (appState.idealBalanceData.period.current_day || OPERATING_ANCHOR_DAY) : OPERATING_ANCHOR_DAY;
   const remainingDays = Math.max(1, totalDays - currentDay);
 
-  const dailyAvg = currentDay > 0 ? (totalRealized / currentDay) : 0;
   const safeDailyAllowance = Math.max(0, (totalIncome - totalRealized) / remainingDays);
 
   const expectedBurn = appState.idealBalanceData 
@@ -689,7 +803,7 @@ function generateAiAnalytics() {
     scoreEl.style.color = healthScore >= 80 ? '#34D399' : (healthScore >= 60 ? '#FBBF24' : '#F87171');
   }
   if (realizedEl) realizedEl.textContent = formatIDR(totalRealized);
-  if (dailyEl) dailyEl.textContent = formatIDR(dailyAvg) + t('perDayWord');
+  if (dailyEl) dailyEl.textContent = formatIDR(safeDailyAllowance) + t('perDayWord');
 
   let catSpend = { Dasar: 0, Pribadi: 0, Hiburan: 0, Insidental: 0, 'Alokasi Surplus': 0 };
   (appState.budgets || []).forEach(b => {
@@ -704,37 +818,33 @@ function generateAiAnalytics() {
 
   if (currentLang === 'en') {
     overText = overBudgets.length > 0 
-      ? 'There are <strong>' + overBudgets.length + ' overbudget categories</strong> (' + overBudgets.map(b => b.item_name).join(', ') + '). Immediate adjustment advised.'
-      : 'All expense items are running <strong>safely and within target limits</strong>.';
+      ? 'There are <strong>' + overBudgets.length + ' overbudget items</strong> (' + overBudgets.map(b => b.item_name).join(', ') + ').'
+      : 'All items are <strong>within safe budget targets</strong>.';
 
-    if (healthScore >= 80) {
-      adviceText = 'Financial discipline is <strong>excellent</strong>! With ' + remainingDays + ' days left this month, your maximum safe daily spending is <strong>' + formatIDR(safeDailyAllowance) + ' / day</strong> to maintain target surplus.';
-    } else {
-      adviceText = 'Spending is nearing ideal burn ceiling. We recommend reducing personal entertainment expenses, capping daily spend at <strong>' + formatIDR(safeDailyAllowance) + ' / day</strong> through month-end.';
-    }
+    adviceText = healthScore >= 80
+      ? 'Discipline is high. With ' + remainingDays + ' days remaining, safe spending limit is <strong>' + formatIDR(safeDailyAllowance) + '/day</strong>.'
+      : 'Spending is near limit. Cap discretionary spend at <strong>' + formatIDR(safeDailyAllowance) + '/day</strong> through month-end.';
 
     if (diagEl) {
       diagEl.innerHTML = 
-        '<div style="margin-bottom: 8px;"><strong>&bull; Realized Distribution:</strong> Basic: ' + formatIDR(catSpend.Dasar) + ' &bull; Personal & Fun: ' + formatIDR(catSpend.Pribadi + catSpend.Hiburan) + ' &bull; Savings/Surplus: ' + formatIDR(catSpend['Alokasi Surplus']) + '</div>' +
-        '<div style="margin-bottom: 8px;"><strong>&bull; Status Check:</strong> ' + overText + '</div>' +
-        '<div><strong>&bull; Actionable Advice:</strong> ' + adviceText + '</div>';
+        '<div style="margin-bottom: 4px;">â€¢ Basic: ' + formatIDR(catSpend.Dasar) + ' | Fun/Personal: ' + formatIDR(catSpend.Pribadi + catSpend.Hiburan) + ' | Surplus: ' + formatIDR(catSpend['Alokasi Surplus']) + '</div>' +
+        '<div style="margin-bottom: 4px;">â€¢ ' + overText + '</div>' +
+        '<div>â€¢ ' + adviceText + '</div>';
     }
   } else {
     overText = overBudgets.length > 0 
-      ? 'Terdapat <strong>' + overBudgets.length + ' pos overbudget</strong> (' + overBudgets.map(b => b.item_name).join(', ') + '). Perlu pengetatan segera.'
-      : 'Semua pos pengeluaran berjalan <strong>sangat tertib dan aman</strong> di bawah plafon target.';
+      ? 'Terdapat <strong>' + overBudgets.length + ' pos overbudget</strong> (' + overBudgets.map(b => b.item_name).join(', ') + ').'
+      : 'Semua pos berjalan <strong>tertib di bawah plafon target</strong>.';
 
-    if (healthScore >= 80) {
-      adviceText = 'Disiplin finansial Anda <strong>sangat baik</strong>! Sisa waktu ' + remainingDays + ' hari lagi di bulan ini, batas aman belanja harian Anda adalah <strong>' + formatIDR(safeDailyAllowance) + ' / hari</strong> untuk mempertahankan surplus.';
-    } else {
-      adviceText = 'Pengeluaran mendekati batas burn rate ideal. Disarankan membatasi pos hiburan & jajan pribadi, dengan alokasi maksimal <strong>' + formatIDR(safeDailyAllowance) + ' / hari</strong> hingga akhir bulan.';
-    }
+    adviceText = healthScore >= 80
+      ? 'Disiplin sangat baik. Sisa ' + remainingDays + ' hari lagi, batas aman belanja harian adalah <strong>' + formatIDR(safeDailyAllowance) + '/hari</strong>.'
+      : 'Mendekati plafon burn rate. Batasi pos hiburan & jajan maksimal <strong>' + formatIDR(safeDailyAllowance) + '/hari</strong>.';
 
     if (diagEl) {
       diagEl.innerHTML = 
-        '<div style="margin-bottom: 8px;"><strong>&bull; Pola Pengeluaran Real:</strong> Kebutuhan Pokok: ' + formatIDR(catSpend.Dasar) + ' &bull; Pribadi & Hiburan: ' + formatIDR(catSpend.Pribadi + catSpend.Hiburan) + ' &bull; Tabungan/Surplus: ' + formatIDR(catSpend['Alokasi Surplus']) + '</div>' +
-        '<div style="margin-bottom: 8px;"><strong>&bull; Diagnosa Pos:</strong> ' + overText + '</div>' +
-        '<div><strong>&bull; Rekomendasi AI:</strong> ' + adviceText + '</div>';
+        '<div style="margin-bottom: 4px;">â€¢ Pokok: ' + formatIDR(catSpend.Dasar) + ' | Pribadi/Hiburan: ' + formatIDR(catSpend.Pribadi + catSpend.Hiburan) + ' | Surplus: ' + formatIDR(catSpend['Alokasi Surplus']) + '</div>' +
+        '<div style="margin-bottom: 4px;">â€¢ ' + overText + '</div>' +
+        '<div>â€¢ ' + adviceText + '</div>';
     }
   }
 
@@ -765,17 +875,14 @@ function renderAnalyticsExpensesStream() {
 
   if (filteredTx.length === 0) {
     const emptyTitle = currentLang === 'en' ? 'No Realized Expenses Recorded Yet' : 'Belum Ada Pengeluaran Realized Dicatat';
-    const emptyDesc = currentLang === 'en' ? 'Log your daily expenses or upload an interim bank statement.' : 'Catat pengeluaran harian Anda atau unggah mutasi e-banking sementara.';
+    const emptyDesc = currentLang === 'en' ? 'Log your daily expenses or upload an interim bank statement.' : 'Catat pengeluaran harian Anda atau unggah mutasi bank di bawah.';
     const btnText = currentLang === 'en' ? '+ Log Realized Expense' : '+ Catat Pengeluaran Realized';
 
     container.innerHTML = 
-      '<div class="empty-state-box" style="padding: 24px 16px; text-align: center;">' +
-        '<div class="empty-icon" style="margin-bottom: 8px;">' +
-          '<svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>' +
-        '</div>' +
-        '<div class="empty-title" style="font-weight: 700; font-size: 0.9rem; color: var(--text-primary); margin-bottom: 4px;">' + emptyTitle + '</div>' +
-        '<div class="empty-desc" style="font-size: 0.75rem; color: var(--text-secondary); max-width: 280px; margin: 0 auto 12px; line-height: 1.4;">' + emptyDesc + '</div>' +
-        '<button class="btn-primary" style="padding: 8px 14px; font-size: 0.75rem;" onclick="openAddExpenseModal()">' + btnText + '</button>' +
+      '<div class="empty-state-box" style="padding: 20px 14px; text-align: center;">' +
+        '<div style="font-weight: 700; font-size: 0.85rem; color: var(--text-primary); margin-bottom: 4px;">' + emptyTitle + '</div>' +
+        '<div style="font-size: 0.72rem; color: var(--text-secondary); max-width: 260px; margin: 0 auto 10px; line-height: 1.4;">' + emptyDesc + '</div>' +
+        '<button class="btn-primary" style="padding: 6px 12px; font-size: 0.72rem;" onclick="openAddExpenseModal()">' + btnText + '</button>' +
       '</div>';
     return;
   }
@@ -786,17 +893,17 @@ function renderAnalyticsExpensesStream() {
     const posName = b ? b.item_name : (tx.description || 'Transaction');
 
     return (
-      '<div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); margin-bottom: 8px;">' +
+      '<div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); margin-bottom: 6px;">' +
         '<div>' +
-          '<div style="font-weight: 700; font-size: 0.85rem; color: var(--text-primary);">' + (tx.description || posName) + '</div>' +
-          '<div style="font-size: 0.7rem; color: var(--text-secondary); display: flex; align-items: center; gap: 6px; margin-top: 2px;">' +
-            '<span class="item-category-pill" style="font-size: 0.65rem; padding: 1px 5px;">' + catName + '</span>' +
+          '<div style="font-weight: 700; font-size: 0.82rem; color: var(--text-primary);">' + (tx.description || posName) + '</div>' +
+          '<div style="font-size: 0.68rem; color: var(--text-secondary); display: flex; align-items: center; gap: 4px; margin-top: 1px;">' +
+            '<span class="item-category-pill" style="font-size: 0.62rem; padding: 1px 4px;">' + catName + '</span>' +
             '<span>Pos: ' + posName + '</span> &bull; <span>' + (tx.transaction_date || '2026-08-22') + '</span>' +
           '</div>' +
         '</div>' +
         '<div style="text-align: right;">' +
-          '<div style="font-weight: 700; font-size: 0.88rem; color: var(--accent-warning);">- ' + formatIDR(tx.amount) + '</div>' +
-          '<div style="font-size: 0.68rem; color: var(--text-secondary);">' + (tx.payment_method_platform || 'Manual') + '</div>' +
+          '<div style="font-weight: 700; font-size: 0.85rem; color: var(--accent-warning);">- ' + formatIDR(tx.amount) + '</div>' +
+          '<div style="font-size: 0.65rem; color: var(--text-secondary);">' + (tx.payment_method_platform || 'Manual') + '</div>' +
         '</div>' +
       '</div>'
     );
@@ -870,15 +977,69 @@ async function submitQuickExpense() {
   alert(alertMsg);
 }
 
-function loadInterimSample() {
+// -----------------------------------------------------------------------------
+// PDF.JS STATEMENT PARSER & BCA TAHAPAN RECONCILIATION ENGINE
+// -----------------------------------------------------------------------------
+async function handlePdfUpload(file) {
+  if (!window.pdfjsLib) {
+    alert(currentLang === 'en' ? 'PDF.js library is loading, please try again in a few seconds.' : 'Modul PDF.js sedang dimuat, silakan coba beberapa detik lagi.');
+    return;
+  }
+
+  try {
+    const arrayBuffer = await file.arrayBuffer();
+    const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+    const pdfDoc = await loadingTask.promise;
+    let fullExtractedText = '';
+
+    for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
+      const page = await pdfDoc.getPage(pageNum);
+      const textContent = await page.getTextContent();
+      const pageStrings = textContent.items.map(item => item.str).join(' ');
+      fullExtractedText += '\n--- HALAMAN ' + pageNum + ' ---\n' + pageStrings;
+    }
+
+    const textarea = document.getElementById('interim-statement-textarea');
+    if (textarea) {
+      textarea.value = fullExtractedText.trim();
+    }
+
+    processInterimStatement();
+  } catch (err) {
+    console.error('PDF parsing error:', err);
+    alert(currentLang === 'en' ? 'Failed to read PDF. You can paste transaction text manually.' : 'Gagal membaca PDF secara otomatis. Anda dapat menempelkan teks mutasi secara manual.');
+  }
+}
+
+function loadBcaSampleStatement() {
   const textarea = document.getElementById('interim-statement-textarea');
   if (textarea) {
-    textarea.value = 'Tanggal,Keterangan,Tipe,Nominal\n' +
-      '2026-08-05,WARUNG MAKAN NASI PADANG,DEBIT,45000\n' +
-      '2026-08-08,ISI ULANG GALON AIR MINUM,DEBIT,15000\n' +
-      '2026-08-12,GOJEK TRANSPORT GORIDE,DEBIT,25000\n' +
-      '2026-08-15,INDOMARET JAJAN KOPI,DEBIT,35000\n' +
-      '2026-08-20,TOPUP BIBIT DANA DARURAT,DEBIT,880000';
+    textarea.value = 
+      '01/07 TRANSAKSI DEBIT QR 914 Amarilis, 9,500.00 DB\n' +
+      '01/07 BIAYA ADM 14,000.00 DB\n' +
+      '02/07 TRSF E-BANKING DB EKA NURBAITI 1,600,000.00 DB\n' +
+      '02/07 TRANSAKSI DEBIT QR 912 GRAB TRANS 9,000.00 DB\n' +
+      '02/07 TRSF E-BANKING DB TOKOPEDIA 4,553,871.00 DB\n' +
+      '02/07 TRSF E-BANKING DB SHOPEEPAY 177,965.00 DB\n' +
+      '03/07 TRANSAKSI DEBIT QR 914 RM Sederha 17,000.00 DB\n' +
+      '03/07 TRANSAKSI DEBIT QR 914 jagocoffee 10,000.00 DB\n' +
+      '03/07 TRANSAKSI DEBIT QR 002 AYAM PENYE 13,000.00 DB\n' +
+      '03/07 TRSF E-BANKING DB ALFAGIFT 32,581.00 DB\n' +
+      '04/07 TRANSAKSI DEBIT QR 503 WARTEG BAH 17,000.00 DB\n' +
+      '04/07 TRANSAKSI DEBIT QR 008 BATAGOR RE 10,000.00 DB\n' +
+      '05/07 TRSF E-BANKING DB GOPAY TOPUP 39,862.00 DB\n' +
+      '07/07 TRSF E-BANKING DB KKI-PLUANG 3,000,000.00 DB\n' +
+      '08/07 TRANSAKSI DEBIT QR 912 GRAB TRANS 13,900.00 DB\n' +
+      '10/07 TRANSAKSI DEBIT Shopee Ind 38,100.00 DB\n' +
+      '11/07 TRANSAKSI DEBIT XL Priorit 80,000.00 DB\n' +
+      '12/07 TRSF E-BANKING DB ASTRO 82,736.00 DB\n' +
+      '13/07 TRANSAKSI DEBIT Batagor 99 10,000.00 DB\n' +
+      '16/07 TRANSAKSI DEBIT Access By 369,000.00 DB\n' +
+      '17/07 TRANSAKSI DEBIT KANG RUJAK 44,000.00 DB\n' +
+      '18/07 TRANSAKSI DEBIT TOUS LES J 89,000.00 DB\n' +
+      '20/07 TRSF E-BANKING DB KLIKINDOMARE 15,400.00 DB\n' +
+      '25/07 TRANSAKSI DEBIT mtix by XX 220,000.00 DB\n' +
+      '29/07 KR OTOMATIS PERTAMINA PATRA NI Regular Payroll 12,436,000.00';
   }
 }
 
@@ -888,7 +1049,7 @@ async function processInterimStatement() {
 
   const raw = textarea.value.trim();
   if (!raw) {
-    alert(currentLang === 'en' ? 'Please upload a CSV/PDF or paste statement text first!' : 'Harap pilih file CSV/PDF atau tempel mutasi bank sementara terlebih dahulu!');
+    alert(currentLang === 'en' ? 'Please upload a PDF/CSV or paste statement text first!' : 'Harap pilih file PDF/CSV atau tempel mutasi bank terlebih dahulu!');
     return;
   }
 
@@ -897,25 +1058,38 @@ async function processInterimStatement() {
   const lines = raw.split(/\r?\n/);
 
   lines.forEach(l => {
-    const lower = l.toLowerCase();
+    const cleanL = l.trim();
+    if (!cleanL || cleanL.startsWith('---')) return;
+
+    const lower = cleanL.toLowerCase();
     let matchedItem = null;
 
-    if (lower.includes('makan') || lower.includes('warung') || lower.includes('resto') || lower.includes('padang')) {
-      matchedItem = appState.budgets.find(b => b.item_name.toLowerCase().includes('makan'));
-    } else if (lower.includes('kos') || lower.includes('kost') || lower.includes('retno')) {
-      matchedItem = appState.budgets.find(b => b.item_name.toLowerCase().includes('kos'));
-    } else if (lower.includes('gojek') || lower.includes('grab') || lower.includes('transport') || lower.includes('bensin')) {
-      matchedItem = appState.budgets.find(b => b.item_name.toLowerCase().includes('transport'));
-    } else if (lower.includes('galon') || lower.includes('laundry') || lower.includes('indomaret')) {
-      matchedItem = appState.budgets.find(b => b.item_name.toLowerCase().includes('pribadi') || b.item_name.toLowerCase().includes('laundry'));
-    } else if (lower.includes('bibit') || lower.includes('rdpu') || lower.includes('darurat')) {
-      matchedItem = appState.budgets.find(b => b.item_name.toLowerCase().includes('darurat') || b.category_type === 'Alokasi Surplus');
+    if (lower.includes('makan') || lower.includes('warung') || lower.includes('resto') || lower.includes('padang') || lower.includes('sederha') || lower.includes('jago') || lower.includes('coffee') || lower.includes('penye') || lower.includes('warteg') || lower.includes('batagor') || lower.includes('ayam') || lower.includes('cilor') || lower.includes('rujak') || lower.includes('martabak') || lower.includes('kriuk') || lower.includes('sate')) {
+      matchedItem = appState.budgets.find(b => b.item_name.toLowerCase().includes('makan') || b.category_type === 'Dasar');
+    } else if (lower.includes('kos') || lower.includes('kost') || lower.includes('nurbaiti') || lower.includes('retno') || lower.includes('sewa')) {
+      matchedItem = appState.budgets.find(b => b.item_name.toLowerCase().includes('kos') || b.item_name.toLowerCase().includes('sewa') || b.category_type === 'Dasar');
+    } else if (lower.includes('grab') || lower.includes('gojek') || lower.includes('goride') || lower.includes('bensin') || lower.includes('transport') || lower.includes('access by')) {
+      matchedItem = appState.budgets.find(b => b.item_name.toLowerCase().includes('transport') || b.item_name.toLowerCase().includes('grab') || b.category_type === 'Dasar');
+    } else if (lower.includes('alfagift') || lower.includes('indomaret') || lower.includes('klikindomare') || lower.includes('astro') || lower.includes('laundry') || lower.includes('galon')) {
+      matchedItem = appState.budgets.find(b => b.item_name.toLowerCase().includes('pribadi') || b.category_type === 'Pribadi' || b.item_name.toLowerCase().includes('laundry'));
+    } else if (lower.includes('xl') || lower.includes('priorit') || lower.includes('pulsa') || lower.includes('listrik') || lower.includes('pln')) {
+      matchedItem = appState.budgets.find(b => b.item_name.toLowerCase().includes('pulsa') || b.item_name.toLowerCase().includes('listrik') || b.category_type === 'Dasar');
+    } else if (lower.includes('pluang') || lower.includes('bibit') || lower.includes('rdpu') || lower.includes('darurat') || lower.includes('investasi') || lower.includes('surplus')) {
+      matchedItem = appState.budgets.find(b => b.category_type === 'Alokasi Surplus' || b.item_name.toLowerCase().includes('darurat') || b.item_name.toLowerCase().includes('investasi'));
+    } else if (lower.includes('mtix') || lower.includes('tous les') || lower.includes('champs') || lower.includes('hiburan') || lower.includes('nonton')) {
+      matchedItem = appState.budgets.find(b => b.category_type === 'Hiburan' || b.item_name.toLowerCase().includes('hiburan'));
+    } else if (lower.includes('tokopedia') || lower.includes('shopee') || lower.includes('gopay')) {
+      matchedItem = appState.budgets.find(b => b.category_type === 'Pribadi' || b.category_type === 'Hiburan') || appState.budgets[0];
+    } else if (lower.includes('biaya adm') || lower.includes('adm')) {
+      matchedItem = appState.budgets.find(b => b.item_name.toLowerCase().includes('admin') || b.category_type === 'Dasar');
     }
 
-    const nums = l.match(/\b\d{4,10}\b/);
-    if (matchedItem && nums && (lower.includes('debit') || lower.includes('db') || !lower.includes('kredit'))) {
-      const amt = parseFloat(nums[0]) || 0;
-      if (amt > 0) {
+    const numMatches = cleanL.match(/[\d,]+\.\d{2}|\b\d{4,9}\b/g);
+    if (numMatches && (lower.includes('db') || lower.includes('debit') || (!lower.includes('cr') && !lower.includes('payroll') && !lower.includes('kredit')))) {
+      const amtStr = numMatches[numMatches.length - 1].replace(/,/g, '');
+      const amt = parseFloat(amtStr) || 0;
+
+      if (amt > 0 && matchedItem) {
         matchedItem.realisasi_used = (Number(matchedItem.realisasi_used) || 0) + amt;
         matchedItem.balance = Number(matchedItem.target_anggaran) - matchedItem.realisasi_used;
         matched++;
@@ -934,8 +1108,8 @@ async function processInterimStatement() {
           goal_id: matchedItem.linked_goal_id,
           transaction_type: 'Expense',
           amount: amt,
-          payment_method_platform: 'Mutasi Sementara',
-          description: l.substring(0, 40)
+          payment_method_platform: 'BCA Statement',
+          description: cleanL.substring(0, 45)
         });
       }
     }
@@ -946,8 +1120,8 @@ async function processInterimStatement() {
   generateAiAnalytics();
   textarea.value = '';
   const successMsg = currentLang === 'en'
-    ? 'Interim Statement Reconciled Successfully!\n\nâ€¢ Matched: ' + matched + ' transactions\nâ€¢ Total Realized: ' + formatIDR(totalAmt)
-    : 'Rekonsiliasi Mutasi Sementara Berhasil!\n\nâ€¢ Mutasi Dicocokkan: ' + matched + ' transaksi\nâ€¢ Total Realisasi Terekonsiliasi: ' + formatIDR(totalAmt);
+    ? 'Bank Statement Reconciled Successfully!\n\nâ€¢ Matched: ' + matched + ' transactions\nâ€¢ Total Realized: ' + formatIDR(totalAmt)
+    : 'Rekonsiliasi Mutasi Bank Berhasil!\n\nâ€¢ Mutasi Dicocokkan: ' + matched + ' transaksi\nâ€¢ Total Realisasi Terekonsiliasi: ' + formatIDR(totalAmt);
   alert(successMsg);
 }
 
@@ -1010,12 +1184,6 @@ function applyDatePreset(target, datesArray) {
   const state = target === 'add' ? addModalTiming : editModalTiming;
   setTimingMode(target, 'dates');
   state.selectedDates = [...datesArray].sort((a, b) => a - b);
-  renderCalendarDaysGrid(target);
-}
-
-function clearSelectedDates(target) {
-  const state = target === 'add' ? addModalTiming : editModalTiming;
-  state.selectedDates = [];
   renderCalendarDaysGrid(target);
 }
 
@@ -1176,6 +1344,7 @@ async function submitLandingLogin() {
           authToken = data.token;
           localStorage.setItem('flowtrack_user', JSON.stringify(currentUser));
           localStorage.setItem('flowtrack_token', authToken);
+          recordRegisteredUser(currentUser);
           loginSuccess = true;
         }
       } catch (parseErr) {}
@@ -1186,11 +1355,11 @@ async function submitLandingLogin() {
     const isAdmin = (emailOrUser.toLowerCase() === 'zidanmuzaki13' || emailOrUser.toLowerCase() === 'zidanmuzaki2002@gmail.com') && password === 'zakiya03';
     
     let localUsers = [];
-    try { localUsers = JSON.parse(localStorage.getItem('flowtrack_local_users') || '[]'); } catch (e) {}
+    try { localUsers = JSON.parse(localStorage.getItem('flowtrack_all_registered_users') || '[]'); } catch (e) {}
 
     const matchedLocal = localUsers.find(u => 
-      (u.email.toLowerCase() === emailOrUser.toLowerCase() || u.username.toLowerCase() === emailOrUser.toLowerCase()) && 
-      u.password === password
+      (u.email && u.email.toLowerCase() === emailOrUser.toLowerCase()) || 
+      (u.username && u.username.toLowerCase() === emailOrUser.toLowerCase())
     );
 
     if (isAdmin) {
@@ -1203,6 +1372,7 @@ async function submitLandingLogin() {
       authToken = 'jwt_usr_admin_zidanmuzaki13';
       localStorage.setItem('flowtrack_user', JSON.stringify(currentUser));
       localStorage.setItem('flowtrack_token', authToken);
+      recordRegisteredUser(currentUser);
       loginSuccess = true;
     } else if (matchedLocal) {
       currentUser = {
@@ -1214,6 +1384,7 @@ async function submitLandingLogin() {
       authToken = 'jwt_' + matchedLocal.user_id;
       localStorage.setItem('flowtrack_user', JSON.stringify(currentUser));
       localStorage.setItem('flowtrack_token', authToken);
+      recordRegisteredUser(currentUser);
       loginSuccess = true;
     }
   }
@@ -1277,6 +1448,7 @@ async function submitLandingRegister() {
           authToken = data.token;
           localStorage.setItem('flowtrack_user', JSON.stringify(currentUser));
           localStorage.setItem('flowtrack_token', authToken);
+          recordRegisteredUser(currentUser);
           regSuccess = true;
         }
       } catch (e) {}
@@ -1293,11 +1465,7 @@ async function submitLandingRegister() {
     };
     authToken = 'jwt_' + newUserId;
 
-    let localUsers = [];
-    try { localUsers = JSON.parse(localStorage.getItem('flowtrack_local_users') || '[]'); } catch (e) {}
-    localUsers.push({ user_id: newUserId, username, email, password });
-    localStorage.setItem('flowtrack_local_users', JSON.stringify(localUsers));
-
+    recordRegisteredUser(currentUser);
     localStorage.setItem('flowtrack_user', JSON.stringify(currentUser));
     localStorage.setItem('flowtrack_token', authToken);
     regSuccess = true;
@@ -1362,6 +1530,11 @@ function switchView(viewId) {
     }
   });
 
+  const timeBar = document.getElementById('app-time-selector-bar');
+  if (timeBar) {
+    timeBar.style.display = (viewId === 'view-goals' || viewId === 'view-admin' || viewId === 'view-feedback') ? 'none' : 'flex';
+  }
+
   if (viewId === 'view-admin') {
     fetchAdminData();
   } else if (viewId === 'view-feedback') {
@@ -1381,66 +1554,49 @@ function switchView(viewId) {
 async function fetchAdminData() {
   if (!currentUser || currentUser.email !== 'zidanmuzaki2002@gmail.com') return;
 
+  let allUsers = [];
   try {
-    const resStats = await authFetch('/admin/stats');
-    if (resStats && resStats.ok) {
-      const dataStats = await resStats.json();
-      if (dataStats.status === 'SUCCESS' && dataStats.stats) {
-        document.getElementById('admin-stat-users').textContent = dataStats.stats.total_users;
-        document.getElementById('admin-stat-budgets').textContent = dataStats.stats.total_budgets;
-        document.getElementById('admin-stat-incomes').textContent = dataStats.stats.total_incomes;
-        document.getElementById('admin-stat-tx').textContent = dataStats.stats.total_transactions;
-      }
-    }
+    allUsers = JSON.parse(localStorage.getItem('flowtrack_all_registered_users') || '[]');
+  } catch (e) {}
 
-    let localUsers = [];
-    try { localUsers = JSON.parse(localStorage.getItem('flowtrack_local_users') || '[]'); } catch (e) {}
+  if (!allUsers.some(u => u.email === 'zidanmuzaki2002@gmail.com')) {
+    allUsers.unshift({ user_id: 'usr_admin_zidanmuzaki13', username: 'zidanmuzaki13', email: 'zidanmuzaki2002@gmail.com', role: 'admin' });
+  }
 
-    const resUsers = await authFetch('/admin/users');
-    let allUsers = [];
-    if (resUsers && resUsers.ok) {
-      const dataUsers = await resUsers.json();
-      if (dataUsers.status === 'SUCCESS' && dataUsers.users) {
-        allUsers = dataUsers.users;
-      }
-    }
+  const statUsers = document.getElementById('admin-stat-users');
+  if (statUsers) statUsers.textContent = allUsers.length;
 
-    localUsers.forEach(lu => {
-      if (!allUsers.some(u => u.user_id === lu.user_id || u.email === lu.email)) {
-        allUsers.push({ user_id: lu.user_id, username: lu.username, email: lu.email, role: 'user' });
-      }
-    });
+  let localFeedbacks = [];
+  try { localFeedbacks = JSON.parse(localStorage.getItem('flowtrack_local_feedbacks') || '[]'); } catch (e) {}
+  const avgRating = localFeedbacks.length > 0
+    ? (localFeedbacks.reduce((sum, f) => sum + (f.rating || 5), 0) / localFeedbacks.length).toFixed(1)
+    : '5.0';
+  const statRating = document.getElementById('admin-stat-rating');
+  if (statRating) statRating.textContent = avgRating + ' / 5';
 
-    if (!allUsers.some(u => u.email === 'zidanmuzaki2002@gmail.com')) {
-      allUsers.unshift({ user_id: 'usr_admin_zidanmuzaki13', username: 'zidanmuzaki13', email: 'zidanmuzaki2002@gmail.com', role: 'admin' });
-    }
+  const container = document.getElementById('admin-users-list');
+  if (container) {
+    container.innerHTML = allUsers.map(u => {
+      const isSuperadmin = u.email === 'zidanmuzaki2002@gmail.com' || u.role === 'admin';
+      const actionHtml = isSuperadmin 
+        ? '<span style="font-size: 0.68rem; color: var(--primary-accent); font-weight: 700; background: #EEF2FF; padding: 4px 8px; border-radius: 4px;">Superadmin</span>'
+        : '<button class="btn-danger" style="padding: 4px 8px; font-size: 0.7rem;" onclick="takeOutUser(\'' + u.user_id + '\', \'' + u.username + '\')">Take Out</button>';
 
-    const container = document.getElementById('admin-users-list');
-    if (container) {
-      container.innerHTML = allUsers.map(u => {
-        const isSuperadmin = u.email === 'zidanmuzaki2002@gmail.com' || u.role === 'admin';
-        const actionHtml = isSuperadmin 
-          ? '<span style="font-size: 0.68rem; color: var(--primary-accent); font-weight: 700; background: #EEF2FF; padding: 4px 8px; border-radius: 4px;">Superadmin</span>'
-          : '<button class="btn-danger-sm" onclick="takeOutUser(\'' + u.user_id + '\', \'' + u.username + '\')">Take Out</button>';
-
-        return (
-          '<div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: var(--bg-main); border: 1px solid var(--border-subtle); border-radius: var(--radius-md);">' +
-            '<div>' +
-              '<div style="font-weight: 700; font-size: 0.85rem; color: var(--text-primary);">' +
-                u.username + ' <span style="font-size: 0.68rem; padding: 2px 6px; border-radius: 4px; background: ' + (isSuperadmin ? '#EEF2FF' : '#E2E8F0') + '; color: ' + (isSuperadmin ? 'var(--primary-accent)' : 'var(--text-secondary)') + '; font-weight: 600;">' + (u.role || 'USER').toUpperCase() + '</span>' +
-              '</div>' +
-              '<div style="font-size: 0.72rem; color: var(--text-secondary);">' + u.email + '</div>' +
+      return (
+        '<div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: var(--bg-main); border: 1px solid var(--border-subtle); border-radius: var(--radius-md);">' +
+          '<div>' +
+            '<div style="font-weight: 700; font-size: 0.85rem; color: var(--text-primary);">' +
+              u.username + ' <span style="font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; background: ' + (isSuperadmin ? '#EEF2FF' : '#E2E8F0') + '; color: ' + (isSuperadmin ? 'var(--primary-accent)' : 'var(--text-secondary)') + '; font-weight: 600;">' + (u.role || 'USER').toUpperCase() + '</span>' +
             '</div>' +
-            '<div style="display: flex; align-items: center; gap: 8px;">' +
-              actionHtml +
-            '</div>' +
-          '</div>'
-        );
-      }).join('');
-    }
+            '<div style="font-size: 0.72rem; color: var(--text-secondary);">' + u.email + '</div>' +
+          '</div>' +
+          '<div>' + actionHtml + '</div>' +
+        '</div>'
+      );
+    }).join('');
+  }
 
-    fetchAdminFeedbacks();
-  } catch (err) {}
+  fetchAdminFeedbacks();
 }
 
 async function takeOutUser(userId, username) {
@@ -1450,18 +1606,10 @@ async function takeOutUser(userId, username) {
   if (!confirm(confirmMsg)) return;
 
   try {
-    let localUsers = JSON.parse(localStorage.getItem('flowtrack_local_users') || '[]');
-    localUsers = localUsers.filter(u => u.user_id !== userId);
-    localStorage.setItem('flowtrack_local_users', JSON.stringify(localUsers));
+    let allUsers = JSON.parse(localStorage.getItem('flowtrack_all_registered_users') || '[]');
+    allUsers = allUsers.filter(u => u.user_id !== userId);
+    localStorage.setItem('flowtrack_all_registered_users', JSON.stringify(allUsers));
   } catch (e) {}
-
-  try {
-    await authFetch('/admin/take-out-user', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ user_id: userId })
-    });
-  } catch (err) {}
 
   alert(currentLang === 'en' ? 'User \'' + username + '\' has been removed.' : 'Pengguna \'' + username + '\' berhasil di-take out dari sistem.');
   fetchAdminData();
@@ -1514,14 +1662,6 @@ async function submitUserFeedback() {
   localFeedbacks.unshift(newFeedback);
   localStorage.setItem('flowtrack_local_feedbacks', JSON.stringify(localFeedbacks));
 
-  try {
-    await authFetch('/feedback', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newFeedback)
-    });
-  } catch (err) {}
-
   if (alertEl) {
     alertEl.className = 'auth-alert-msg success';
     alertEl.textContent = currentLang === 'en' ? 'Thank you! Your feedback has been sent to admin.' : 'Terima kasih! Masukan Anda telah berhasil dikirim ke Admin untuk perbaikan sistem.';
@@ -1540,18 +1680,6 @@ async function fetchUserFeedbacks() {
   let localFeedbacks = [];
   try { localFeedbacks = JSON.parse(localStorage.getItem('flowtrack_local_feedbacks') || '[]'); } catch (e) {}
   const userLocal = localFeedbacks.filter(f => f.user_id === currentUser.user_id);
-
-  try {
-    const res = await authFetch('/feedback');
-    if (res && res.ok) {
-      const data = await res.json();
-      if (data.status === 'SUCCESS' && Array.isArray(data.feedbacks) && data.feedbacks.length > 0) {
-        renderFeedbacksList(container, data.feedbacks, false);
-        return;
-      }
-    }
-  } catch (err) {}
-
   renderFeedbacksList(container, userLocal, false);
 }
 
@@ -1561,21 +1689,6 @@ async function fetchAdminFeedbacks() {
 
   let localFeedbacks = [];
   try { localFeedbacks = JSON.parse(localStorage.getItem('flowtrack_local_feedbacks') || '[]'); } catch (e) {}
-
-  try {
-    const res = await authFetch('/feedback');
-    if (res && res.ok) {
-      const data = await res.json();
-      if (data.status === 'SUCCESS' && Array.isArray(data.feedbacks)) {
-        data.feedbacks.forEach(f => {
-          if (!localFeedbacks.some(lf => lf.feedback_id === f.feedback_id)) {
-            localFeedbacks.unshift(f);
-          }
-        });
-      }
-    }
-  } catch (err) {}
-
   renderFeedbacksList(container, localFeedbacks, true);
 }
 
@@ -1587,31 +1700,31 @@ function renderFeedbacksList(container, feedbacks, isAdminView) {
 
   container.innerHTML = feedbacks.map(f => {
     const ratingNum = f.rating || 5;
-    const starsHtml = '&#9733;'.repeat(ratingNum) + '&#9734;'.repeat(Math.max(0, 5 - ratingNum));
+    const starsHtml = 'â­'.repeat(ratingNum);
     const dateStr = f.created_at ? f.created_at.substring(0, 10) : (currentLang === 'en' ? 'Today' : 'Hari ini');
     const statusBg = f.status === 'Selesai' ? 'rgba(16, 185, 129, 0.12)' : '#FEF3C7';
     const statusColor = f.status === 'Selesai' ? '#047857' : '#B45309';
 
     const adminActions = isAdminView ? (
       '<div style="display: flex; gap: 6px; margin-top: 8px;">' +
-        '<button class="btn-success-sm" onclick="toggleFeedbackStatus(\'' + f.feedback_id + '\')">' + (currentLang === 'en' ? 'Mark Completed' : 'Tandai Selesai') + '</button>' +
-        '<button class="btn-danger-sm" onclick="deleteFeedback(\'' + f.feedback_id + '\')">' + (currentLang === 'en' ? 'Delete' : 'Hapus') + '</button>' +
+        '<button class="btn-primary" style="padding: 3px 8px; font-size: 0.68rem;" onclick="toggleFeedbackStatus(\'' + f.feedback_id + '\')">' + (currentLang === 'en' ? 'Mark Completed' : 'Tandai Selesai') + '</button>' +
+        '<button class="btn-danger" style="padding: 3px 8px; font-size: 0.68rem;" onclick="deleteFeedback(\'' + f.feedback_id + '\')">' + (currentLang === 'en' ? 'Delete' : 'Hapus') + '</button>' +
       '</div>'
     ) : '';
 
     return (
-      '<div class="feedback-item-card">' +
+      '<div class="feedback-item-card" style="padding: 10px; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); margin-bottom: 8px;">' +
         '<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px;">' +
           '<div>' +
             '<div style="font-weight: 700; font-size: 0.85rem; color: var(--text-primary);">' + f.subject + '</div>' +
             '<div style="font-size: 0.7rem; color: var(--text-secondary);">' +
-              (isAdminView ? ('From: <strong>' + (f.username || f.email) + '</strong> (' + f.email + ') &bull; ') : '') +
-              f.category + ' &bull; <span style="color: #F59E0B; font-size: 0.85rem;">' + starsHtml + '</span> &bull; ' + dateStr +
+              (isAdminView ? ('From: <strong>' + (f.username || f.email) + '</strong> &bull; ') : '') +
+              f.category + ' &bull; <span>' + starsHtml + '</span> &bull; ' + dateStr +
             '</div>' +
           '</div>' +
-          '<span style="font-size: 0.68rem; padding: 2px 6px; border-radius: 4px; background: ' + statusBg + '; color: ' + statusColor + '; font-weight: 600;">' + (f.status || 'Baru') + '</span>' +
+          '<span style="font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; background: ' + statusBg + '; color: ' + statusColor + '; font-weight: 600;">' + (f.status || 'Baru') + '</span>' +
         '</div>' +
-        '<div style="font-size: 0.78rem; color: var(--text-primary); background: #FFFFFF; padding: 8px; border-radius: 6px; border: 1px solid var(--border-subtle); margin-top: 6px; line-height: 1.4;">' +
+        '<div style="font-size: 0.75rem; color: var(--text-primary); background: var(--bg-main); padding: 8px; border-radius: 6px; margin-top: 6px; line-height: 1.4;">' +
           f.message +
         '</div>' +
         adminActions +
@@ -1628,25 +1741,15 @@ async function toggleFeedbackStatus(feedbackId) {
     target.status = target.status === 'Selesai' ? 'Baru' : 'Selesai';
     localStorage.setItem('flowtrack_local_feedbacks', JSON.stringify(localFeedbacks));
   }
-
-  authFetch('/feedback/status', {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ feedback_id: feedbackId, status: 'Selesai' })
-  }).catch(() => {});
-
   fetchAdminFeedbacks();
 }
 
 async function deleteFeedback(feedbackId) {
   if (!confirm(currentLang === 'en' ? 'Delete this feedback?' : 'Hapus feedback ini?')) return;
-
   let localFeedbacks = [];
   try { localFeedbacks = JSON.parse(localStorage.getItem('flowtrack_local_feedbacks') || '[]'); } catch (e) {}
   localFeedbacks = localFeedbacks.filter(f => f.feedback_id !== feedbackId);
   localStorage.setItem('flowtrack_local_feedbacks', JSON.stringify(localFeedbacks));
-
-  authFetch('/feedback?feedback_id=' + feedbackId, { method: 'DELETE' }).catch(() => {});
   fetchAdminFeedbacks();
 }
 
@@ -1665,6 +1768,7 @@ async function refreshAllData() {
   ]);
   ensureMonthlySurplusBudgetExists();
   renderControlBalance();
+  renderDashboardCategorySummary();
   await fetchIdealBalance();
   if (appState.activeView === 'view-analytics') {
     generateAiAnalytics();
@@ -1755,6 +1859,7 @@ async function fetchBudgets() {
 
   renderBudgetsLists();
   renderControlBalance();
+  renderDashboardCategorySummary();
 }
 
 async function fetchFinancialGoals() {
@@ -2115,7 +2220,6 @@ function renderFlowFormula() {
 // 4. RENDER INCOMES & BUDGETS
 // -----------------------------------------------------------------------------
 function renderIncomesLists() {
-  const containerDashboard = document.getElementById('incomes-list-preview');
   const containerBudgetsPage = document.getElementById('incomes-management-list');
   const allIncomes = Array.isArray(appState.incomes) ? appState.incomes : [];
 
@@ -2134,12 +2238,10 @@ function renderIncomesLists() {
         '</div>'
       ).join('');
 
-  if (containerDashboard) containerDashboard.innerHTML = html;
   if (containerBudgetsPage) containerBudgetsPage.innerHTML = html;
 }
 
 function renderBudgetsLists() {
-  const containerDashboard = document.getElementById('budgets-list-container');
   const containerBudgetsPage = document.getElementById('budgets-page-list');
   const allBudgets = Array.isArray(appState.budgets) ? appState.budgets : [];
 
@@ -2150,21 +2252,14 @@ function renderBudgetsLists() {
   function generateCardsHtml(items) {
     if (items.length === 0) {
       const emptyTitle = currentLang === 'en' ? 'No Budget Items For This Month' : 'Belum Ada Pos Anggaran di Bulan Ini';
-      const emptyDesc = currentLang === 'en' ? 'Add a new budget category or duplicate budget template from another month.' : 'Tambahkan pos anggaran baru atau salin template anggaran dari bulan lain.';
+      const emptyDesc = currentLang === 'en' ? 'Add a new budget category or copy from another month.' : 'Tambahkan pos anggaran baru atau salin dari bulan lain.';
       const btnAdd = currentLang === 'en' ? '+ Add Budget Category' : '+ Tambah Pos Anggaran';
-      const btnCopy = currentLang === 'en' ? 'Copy from Another Month' : 'Salin dari Bulan Lain';
 
       return (
         '<div class="empty-state-box" style="padding: 24px 16px; text-align: center;">' +
-          '<div class="empty-icon" style="margin-bottom: 8px;">' +
-            '<svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>' +
-          '</div>' +
-          '<div class="empty-title" style="font-weight: 700; font-size: 0.9rem; color: var(--text-primary); margin-bottom: 4px;">' + emptyTitle + '</div>' +
+          '<div class="empty-title" style="font-weight: 700; font-size: 0.88rem; color: var(--text-primary); margin-bottom: 4px;">' + emptyTitle + '</div>' +
           '<div class="empty-desc" style="font-size: 0.75rem; color: var(--text-secondary); max-width: 280px; margin: 0 auto 12px; line-height: 1.4;">' + emptyDesc + '</div>' +
-          '<div style="display: flex; gap: 8px; justify-content: center;">' +
-            '<button class="btn-primary" style="padding: 8px 14px; font-size: 0.75rem;" onclick="openAddBudgetModal()">' + btnAdd + '</button>' +
-            '<button class="btn-secondary" style="padding: 8px 14px; font-size: 0.75rem;" onclick="openDuplicateModal()">' + btnCopy + '</button>' +
-          '</div>' +
+          '<button class="btn-primary" style="padding: 8px 14px; font-size: 0.75rem;" onclick="openAddBudgetModal()">' + btnAdd + '</button>' +
         '</div>'
       );
     }
@@ -2178,9 +2273,9 @@ function renderBudgetsLists() {
       if (item.category_type === 'Alokasi Surplus' || item.linked_goal_id) {
         if (item.linked_goal_id) {
           const g = (appState.financialGoals || []).find(x => x.goal_id === item.linked_goal_id);
-          goalBadge = '<span style="font-size: 0.68rem; color: #4338CA; background: #EEF2FF; padding: 2px 6px; border-radius: 4px; font-weight: 600; border: 1px solid #C7D2FE;">' + (g ? ('[' + g.goal_code + '] ' + g.goal_name) : 'Goal Linked') + '</span>';
+          goalBadge = '<span style="font-size: 0.65rem; color: #4338CA; background: #EEF2FF; padding: 2px 6px; border-radius: 4px; font-weight: 600; border: 1px solid #C7D2FE;">' + (g ? g.goal_name : 'Goal Linked') + '</span>';
         } else if (item.category_type === 'Alokasi Surplus') {
-          goalBadge = '<span style="font-size: 0.68rem; color: #D97706; background: #FEF3C7; padding: 2px 6px; border-radius: 4px; font-weight: 600;">' + (currentLang === 'en' ? 'Link Goal' : 'Hubungkan Goal') + '</span>';
+          goalBadge = '<span style="font-size: 0.65rem; color: #D97706; background: #FEF3C7; padding: 2px 6px; border-radius: 4px; font-weight: 600;">' + (currentLang === 'en' ? 'Link Goal' : 'Hubungkan Goal') + '</span>';
         }
       }
 
@@ -2219,7 +2314,6 @@ function renderBudgetsLists() {
   }
 
   const cardsHtml = generateCardsHtml(filtered);
-  if (containerDashboard) containerDashboard.innerHTML = cardsHtml;
   if (containerBudgetsPage) containerBudgetsPage.innerHTML = cardsHtml;
 }
 
@@ -2227,41 +2321,40 @@ function renderBudgetsLists() {
 // 6. RENDER GOALS
 // -----------------------------------------------------------------------------
 function renderGoalsList() {
-  const containerDashboard = document.getElementById('goals-container');
   const containerGoalsPage = document.getElementById('goals-page-list');
   const allGoals = Array.isArray(appState.financialGoals) ? appState.financialGoals : [];
 
-  function generateGoalsHtml(goals) {
-    if (goals.length === 0) {
-      const emptyTitle = currentLang === 'en' ? 'No Financial Goals Yet' : 'Belum Ada Target Finansial';
-      const emptyDesc = currentLang === 'en' ? 'Create your long-term savings and investment milestones.' : 'Buat sasaran tabungan dan investasi jangka panjang Anda.';
-      const btnText = currentLang === 'en' ? '+ Add Financial Goal' : '+ Tambah Target Goal';
+  if (allGoals.length === 0) {
+    const emptyTitle = currentLang === 'en' ? 'No Financial Goals Yet' : 'Belum Ada Target Finansial';
+    const emptyDesc = currentLang === 'en' ? 'Create your long-term savings and investment milestones.' : 'Buat sasaran tabungan dan investasi jangka panjang Anda.';
+    const btnText = currentLang === 'en' ? '+ Add Financial Goal' : '+ Tambah Target Goal';
 
-      return (
+    if (containerGoalsPage) {
+      containerGoalsPage.innerHTML = (
         '<div class="empty-state-box" style="padding: 24px 16px; text-align: center;">' +
-          '<div class="empty-icon" style="margin-bottom: 8px;">' +
-            '<svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>' +
-          '</div>' +
-          '<div class="empty-title" style="font-weight: 700; font-size: 0.9rem; color: var(--text-primary); margin-bottom: 4px;">' + emptyTitle + '</div>' +
+          '<div class="empty-title" style="font-weight: 700; font-size: 0.88rem; color: var(--text-primary); margin-bottom: 4px;">' + emptyTitle + '</div>' +
           '<div class="empty-desc" style="font-size: 0.75rem; color: var(--text-secondary); max-width: 280px; margin: 0 auto 12px; line-height: 1.4;">' + emptyDesc + '</div>' +
           '<button class="btn-primary" style="padding: 8px 14px; font-size: 0.75rem;" onclick="openAddGoalModal()">' + btnText + '</button>' +
         '</div>'
       );
     }
+    return;
+  }
 
-    return goals.map(g => {
+  if (containerGoalsPage) {
+    containerGoalsPage.innerHTML = allGoals.map(g => {
       const cur = Number(g.current_amount) || 0;
       const tgt = Number(g.target_amount) || 1;
       const pct = Math.min(100, Math.round((cur / tgt) * 100));
 
       return (
-        '<div class="card" style="padding: 14px; margin-bottom: 10px; cursor: pointer; border: 1px solid var(--border-subtle);" onclick="openGoalDetailModalById(\'' + g.goal_id + '\')">' +
+        '<div class="card" style="padding: 12px 14px; margin-bottom: 10px; cursor: pointer; border: 1px solid var(--border-subtle);" onclick="openGoalDetailModalById(\'' + g.goal_id + '\')">' +
           '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">' +
-            '<div style="font-weight: 700; font-size: 0.88rem; color: var(--text-primary);">[' + g.goal_code + '] ' + g.goal_name + '</div>' +
+            '<div style="font-weight: 700; font-size: 0.88rem; color: var(--text-primary);">' + g.goal_name + '</div>' +
             '<div style="font-size: 0.7rem; font-weight: 700; color: #4F46E5; background: #EEF2FF; padding: 2px 8px; border-radius: 6px;">' + pct + '%</div>' +
           '</div>' +
-          '<div style="font-size: 0.72rem; color: var(--text-secondary); margin-bottom: 6px;">' +
-            'Target: <strong>' + (currentLang === 'en' ? 'Year ' : 'Tahun ') + (g.target_year || g.time_frame || '2027') + '</strong> &bull; <strong>' + (g.target_instrument || 'Investasi') + '</strong>' +
+          '<div style="font-size: 0.72rem; color: var(--text-secondary); margin-bottom: 4px;">' +
+            'Target: <strong>' + (currentLang === 'en' ? 'Year ' : 'Tahun ') + (g.target_year || '2027') + '</strong> &bull; <strong>' + (g.target_instrument || 'Investasi') + '</strong>' +
           '</div>' +
           '<div style="font-size: 0.72rem; color: var(--text-secondary); margin-bottom: 8px;">' +
             (currentLang === 'en' ? 'Collected: ' : 'Terkumpul: ') + '<strong style="color: var(--accent-positive);">' + formatIDR(cur) + '</strong> ' + (currentLang === 'en' ? 'of target ' : 'dari target ') + formatIDR(tgt) +
@@ -2273,10 +2366,6 @@ function renderGoalsList() {
       );
     }).join('');
   }
-
-  const goalsHtml = generateGoalsHtml(allGoals);
-  if (containerDashboard) containerDashboard.innerHTML = goalsHtml;
-  if (containerGoalsPage) containerGoalsPage.innerHTML = goalsHtml;
 }
 
 function populateGoalDropdowns() {
@@ -2285,7 +2374,7 @@ function populateGoalDropdowns() {
 
   const optionsHtml = '<option value="">-- ' + (currentLang === 'en' ? 'No Linked Goal' : 'Tanpa Relasi Goal') + ' --</option>' +
     (appState.financialGoals || []).map(g => 
-      '<option value="' + g.goal_id + '">[' + g.goal_code + '] ' + g.goal_name + ' (' + (g.target_instrument || 'Investasi') + ')</option>'
+      '<option value="' + g.goal_id + '">' + g.goal_name + ' (' + (g.target_instrument || 'Investasi') + ')</option>'
     ).join('');
 
   if (goalSelectAdd) goalSelectAdd.innerHTML = optionsHtml;
@@ -2301,12 +2390,8 @@ function renderTransactionsTable() {
 
   if (appState.transactions.length === 0) {
     container.innerHTML = 
-      '<div class="empty-state-box" style="padding: 24px 16px; text-align: center;">' +
-        '<div class="empty-icon" style="margin-bottom: 8px;">' +
-          '<svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>' +
-        '</div>' +
-        '<div class="empty-title" style="font-weight: 700; font-size: 0.9rem; color: var(--text-primary); margin-bottom: 4px;">' + (currentLang === 'en' ? 'No Transaction History Yet' : 'Belum Ada Riwayat Mutasi') + '</div>' +
-        '<div class="empty-desc" style="font-size: 0.75rem; color: var(--text-secondary); max-width: 280px; margin: 0 auto; line-height: 1.4;">' + (currentLang === 'en' ? 'Upload CSV/PDF statement or record realized expenses to view history.' : 'Unggah file CSV/PDF mutasi rekening bank Anda untuk merealisasikan anggaran.') + '</div>' +
+      '<div style="font-size: 0.72rem; color: var(--text-secondary); padding: 8px 0;">' +
+        (currentLang === 'en' ? 'No reconciled statement transactions yet.' : 'Belum ada transaksi mutasi terekonsiliasi.') +
       '</div>';
     return;
   }
@@ -2317,12 +2402,12 @@ function renderTransactionsTable() {
     const amountPrefix = isIncome ? '+ ' : '- ';
 
     return (
-      '<div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); margin-bottom: 8px;">' +
+      '<div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px dashed var(--border-subtle); font-size: 0.75rem;">' +
         '<div>' +
-          '<div style="font-weight: 600; font-size: 0.82rem; color: var(--text-primary);">' + (tx.description || (currentLang === 'en' ? 'Transaction' : 'Transaksi')) + '</div>' +
-          '<div style="font-size: 0.7rem; color: var(--text-secondary);">' + tx.transaction_date + ' &bull; ' + (tx.payment_method_platform || 'Bank') + '</div>' +
+          '<div style="font-weight: 600; color: var(--text-primary);">' + (tx.description || (currentLang === 'en' ? 'Transaction' : 'Transaksi')) + '</div>' +
+          '<div style="font-size: 0.68rem; color: var(--text-secondary);">' + tx.transaction_date + ' &bull; ' + (tx.payment_method_platform || 'Bank') + '</div>' +
         '</div>' +
-        '<div style="font-weight: 700; font-size: 0.85rem; color: ' + amountColor + ';">' +
+        '<div style="font-weight: 700; color: ' + amountColor + ';">' +
           amountPrefix + formatIDR(tx.amount) +
         '</div>' +
       '</div>'
@@ -2715,9 +2800,8 @@ async function deleteSelectedBudget() {
   }
 }
 
-// Financial Goal Handlers
+// Financial Goal Handlers (Simplified: No goal code required)
 function openAddGoalModal() {
-  document.getElementById('goal-code-input').value = '';
   document.getElementById('goal-name-input').value = '';
   document.getElementById('goal-target-input').value = '';
   document.getElementById('goal-initial-input').value = '';
@@ -2725,7 +2809,6 @@ function openAddGoalModal() {
 }
 
 async function submitAddGoal() {
-  const code = document.getElementById('goal-code-input').value.trim() || 'G1';
   const name = document.getElementById('goal-name-input').value.trim();
   const targetYear = document.getElementById('goal-target-year-select').value;
   const target = parseFloat(document.getElementById('goal-target-input').value) || 0;
@@ -2736,6 +2819,8 @@ async function submitAddGoal() {
     alert(currentLang === 'en' ? 'Please fill out goal name and target amount!' : 'Harap isi nama sasaran dan target nominal!');
     return;
   }
+
+  const code = 'G' + (appState.financialGoals.length + 1);
 
   const newG = {
     goal_id: 'goal_' + Date.now().toString(36),
@@ -2774,7 +2859,7 @@ function openGoalDetailModalById(goalId) {
 
 function openGoalDetailModal(g) {
   appState.selectedGoalItem = g;
-  document.getElementById('detail-goal-code').textContent = '[' + g.goal_code + ']';
+  document.getElementById('detail-goal-code').textContent = '';
   document.getElementById('detail-goal-name').textContent = g.goal_name;
   document.getElementById('detail-goal-target').textContent = formatIDR(g.target_amount);
   document.getElementById('detail-goal-current').textContent = formatIDR(g.current_amount);
@@ -2886,121 +2971,27 @@ async function submitDuplicateMonth() {
 }
 
 // -----------------------------------------------------------------------------
-// 10. STATEMENT PARSER
+// 10. STATEMENT UPLOADER (PDF / CSV / TXT)
 // -----------------------------------------------------------------------------
 function setupStatementUploader() {
-  const fileInput = document.getElementById('statement-file-input');
-  const textarea = document.getElementById('statement-textarea');
-  if (fileInput && textarea) {
-    fileInput.addEventListener('change', async (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (ev) => { textarea.value = ev.target.result; };
-      reader.readAsText(file);
-    });
-  }
-
   const interimFileInput = document.getElementById('interim-statement-file-input');
   const interimTextarea = document.getElementById('interim-statement-textarea');
+  
   if (interimFileInput && interimTextarea) {
     interimFileInput.addEventListener('change', async (e) => {
       const file = e.target.files[0];
       if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (ev) => { interimTextarea.value = ev.target.result; };
-      reader.readAsText(file);
-    });
-  }
 
-  const loadSampleBtn = document.getElementById('btn-load-sample-statement');
-  if (loadSampleBtn && textarea) {
-    loadSampleBtn.addEventListener('click', () => {
-      textarea.value = 'Tanggal,Keterangan,Tipe,Nominal,Saldo\n' +
-        '2026-08-05,WARUNG MAKAN NASI PADANG,DEBIT,45000,7485000\n' +
-        '2026-08-06,GOJEK TRANSPORT GORIDE,DEBIT,25000,7460000\n' +
-        '2026-08-07,TRANSFER SEWA KOS IBU RETNO,DEBIT,1600000,5860000\n' +
-        '2026-08-08,ISI ULANG GALON LE MINERALE,DEBIT,15000,5845000\n' +
-        '2026-08-10,TOPUP BIBIT RDPU DANA DARURAT,DEBIT,880000,4965000\n' +
-        '2026-08-11,INDOMARET JAJAN KOPI,DEBIT,35000,4930000\n' +
-        '2026-08-12,TRANSFER GAJI KANTOR,KREDIT,8500000,13430000';
-    });
-  }
-
-  const submitBtn = document.getElementById('btn-process-statement');
-  if (submitBtn && textarea) {
-    submitBtn.addEventListener('click', async () => {
-      const rawContent = textarea.value.trim();
-      if (!rawContent) {
-        alert(currentLang === 'en' ? 'Please upload statement file or paste text first!' : 'Silakan pilih file CSV/PDF atau tempel teks mutasi bank terlebih dahulu!');
-        return;
+      if (file.name.toLowerCase().endsWith('.pdf')) {
+        handlePdfUpload(file);
+      } else {
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          interimTextarea.value = ev.target.result;
+          processInterimStatement();
+        };
+        reader.readAsText(file);
       }
-
-      const targetM = document.getElementById('mutasi-target-month').value;
-      const targetY = parseInt(document.getElementById('mutasi-target-year').value);
-
-      let matchedCount = 0;
-      let totalAmount = 0;
-
-      const lines = rawContent.split(/\r?\n/);
-      lines.forEach(l => {
-        const lower = l.toLowerCase();
-        let matchedItem = null;
-
-        if (lower.includes('makan') || lower.includes('warung') || lower.includes('resto') || lower.includes('padang')) {
-          matchedItem = appState.budgets.find(b => b.item_name.toLowerCase().includes('makan'));
-        } else if (lower.includes('kos') || lower.includes('kost') || lower.includes('retno')) {
-          matchedItem = appState.budgets.find(b => b.item_name.toLowerCase().includes('kos'));
-        } else if (lower.includes('gojek') || lower.includes('grab') || lower.includes('transport') || lower.includes('bensin')) {
-          matchedItem = appState.budgets.find(b => b.item_name.toLowerCase().includes('transport'));
-        } else if (lower.includes('galon') || lower.includes('laundry') || lower.includes('indomaret')) {
-          matchedItem = appState.budgets.find(b => b.item_name.toLowerCase().includes('pribadi') || b.item_name.toLowerCase().includes('laundry'));
-        } else if (lower.includes('bibit') || lower.includes('rdpu') || lower.includes('darurat')) {
-          matchedItem = appState.budgets.find(b => b.item_name.toLowerCase().includes('darurat') || b.category_type === 'Alokasi Surplus');
-        }
-
-        const nums = l.match(/\b\d{4,10}\b/);
-        if (matchedItem && nums && (lower.includes('debit') || lower.includes('db'))) {
-          const amt = parseFloat(nums[0]) || 0;
-          if (amt > 0) {
-            matchedItem.realisasi_used = (Number(matchedItem.realisasi_used) || 0) + amt;
-            matchedItem.balance = Number(matchedItem.target_anggaran) - matchedItem.realisasi_used;
-            matchedCount++;
-            totalAmount += amt;
-
-            if (matchedItem.linked_goal_id) {
-              const lg = appState.financialGoals.find(g => g.goal_id === matchedItem.linked_goal_id);
-              if (lg) lg.current_amount = (Number(lg.current_amount) || 0) + amt;
-            }
-
-            appState.transactions.unshift({
-              transaction_id: 'tx_' + Math.random().toString(36).substring(2, 9),
-              user_id: currentUser.user_id,
-              transaction_date: '2026-08-22',
-              budget_id: matchedItem.budget_id,
-              goal_id: matchedItem.linked_goal_id,
-              transaction_type: 'Expense',
-              amount: amt,
-              payment_method_platform: 'Mutasi Statement',
-              description: l.substring(0, 40)
-            });
-          }
-        }
-      });
-
-      saveUserDataToStorage();
-
-      const successMsg = currentLang === 'en'
-        ? 'Statement Reconciliation Succeeded!\n\nâ€¢ Period: ' + getMonthDisplayName(targetM) + ' ' + targetY + '\nâ€¢ Matched: ' + matchedCount + ' transactions\nâ€¢ Total Realized: ' + formatIDR(totalAmount)
-        : 'Rekonsiliasi Mutasi Berhasil!\n\nâ€¢ Periode: ' + targetM + ' ' + targetY + '\nâ€¢ Mutasi Dicocokkan: ' + matchedCount + ' transaksi\nâ€¢ Total Realisasi Terekonsiliasi: ' + formatIDR(totalAmount);
-      alert(successMsg);
-
-      appState.currentMonth = targetM;
-      appState.currentYear = targetY;
-      document.getElementById('select-month').value = targetM;
-      document.getElementById('select-year').value = targetY;
-      refreshAllData();
-      switchView('view-analytics');
     });
   }
 }
@@ -3167,7 +3158,6 @@ window.setTimingMode = setTimingMode;
 window.renderCalendarDaysGrid = renderCalendarDaysGrid;
 window.toggleDayDate = toggleDayDate;
 window.applyDatePreset = applyDatePreset;
-window.clearSelectedDates = clearSelectedDates;
 window.openAddGoalModal = openAddGoalModal;
 window.submitAddGoal = submitAddGoal;
 window.openGoalDetailModalById = openGoalDetailModalById;
@@ -3189,5 +3179,6 @@ window.filterAnalyticsCategory = filterAnalyticsCategory;
 window.renderAnalyticsExpensesStream = renderAnalyticsExpensesStream;
 window.openAddExpenseModal = openAddExpenseModal;
 window.submitQuickExpense = submitQuickExpense;
-window.loadInterimSample = loadInterimSample;
+window.loadBcaSampleStatement = loadBcaSampleStatement;
 window.processInterimStatement = processInterimStatement;
+window.toggleFlowFormula = toggleFlowFormula;
