@@ -399,6 +399,40 @@
       <!-- ===================================================================== -->
       <div class="view-page" id="view-budgets">
         
+        <!-- Control Balance (Zero-Based Budgeting) Widget -->
+        <section class="card" style="background: linear-gradient(135deg, #1E1B4B 0%, #2E1065 50%, #3B0764 100%); color: #FFFFFF; border: none; padding: 16px; margin-bottom: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700; color: #DDD6FE;">Zero-Based Control Balance</div>
+            <span id="control-balance-status-badge" class="mode-badge" style="background: rgba(16, 185, 129, 0.25); color: #34D399; font-weight: 700; font-size: 0.7rem; border: 1px solid rgba(52, 211, 153, 0.4);">
+              Seimbang Rp 0
+            </span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; background: rgba(255, 255, 255, 0.08); padding: 10px; border-radius: var(--radius-md); backdrop-filter: blur(8px); margin-bottom: 10px;">
+            <div>
+              <div style="font-size: 0.65rem; color: #C4B5FD;">Total Pemasukan</div>
+              <div id="cb-total-income" style="font-weight: 700; font-size: 0.85rem; color: #34D399;">Rp 0</div>
+            </div>
+            <div>
+              <div style="font-size: 0.65rem; color: #C4B5FD;">Total Anggaran</div>
+              <div id="cb-total-budget" style="font-weight: 700; font-size: 0.85rem; color: #FCA5A5;">Rp 0</div>
+            </div>
+            <div>
+              <div style="font-size: 0.65rem; color: #C4B5FD;">Sisa / Selisih</div>
+              <div id="cb-diff-figure" style="font-weight: 700; font-size: 0.85rem; color: #FFFFFF;">Rp 0</div>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+            <div id="cb-explanation-text" style="font-size: 0.72rem; color: #E9D5FF; line-height: 1.3; flex: 1;">
+              Formula Zero-Based: <strong>Pemasukan − Total Anggaran = Rp 0</strong>. Seluruh rupiah dialokasikan dengan tepat.
+            </div>
+            <button type="button" class="btn-primary" style="padding: 6px 10px; font-size: 0.7rem; background: #8B5CF6; border-color: #A78BFA; white-space: nowrap;" onclick="autoSyncSurplusBudget()">
+              ⚡ Alokasikan Surplus
+            </button>
+          </div>
+        </section>
+
         <!-- Incomes Manager -->
         <section class="card">
           <div class="section-title">
@@ -459,73 +493,100 @@
       </div>
 
       <!-- ===================================================================== -->
-      <!-- PAGE 5: VIEW PERENCANAAN, TEMPLATE & EXCEL IMPORT -->
+      <!-- PAGE 5: VIEW ANALISIS PENGELUARAN & AI ADVISOR                        -->
       <!-- ===================================================================== -->
-      <div class="view-page" id="view-template">
+      <div class="view-page" id="view-analytics">
         
-        <!-- Excel Importer Card -->
-        <section class="card">
-          <div class="section-title">
-            <span>Import File Excel Perencanaan</span>
-            <span style="font-size: 0.72rem; color: var(--primary-accent);">.XLSX & Spreadsheet</span>
-          </div>
-
-          <div style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 14px; line-height: 1.4;">
-            Unggah dokumen spreadsheet perencanaan keuangan Anda untuk mengekstrak <strong>Pemasukan</strong> dan <strong>Pos Anggaran</strong> secara otomatis ke bulan target.
-          </div>
-
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;">
-            <div class="form-group" style="margin-bottom: 0;">
-              <label class="form-label">Bulan Target:</label>
-              <select id="excel-target-month" class="form-select">
-                <option value="Januari">Januari</option>
-                <option value="Februari">Februari</option>
-                <option value="Maret">Maret</option>
-                <option value="April">April</option>
-                <option value="Mei">Mei</option>
-                <option value="Juni">Juni</option>
-                <option value="Juli">Juli</option>
-                <option value="Agustus" selected>Agustus</option>
-                <option value="September">September</option>
-                <option value="Oktober">Oktober</option>
-                <option value="November">November</option>
-                <option value="Desember">Desember</option>
-              </select>
+        <!-- AI Financial Health & Diagnostic Hero Widget -->
+        <section class="card" style="background: linear-gradient(135deg, #0F172A 0%, #1E1B4B 50%, #312E81 100%); color: #FFFFFF; border: none; padding: 18px; position: relative; overflow: hidden; margin-bottom: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <div>
+              <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700; color: #818CF8;">🤖 AI Financial Advisor</div>
+              <div style="font-size: 1.1rem; font-weight: 800; color: #FFFFFF;" id="analytics-month-title">Analisis Realisasi Pengeluaran</div>
             </div>
-            <div class="form-group" style="margin-bottom: 0;">
-              <label class="form-label">Tahun Target:</label>
-              <select id="excel-target-year" class="form-select">
-                <option value="2024">2024</option>
-                <option value="2025">2025</option>
-                <option value="2026" selected>2026</option>
-                <option value="2027">2027</option>
-                <option value="2028">2028</option>
-              </select>
+            <button type="button" class="btn-primary" style="padding: 6px 12px; font-size: 0.72rem; background: #4F46E5; border-color: #6366F1;" onclick="generateAiAnalytics()">
+              ✨ Refresh AI
+            </button>
+          </div>
+
+          <!-- Score & Metrics Grid -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; background: rgba(255, 255, 255, 0.07); padding: 12px; border-radius: var(--radius-md); backdrop-filter: blur(8px); margin-bottom: 12px;">
+            <div>
+              <div style="font-size: 0.65rem; color: #A5B4FC;">Skor Disiplin</div>
+              <div id="ai-health-score" style="font-weight: 800; font-size: 1.05rem; color: #34D399;">88 / 100</div>
+            </div>
+            <div>
+              <div style="font-size: 0.65rem; color: #A5B4FC;">Total Realisasi</div>
+              <div id="ai-total-realized" style="font-weight: 800; font-size: 0.95rem; color: #FCA5A5;">Rp 0</div>
+            </div>
+            <div>
+              <div style="font-size: 0.65rem; color: #A5B4FC;">Rata-rata/Hari</div>
+              <div id="ai-daily-avg" style="font-weight: 800; font-size: 0.95rem; color: #FDE047;">Rp 0</div>
             </div>
           </div>
 
-          <div class="form-group">
-            <label class="form-label">Pilih Dokumen Excel (.XLSX, .CSV, .TXT):</label>
-            <input type="file" id="excel-file-input" accept=".xlsx,.xls,.csv,.txt" class="form-input" style="padding: 6px;">
+          <!-- AI Diagnostic Commentary -->
+          <div style="background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius-md); padding: 12px;">
+            <div style="display: flex; align-items: center; gap: 6px; font-weight: 700; font-size: 0.78rem; color: #C7D2FE; margin-bottom: 6px;">
+              <span>💡 Diagnosa & Rekomendasi Cerdas AI:</span>
+            </div>
+            <div id="ai-diagnostic-text" style="font-size: 0.75rem; color: #E0E7FF; line-height: 1.45;">
+              Memuat diagnosa pengeluaran berbasis data transaksi...
+            </div>
           </div>
-
-          <div id="excel-import-status" style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 500;"></div>
         </section>
 
-        <!-- Template Duplicator Card -->
+        <!-- Interim Statement Sync Card (Upload Mutasi Sementara s/d Hari Ini) -->
         <section class="card">
           <div class="section-title">
-            <span>Salin Anggaran Antar Bulan</span>
-            <span style="font-size: 0.72rem; color: var(--primary-accent);">Duplikasi Bebas</span>
+            <span>⚡ Rekonsiliasi Mutasi Sementara (s/d Hari Ini)</span>
+            <span style="font-size: 0.7rem; color: var(--primary-accent); font-weight: 600; background: #EEF2FF; padding: 2px 8px; border-radius: 12px;">Interim Sync</span>
           </div>
 
-          <div style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 14px; line-height: 1.4;">
-            Salin seluruh pos anggaran dan target dari bulan mana pun (contoh: Juni) ke bulan masa depan mana pun (contoh: September) dengan 1 klik.
+          <div style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.4;">
+            Unggah mutasi rekening (format <strong>.CSV</strong> atau <strong>.PDF</strong>) yang diunduh sementara dari mobile banking/e-banking hingga tanggal hari ini untuk menyinkronkan seluruh pengeluaran real.
           </div>
 
-          <button class="btn-primary" onclick="openDuplicateModal()">
-            📋 Buka Panel Duplikasi Anggaran
-          </button>
+          <div class="form-group" style="margin-bottom: 8px;">
+            <input type="file" id="interim-statement-file-input" accept=".csv,.pdf,.txt" class="form-input" style="padding: 6px;">
+          </div>
+
+          <div class="form-group" style="margin-bottom: 10px;">
+            <textarea id="interim-statement-textarea" class="form-input" rows="3" style="font-family: monospace; font-size: 0.72rem; resize: vertical;" placeholder="Atau tempel teks mutasi bank di sini..."></textarea>
+          </div>
+
+          <div style="display: flex; gap: 8px;">
+            <button type="button" class="btn-primary" style="flex: 2;" onclick="processInterimStatement()">
+              🚀 Proses Mutasi Realisasi
+            </button>
+            <button type="button" class="btn-secondary" style="flex: 1;" onclick="loadInterimSample()">
+              Sample
+            </button>
+          </div>
+        </section>
+
+        <!-- Realized Expenses Stream Manager -->
+        <section class="card">
+          <div class="section-title">
+            <span>Daftar Seluruh Pengeluaran Realized</span>
+            <button class="quick-btn" onclick="openAddExpenseModal()">
+              ➕ + Catat Pengeluaran
+            </button>
+          </div>
+
+          <!-- Category Filter Tabs for Analytics -->
+          <div class="tabs-nav" style="margin-bottom: 12px;">
+            <button type="button" class="tab-btn active" data-analytics-cat="Semua" onclick="filterAnalyticsCategory('Semua')">Semua</button>
+            <button type="button" class="tab-btn" data-analytics-cat="Dasar" onclick="filterAnalyticsCategory('Dasar')">Dasar</button>
+            <button type="button" class="tab-btn" data-analytics-cat="Pribadi" onclick="filterAnalyticsCategory('Pribadi')">Pribadi</button>
+            <button type="button" class="tab-btn" data-analytics-cat="Hiburan" onclick="filterAnalyticsCategory('Hiburan')">Hiburan</button>
+            <button type="button" class="tab-btn" data-analytics-cat="Insidental" onclick="filterAnalyticsCategory('Insidental')">Insidental</button>
+            <button type="button" class="tab-btn" data-analytics-cat="Alokasi Surplus" onclick="filterAnalyticsCategory('Alokasi Surplus')">Surplus</button>
+          </div>
+
+          <div id="analytics-expenses-stream-list">
+            <!-- Populated by app.js -->
+          </div>
         </section>
 
       </div>
@@ -666,21 +727,21 @@
         <span class="nav-icon">📊</span>
         <span>Dashboard</span>
       </button>
-      <button class="nav-item" data-view="view-mutasi">
-        <span class="nav-icon">💳</span>
-        <span>Mutasi</span>
-      </button>
       <button class="nav-item" data-view="view-budgets">
         <span class="nav-icon">📝</span>
         <span>Anggaran</span>
+      </button>
+      <button class="nav-item" data-view="view-analytics">
+        <span class="nav-icon">🔍</span>
+        <span>Analisis AI</span>
       </button>
       <button class="nav-item" data-view="view-goals">
         <span class="nav-icon">🎯</span>
         <span>Goals</span>
       </button>
-      <button class="nav-item" data-view="view-template">
-        <span class="nav-icon">📋</span>
-        <span>Template</span>
+      <button class="nav-item" data-view="view-mutasi">
+        <span class="nav-icon">💳</span>
+        <span>Mutasi</span>
       </button>
       <!-- CONDITIONAL RENDERING: Rendered ONLY if user.email === 'zidanmuzaki2002@gmail.com' -->
       <button class="nav-item" id="nav-item-admin" data-view="view-admin" style="display: none;">
@@ -698,7 +759,7 @@
     <!-- MODALS -->
     <!-- ======================================================================= -->
 
-    <!-- Modal 1: Tambah Pemasukan -->
+    <!-- Modal 1: Tambah Pemasukan Baru -->
     <div class="modal-overlay" id="add-income-modal">
       <div class="modal-card">
         <div class="modal-header">
@@ -707,7 +768,7 @@
         </div>
         <div class="form-group">
           <label class="form-label">Sumber Pemasukan</label>
-          <input type="text" id="income-source-input" class="form-input" placeholder="Contoh: Gaji Pokok, Tunjangan, Side-Project">
+          <input type="text" id="income-source-input" class="form-input" placeholder="Contoh: Gaji Pokok, Freelance Project, Dividen">
         </div>
         <div class="form-group">
           <label class="form-label">Nominal Pemasukan (Rp)</label>
@@ -717,7 +778,7 @@
       </div>
     </div>
 
-    <!-- Modal 2: Tambah Pos Anggaran -->
+    <!-- Modal 2: Tambah Pos Anggaran Baru -->
     <div class="modal-overlay" id="add-budget-modal">
       <div class="modal-card">
         <div class="modal-header">
@@ -726,7 +787,7 @@
         </div>
         <div class="form-group">
           <label class="form-label">Nama Pos Pengeluaran</label>
-          <input type="text" id="budget-item-name" class="form-input" placeholder="Contoh: Makan, Sewa Kos, Transportasi">
+          <input type="text" id="budget-item-name" class="form-input" placeholder="Contoh: Makan Harian, Sewa Kos, Listrik, Hiburan">
         </div>
         <div class="form-group">
           <label class="form-label">Kategori Sifat</label>
@@ -925,6 +986,14 @@
               <input type="number" id="edit-budget-mult" class="form-input" value="1">
             </div>
           </div>
+
+          <div class="form-group" style="margin-bottom: 8px;">
+            <label class="form-label" style="font-size: 0.75rem;">Hubungkan ke Financial Goal (Wajib jika Alokasi Surplus)</label>
+            <select id="edit-budget-linked-goal" class="form-select" style="font-size: 0.75rem; padding: 6px;">
+              <option value="">-- Tanpa Relasi Goal --</option>
+            </select>
+          </div>
+
           <div style="display: flex; gap: 8px; margin-top: 4px;">
             <button type="button" class="btn-primary" style="flex: 2;" onclick="submitEditBudget()">💾 Simpan Perubahan</button>
             <button type="button" class="btn-secondary" style="flex: 1;" onclick="switchModalTab('tx')">Batal</button>
@@ -1011,26 +1080,23 @@
         </div>
 
         <div class="form-group">
-          <label class="form-label">+ Tambah Setoran Tabungan (Rp)</label>
-          <input type="number" id="deposit-goal-amount" class="form-input" placeholder="Contoh: 500000">
+          <label class="form-label">Tambah Setoran / Tabungan ke Sasaran Ini (Rp)</label>
+          <input type="number" id="deposit-goal-amount" class="form-input" placeholder="Nominal setoran...">
         </div>
 
         <div style="display: flex; gap: 8px;">
-          <button type="button" class="btn-primary" onclick="submitGoalDeposit()">💰 Tambah Setoran</button>
-          <button type="button" class="btn-danger" onclick="deleteSelectedGoal()">🗑️ Hapus Goal</button>
+          <button type="button" class="btn-primary" style="flex: 2;" onclick="submitGoalDeposit()">💰 Setor Tabungan</button>
+          <button type="button" class="btn-danger" style="flex: 1;" onclick="deleteSelectedGoal()">Hapus Goal</button>
         </div>
       </div>
     </div>
 
-    <!-- Modal 6: Duplikasi Bulan (Salin Template) -->
+    <!-- Modal 6: Duplikasi Template Anggaran Antar Bulan -->
     <div class="modal-overlay" id="duplicate-modal">
       <div class="modal-card">
         <div class="modal-header">
-          <div style="font-weight: 700; font-size: 1rem; color: var(--text-primary);">Salin Anggaran Antar Bulan</div>
+          <div style="font-weight: 700; font-size: 1rem; color: var(--text-primary);">Duplikasi Anggaran Antar Bulan</div>
           <button type="button" class="close-btn close-modal-btn">✕</button>
-        </div>
-        <div style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 12px;">
-          Duplikasi seluruh pos anggaran beserta targetnya dari bulan sumber ke bulan target mana pun.
         </div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;">
           <div class="form-group" style="margin-bottom: 0;">
@@ -1093,7 +1159,57 @@
       </div>
     </div>
 
-    <!-- Modal 7: Switch Akun / Profil Modal -->
+    <!-- Modal 7: Quick Add Realized Expense Modal -->
+    <div class="modal-overlay" id="add-expense-modal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div style="font-weight: 700; font-size: 1rem; color: var(--text-primary);">+ Catat Pengeluaran Realized</div>
+          <button type="button" class="close-btn close-modal-btn">✕</button>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Keterangan Pengeluaran</label>
+          <input type="text" id="expense-desc-input" class="form-input" placeholder="Contoh: Makan Siang Warteg, Bensin, Beli Galon, Topup RDPU">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Pilih Pos Anggaran Terkait</label>
+          <select id="expense-budget-select" class="form-select">
+            <!-- Populated dynamically with active budgets -->
+          </select>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 8px; margin-bottom: 10px;">
+          <div>
+            <label class="form-label">Nominal (Rp)</label>
+            <input type="number" id="expense-amount-input" class="form-input" placeholder="Contoh: 45000">
+          </div>
+          <div>
+            <label class="form-label">Tanggal</label>
+            <input type="date" id="expense-date-input" class="form-input" value="2026-08-22">
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label class="form-label">Metode Pembayaran / Akun</label>
+          <select id="expense-method-select" class="form-select">
+            <option value="Rekening Bank (BCA)">Rekening Bank (BCA)</option>
+            <option value="Rekening Bank (Mandiri)">Rekening Bank (Mandiri)</option>
+            <option value="Dompet Tunai (Cash)">Dompet Tunai (Cash)</option>
+            <option value="GoPay">GoPay</option>
+            <option value="OVO">OVO</option>
+            <option value="ShopeePay">ShopeePay</option>
+            <option value="Lainnya">Lainnya</option>
+          </select>
+        </div>
+
+        <button type="button" class="btn-primary" onclick="submitQuickExpense()">
+          💾 Simpan Pengeluaran Realized
+        </button>
+      </div>
+    </div>
+
+    <!-- Modal 8: Switch Akun / Profil Modal -->
     <div class="modal-overlay" id="auth-modal">
       <div class="modal-card">
         <div class="modal-header">

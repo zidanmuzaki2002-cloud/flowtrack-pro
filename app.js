@@ -1,7 +1,8 @@
 // ==============================================================================
 // FlowTrack Pro: Mobile-First Client Logic & Resilient Local-Cloud Sync Engine
-// Features: Interactive Multi-Date Calendar Picker (1-31 Exact Burn Engine),
-// Dynamic 3-Phase Engine, Pos Anggaran Edit Modal, Cash Justification Notes,
+// Features: Analisis Pengeluaran & AI Advisor, Realized Expense Stream,
+// Interim Bank Statement Sync, Zero-Based Control Balance, Auto-Surplus Engine,
+// Multi-Date Calendar Picker (1-31 Burn Engine), Dynamic 3-Phase Engine,
 // Permanent LocalStorage Persistence, Multi-Tenant Auth & Take-Out Management
 // ==============================================================================
 
@@ -61,6 +62,7 @@ let appState = {
   transactions: [],
   feedbacks: [],
   activeCategory: 'Semua',
+  activeAnalyticsCategory: 'Semua',
   selectedBudgetItem: null,
   selectedGoalItem: null
 };
@@ -141,6 +143,420 @@ function loadCashAccountsFromStorage() {
       notesEl.value = savedNotes;
     }
   } catch (e) {}
+}
+
+// -----------------------------------------------------------------------------
+// ZERO-BASED CONTROL BALANCE & AUTO-SURPLUS ENGINE
+// -----------------------------------------------------------------------------
+function renderControlBalance() {
+  const totalIncome = (appState.incomes || []).reduce((sum, i) => sum + Number(i.amount), 0);
+  const totalBudget = (appState.budgets || []).reduce((sum, b) => sum + (Number(b.target_anggaran) || 0), 0);
+  const diff = totalIncome - totalBudget;
+
+  const elInc = document.getElementById('cb-total-income');
+  const elBgt = document.getElementById('cb-total-budget');
+  const elDiff = document.getElementById('cb-diff-figure');
+  const badge = document.getElementById('control-balance-status-badge');
+  const expl = document.getElementById('cb-explanation-text');
+
+  if (elInc) elInc.textContent = formatIDR(totalIncome);
+  if (elBgt) elBgt.textContent = formatIDR(totalBudget);
+  if (elDiff) elDiff.textContent = (diff > 0 ? '+' : '') + formatIDR(diff);
+
+  if (Math.abs(diff) < 1) {
+    if (badge) {
+      badge.style.background = 'rgba(16, 185, 129, 0.25)';
+      badge.style.color = '#34D399';
+      badge.style.borderColor = 'rgba(52, 211, 153, 0.4)';
+      badge.textContent = 'âœ… Seimbang Rp 0';
+    }
+    if (expl) {
+      expl.innerHTML = 'ðŸŽ¯ <strong>Zero-Based Sempurna!</strong> Seluruh pemasukan (Rp ' + formatIDR(totalIncome).replace('Rp ', '') + ') telah habis dialokasikan ke pos kebutuhan dan surplus tabungan.';
+    }
+  } else if (diff > 0) {
+    if (badge) {
+      badge.style.background = 'rgba(245, 158, 11, 0.25)';
+      badge.style.color = '#FBBF24';
+      badge.style.borderColor = 'rgba(251, 191, 36, 0.4)';
+      badge.textContent = 'âš ï¸ Surplus Belum Dialokasikan';
+    }
+    if (expl) {
+      expl.innerHTML = 'Masih ada sisa <strong>' + formatIDR(diff) + '</strong> pemasukan yang belum dialokasikan. Klik "âš¡ Alokasikan Surplus" di samping.';
+    }
+  } else {
+    if (badge) {
+      badge.style.background = 'rgba(239, 68, 68, 0.25)';
+      badge.style.color = '#F87171';
+      badge.style.borderColor = 'rgba(248, 113, 113, 0.4)';
+      badge.textContent = 'ðŸš¨ Defisit / Over-Allocated';
+    }
+    if (expl) {
+      expl.innerHTML = 'Total target anggaran melebihi pemasukan sebesar <strong>' + formatIDR(Math.abs(diff)) + '</strong>. Kurangi pos pengeluaran atau klik sesuaikan.';
+    }
+  }
+}
+
+function autoSyncSurplusBudget() {
+  const totalIncome = (appState.incomes || []).reduce((sum, i) => sum + Number(i.amount), 0);
+  const nonSurplusBudgets = (appState.budgets || []).filter(b => b.category_type !== 'Alokasi Surplus');
+  const nonSurplusTarget = nonSurplusBudgets.reduce((sum, b) => sum + (Number(b.target_anggaran) || 0), 0);
+  const calculatedSurplus = Math.max(0, totalIncome - nonSurplusTarget);
+
+  let surplusBudget = appState.budgets.find(b => b.category_type === 'Alokasi Surplus');
+
+  if (surplusBudget) {
+    surplusBudget.nominal_satuan = calculatedSurplus;
+    surplusBudget.multiplier = 1;
+    surplusBudget.target_anggaran = calculatedSurplus;
+    surplusBudget.balance = calculatedSurplus - (Number(surplusBudget.realisasi_used) || 0);
+    if (!surplusBudget.linked_goal_id && appState.financialGoals.length > 0) {
+      surplusBudget.linked_goal_id = appState.financialGoals[0].goal_id;
+    }
+  } else {
+    surplusBudget = {
+      budget_id: 'bgt_surplus_' + appState.currentMonth + '_' + appState.currentYear,
+      user_id: currentUser.user_id,
+      period_month: appState.currentMonth,
+      period_year: appState.currentYear,
+      category_type: 'Alokasi Surplus',
+      item_name: 'Alokasi Surplus (Tabungan & Investasi)',
+      nominal_satuan: calculatedSurplus,
+      frekuensi: 'Bulanan',
+      multiplier: 1,
+      target_anggaran: calculatedSurplus,
+      realisasi_used: 0.0,
+      balance: calculatedSurplus,
+      timing_pattern: 'Tanggal: 25',
+      selected_dates: [25],
+      linked_goal_id: appState.financialGoals.length > 0 ? appState.financialGoals[0].goal_id : null
+    };
+    appState.budgets.push(surplusBudget);
+  }
+
+  if (currentUser.user_id === 'usr_admin_zidanmuzaki13') {
+    const embeddedMatch = EMBEDDED_ADMIN_DATA.budgets.find(b => b.category_type === 'Alokasi Surplus' && b.period_month.toLowerCase() === appState.currentMonth.toLowerCase() && Number(b.period_year) === Number(appState.currentYear));
+    if (embeddedMatch) {
+      embeddedMatch.nominal_satuan = calculatedSurplus;
+      embeddedMatch.target_anggaran = calculatedSurplus;
+    }
+  }
+
+  saveUserDataToStorage();
+  refreshAllData();
+  alert('Alokasi Surplus otomatis disesuaikan menjadi ' + formatIDR(calculatedSurplus) + '!\nControl Balance kini bernilai Rp 0 (Zero-Based).');
+}
+
+function ensureMonthlySurplusBudgetExists() {
+  const totalIncome = (appState.incomes || []).reduce((sum, i) => sum + Number(i.amount), 0);
+  if (totalIncome <= 0) return;
+
+  const hasSurplus = (appState.budgets || []).some(b => b.category_type === 'Alokasi Surplus');
+  if (!hasSurplus) {
+    const nonSurplusTarget = (appState.budgets || []).filter(b => b.category_type !== 'Alokasi Surplus').reduce((sum, b) => sum + (Number(b.target_anggaran) || 0), 0);
+    const calculatedSurplus = Math.max(0, totalIncome - nonSurplusTarget);
+
+    const autoSurplus = {
+      budget_id: 'bgt_surplus_' + appState.currentMonth + '_' + appState.currentYear,
+      user_id: currentUser.user_id,
+      period_month: appState.currentMonth,
+      period_year: appState.currentYear,
+      category_type: 'Alokasi Surplus',
+      item_name: 'Alokasi Surplus (Tabungan & Investasi)',
+      nominal_satuan: calculatedSurplus,
+      frekuensi: 'Bulanan',
+      multiplier: 1,
+      target_anggaran: calculatedSurplus,
+      realisasi_used: 0.0,
+      balance: calculatedSurplus,
+      timing_pattern: 'Tanggal: 25',
+      selected_dates: [25],
+      linked_goal_id: appState.financialGoals.length > 0 ? appState.financialGoals[0].goal_id : null
+    };
+
+    appState.budgets.push(autoSurplus);
+    saveUserDataToStorage();
+  }
+}
+
+// -----------------------------------------------------------------------------
+// 5. ANALISIS PENGELUARAN & AI ADVISOR ENGINE
+// -----------------------------------------------------------------------------
+function generateAiAnalytics() {
+  const monthTitle = document.getElementById('analytics-month-title');
+  if (monthTitle) monthTitle.textContent = 'Analisis Realisasi Pengeluaran (' + appState.currentMonth + ' ' + appState.currentYear + ')';
+
+  const totalIncome = (appState.incomes || []).reduce((sum, i) => sum + Number(i.amount), 0);
+  const totalTarget = (appState.budgets || []).reduce((sum, b) => sum + (Number(b.target_anggaran) || 0), 0);
+  const totalRealized = (appState.budgets || []).reduce((sum, b) => sum + (Number(b.realisasi_used) || 0), 0);
+
+  const totalDays = getDaysInMonth(appState.currentYear, appState.currentMonth);
+  const currentDay = appState.idealBalanceData ? (appState.idealBalanceData.period.current_day || OPERATING_ANCHOR_DAY) : OPERATING_ANCHOR_DAY;
+  const remainingDays = Math.max(1, totalDays - currentDay);
+
+  const dailyAvg = currentDay > 0 ? (totalRealized / currentDay) : 0;
+  const safeDailyAllowance = Math.max(0, (totalIncome - totalRealized) / remainingDays);
+
+  const expectedBurn = appState.idealBalanceData 
+    ? (appState.idealBalanceData.calculation_breakdown.proportional_burn_rate_variable || (totalTarget * (currentDay / totalDays)))
+    : (totalTarget * (currentDay / totalDays));
+
+  // Compute Health Score (0 - 100)
+  let healthScore = 85;
+  if (expectedBurn > 0) {
+    const ratio = totalRealized / expectedBurn;
+    if (ratio <= 1.0) {
+      healthScore = Math.min(100, Math.round(90 + (1.0 - ratio) * 10));
+    } else {
+      healthScore = Math.max(35, Math.round(90 - (ratio - 1.0) * 50));
+    }
+  }
+
+  const scoreEl = document.getElementById('ai-health-score');
+  const realizedEl = document.getElementById('ai-total-realized');
+  const dailyEl = document.getElementById('ai-daily-avg');
+  const diagEl = document.getElementById('ai-diagnostic-text');
+
+  if (scoreEl) {
+    scoreEl.textContent = healthScore + ' / 100';
+    scoreEl.style.color = healthScore >= 80 ? '#34D399' : (healthScore >= 60 ? '#FBBF24' : '#F87171');
+  }
+  if (realizedEl) realizedEl.textContent = formatIDR(totalRealized);
+  if (dailyEl) dailyEl.textContent = formatIDR(dailyAvg) + '/hari';
+
+  // Category breakdown
+  let catSpend = { Dasar: 0, Pribadi: 0, Hiburan: 0, Insidental: 0, 'Alokasi Surplus': 0 };
+  (appState.budgets || []).forEach(b => {
+    const cat = b.category_type || 'Dasar';
+    if (catSpend[cat] !== undefined) catSpend[cat] += Number(b.realisasi_used) || 0;
+  });
+
+  const overBudgets = (appState.budgets || []).filter(b => Number(b.realisasi_used) > Number(b.target_anggaran));
+  const activeBudgets = (appState.budgets || []).filter(b => Number(b.realisasi_used) > 0);
+
+  let overText = overBudgets.length > 0 
+    ? 'Terdapat <strong>' + overBudgets.length + ' pos overbudget</strong> (' + overBudgets.map(b => b.item_name).join(', ') + '). Perlu pengetatan segera.'
+    : 'Semua pos pengeluaran berjalan <strong>sangat tertib dan aman</strong> di bawah plafon target.';
+
+  let adviceText = '';
+  if (healthScore >= 80) {
+    adviceText = 'Disiplin finansial Anda <strong>sangat baik</strong>! Sisa waktu ' + remainingDays + ' hari lagi di bulan ini, batas aman belanja harian Anda adalah <strong>' + formatIDR(safeDailyAllowance) + ' / hari</strong> untuk mempertahankan surplus.';
+  } else {
+    adviceText = 'Pengeluaran mendekati batas burn rate ideal. Disarankan membatasi pos hiburan & jajan pribadi, dengan alokasi maksimal <strong>' + formatIDR(safeDailyAllowance) + ' / hari</strong> hingga akhir bulan.';
+  }
+
+  if (diagEl) {
+    diagEl.innerHTML = 
+      '<div style="margin-bottom: 6px;">ðŸ“Š <strong>Pola Pengeluaran Real:</strong> Kebutuhan Pokok: ' + formatIDR(catSpend.Dasar) + ' â€¢ Pribadi & Hiburan: ' + formatIDR(catSpend.Pribadi + catSpend.Hiburan) + ' â€¢ Tabungan/Surplus: ' + formatIDR(catSpend['Alokasi Surplus']) + '</div>' +
+      '<div style="margin-bottom: 6px;">âš ï¸ <strong>Diagnosa Pos:</strong> ' + overText + '</div>' +
+      '<div>ðŸŽ¯ <strong>Rekomendasi AI:</strong> ' + adviceText + '</div>';
+  }
+
+  renderAnalyticsExpensesStream();
+}
+
+function filterAnalyticsCategory(category) {
+  appState.activeAnalyticsCategory = category;
+  document.querySelectorAll('[data-analytics-cat]').forEach(btn => {
+    btn.classList.remove('active');
+    if (btn.getAttribute('data-analytics-cat') === category) btn.classList.add('active');
+  });
+  renderAnalyticsExpensesStream();
+}
+
+function renderAnalyticsExpensesStream() {
+  const container = document.getElementById('analytics-expenses-stream-list');
+  if (!container) return;
+
+  const currentMonthTx = (appState.transactions || []).filter(tx => {
+    return true; // Show all active transactions or match period
+  });
+
+  const filteredTx = appState.activeAnalyticsCategory === 'Semua'
+    ? currentMonthTx
+    : currentMonthTx.filter(tx => {
+        const b = appState.budgets.find(item => item.budget_id === tx.budget_id);
+        return b && b.category_type === appState.activeAnalyticsCategory;
+      });
+
+  if (filteredTx.length === 0) {
+    container.innerHTML = 
+      '<div class="empty-state-box" style="padding: 24px 16px; text-align: center;">' +
+        '<div class="empty-icon" style="margin-bottom: 8px;">' +
+          '<svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>' +
+        '</div>' +
+        '<div class="empty-title" style="font-weight: 700; font-size: 0.9rem; color: var(--text-primary); margin-bottom: 4px;">Belum Ada Pengeluaran Realized Dicatat</div>' +
+        '<div class="empty-desc" style="font-size: 0.75rem; color: var(--text-secondary); max-width: 280px; margin: 0 auto 12px; line-height: 1.4;">Catat pengeluaran harian Anda atau unggah mutasi e-banking sementara.</div>' +
+        '<button class="btn-primary" style="padding: 8px 14px; font-size: 0.75rem;" onclick="openAddExpenseModal()">+ Catat Pengeluaran Realized</button>' +
+      '</div>';
+    return;
+  }
+
+  container.innerHTML = filteredTx.map(tx => {
+    const b = appState.budgets.find(item => item.budget_id === tx.budget_id);
+    const catName = b ? b.category_type : 'Pengeluaran';
+    const posName = b ? b.item_name : (tx.description || 'Transaksi');
+
+    return (
+      '<div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); margin-bottom: 8px;">' +
+        '<div>' +
+          '<div style="font-weight: 700; font-size: 0.85rem; color: var(--text-primary);">' + (tx.description || posName) + '</div>' +
+          '<div style="font-size: 0.7rem; color: var(--text-secondary); display: flex; align-items: center; gap: 6px; margin-top: 2px;">' +
+            '<span class="item-category-pill" style="font-size: 0.65rem; padding: 1px 5px;">' + catName + '</span>' +
+            '<span>Pos: ' + posName + '</span> â€¢ <span>' + (tx.transaction_date || '2026-08-22') + '</span>' +
+          '</div>' +
+        '</div>' +
+        '<div style="text-align: right;">' +
+          '<div style="font-weight: 700; font-size: 0.88rem; color: var(--accent-warning);">- ' + formatIDR(tx.amount) + '</div>' +
+          '<div style="font-size: 0.68rem; color: var(--text-secondary);">' + (tx.payment_method_platform || 'Manual') + '</div>' +
+        '</div>' +
+      '</div>'
+    );
+  }).join('');
+}
+
+function openAddExpenseModal() {
+  const select = document.getElementById('expense-budget-select');
+  if (select) {
+    select.innerHTML = (appState.budgets || []).map(b => 
+      '<option value="' + b.budget_id + '">' + b.item_name + ' (' + b.category_type + ' - Target ' + formatIDR(b.target_anggaran) + ')</option>'
+    ).join('');
+  }
+
+  document.getElementById('expense-desc-input').value = '';
+  document.getElementById('expense-amount-input').value = '';
+  document.getElementById('expense-date-input').value = '2026-08-22';
+  document.getElementById('add-expense-modal').classList.add('active');
+}
+
+async function submitQuickExpense() {
+  const desc = document.getElementById('expense-desc-input').value.trim();
+  const budgetId = document.getElementById('expense-budget-select').value;
+  const amount = parseFloat(document.getElementById('expense-amount-input').value) || 0;
+  const date = document.getElementById('expense-date-input').value || '2026-08-22';
+  const method = document.getElementById('expense-method-select').value;
+
+  if (amount <= 0) {
+    alert('Harap isi nominal pengeluaran yang valid!');
+    return;
+  }
+
+  const b = appState.budgets.find(item => item.budget_id === budgetId);
+  if (b) {
+    b.realisasi_used = (Number(b.realisasi_used) || 0) + amount;
+    b.balance = Number(b.target_anggaran) - b.realisasi_used;
+
+    if (b.linked_goal_id) {
+      const g = appState.financialGoals.find(item => item.goal_id === b.linked_goal_id);
+      if (g) g.current_amount = (Number(g.current_amount) || 0) + amount;
+    }
+  }
+
+  const newTx = {
+    transaction_id: 'tx_' + Date.now().toString(36),
+    user_id: currentUser.user_id,
+    transaction_date: date,
+    budget_id: budgetId,
+    goal_id: b ? b.linked_goal_id : null,
+    transaction_type: 'Expense',
+    amount: amount,
+    payment_method_platform: method,
+    description: desc || (b ? b.item_name : 'Pengeluaran')
+  };
+
+  appState.transactions.unshift(newTx);
+  saveUserDataToStorage();
+
+  authFetch('/transactions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(newTx)
+  }).catch(() => {});
+
+  document.getElementById('add-expense-modal').classList.remove('active');
+  refreshAllData();
+  generateAiAnalytics();
+  alert('Pengeluaran ' + formatIDR(amount) + ' berhasil dicatat dan direalisasikan ke pos ' + (b ? b.item_name : '') + '!');
+}
+
+// -----------------------------------------------------------------------------
+// INTERIM STATEMENT PARSER
+// -----------------------------------------------------------------------------
+function loadInterimSample() {
+  const textarea = document.getElementById('interim-statement-textarea');
+  if (textarea) {
+    textarea.value = 'Tanggal,Keterangan,Tipe,Nominal\n' +
+      '2026-08-05,WARUNG MAKAN NASI PADANG,DEBIT,45000\n' +
+      '2026-08-08,ISI ULANG GALON AIR MINUM,DEBIT,15000\n' +
+      '2026-08-12,GOJEK TRANSPORT GORIDE,DEBIT,25000\n' +
+      '2026-08-15,INDOMARET JAJAN KOPI,DEBIT,35000\n' +
+      '2026-08-20,TOPUP BIBIT DANA DARURAT,DEBIT,880000';
+  }
+}
+
+async function processInterimStatement() {
+  const textarea = document.getElementById('interim-statement-textarea');
+  if (!textarea) return;
+
+  const raw = textarea.value.trim();
+  if (!raw) {
+    alert('Harap pilih file CSV/PDF atau tempel mutasi bank sementara terlebih dahulu!');
+    return;
+  }
+
+  let matched = 0;
+  let totalAmt = 0;
+  const lines = raw.split(/\r?\n/);
+
+  lines.forEach(l => {
+    const lower = l.toLowerCase();
+    let matchedItem = null;
+
+    if (lower.includes('makan') || lower.includes('warung') || lower.includes('resto') || lower.includes('padang')) {
+      matchedItem = appState.budgets.find(b => b.item_name.toLowerCase().includes('makan'));
+    } else if (lower.includes('kos') || lower.includes('kost') || lower.includes('retno')) {
+      matchedItem = appState.budgets.find(b => b.item_name.toLowerCase().includes('kos'));
+    } else if (lower.includes('gojek') || lower.includes('grab') || lower.includes('transport') || lower.includes('bensin')) {
+      matchedItem = appState.budgets.find(b => b.item_name.toLowerCase().includes('transport'));
+    } else if (lower.includes('galon') || lower.includes('laundry') || lower.includes('indomaret')) {
+      matchedItem = appState.budgets.find(b => b.item_name.toLowerCase().includes('pribadi') || b.item_name.toLowerCase().includes('laundry'));
+    } else if (lower.includes('bibit') || lower.includes('rdpu') || lower.includes('darurat')) {
+      matchedItem = appState.budgets.find(b => b.item_name.toLowerCase().includes('darurat') || b.category_type === 'Alokasi Surplus');
+    }
+
+    const nums = l.match(/\b\d{4,10}\b/);
+    if (matchedItem && nums && (lower.includes('debit') || lower.includes('db') || !lower.includes('kredit'))) {
+      const amt = parseFloat(nums[0]) || 0;
+      if (amt > 0) {
+        matchedItem.realisasi_used = (Number(matchedItem.realisasi_used) || 0) + amt;
+        matchedItem.balance = Number(matchedItem.target_anggaran) - matchedItem.realisasi_used;
+        matched++;
+        totalAmt += amt;
+
+        if (matchedItem.linked_goal_id) {
+          const g = appState.financialGoals.find(item => item.goal_id === matchedItem.linked_goal_id);
+          if (g) g.current_amount = (Number(g.current_amount) || 0) + amt;
+        }
+
+        appState.transactions.unshift({
+          transaction_id: 'tx_' + Math.random().toString(36).substring(2, 9),
+          user_id: currentUser.user_id,
+          transaction_date: '2026-08-22',
+          budget_id: matchedItem.budget_id,
+          goal_id: matchedItem.linked_goal_id,
+          transaction_type: 'Expense',
+          amount: amt,
+          payment_method_platform: 'Mutasi Sementara',
+          description: l.substring(0, 40)
+        });
+      }
+    }
+  });
+
+  saveUserDataToStorage();
+  refreshAllData();
+  generateAiAnalytics();
+  textarea.value = '';
+  alert('Rekonsiliasi Mutasi Sementara Berhasil!\n\nâ€¢ Mutasi Dicocokkan: ' + matched + ' transaksi\nâ€¢ Total Realisasi Terekonsiliasi: ' + formatIDR(totalAmt));
 }
 
 // -----------------------------------------------------------------------------
@@ -559,6 +975,10 @@ function switchView(viewId) {
     fetchAdminData();
   } else if (viewId === 'view-feedback') {
     fetchUserFeedbacks();
+  } else if (viewId === 'view-budgets') {
+    renderControlBalance();
+  } else if (viewId === 'view-analytics') {
+    generateAiAnalytics();
   }
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -850,7 +1270,12 @@ async function refreshAllData() {
     fetchFinancialGoals(),
     fetchTransactions()
   ]);
+  ensureMonthlySurplusBudgetExists();
+  renderControlBalance();
   await fetchIdealBalance();
+  if (appState.activeView === 'view-analytics') {
+    generateAiAnalytics();
+  }
 }
 
 async function fetchIncomes() {
@@ -936,6 +1361,7 @@ async function fetchBudgets() {
   }
 
   renderBudgetsLists();
+  renderControlBalance();
 }
 
 async function fetchFinancialGoals() {
@@ -975,6 +1401,9 @@ async function fetchTransactions() {
     } catch (err) {}
   }
   renderTransactionsTable();
+  if (appState.activeView === 'view-analytics') {
+    renderAnalyticsExpensesStream();
+  }
 }
 
 async function fetchIdealBalance() {
@@ -1275,7 +1704,7 @@ function renderFlowFormula() {
 }
 
 // -----------------------------------------------------------------------------
-// 4. RENDER INCOMES & BUDGETS (WITH BULLETPROOF &times; & SVG ICONS)
+// 4. RENDER INCOMES & BUDGETS (WITH ZERO-BASED GOAL LINKING & SVG ICONS)
 // -----------------------------------------------------------------------------
 function renderIncomesLists() {
   const containerDashboard = document.getElementById('incomes-list-preview');
@@ -1331,8 +1760,17 @@ function renderBudgetsLists() {
       const balance = Number(item.balance !== undefined ? item.balance : (item.target_anggaran - item.realisasi_used));
       const balanceClass = balance >= 0 ? 'positive' : 'negative';
       const balanceText = balance >= 0 ? ('Sisa ' + formatIDR(balance)) : ('Minus ' + formatIDR(Math.abs(balance)));
-      const goalBadge = item.linked_goal_id ? '<span style="font-size: 0.65rem; color: #4F46E5; background: #EEF2FF; padding: 1px 5px; border-radius: 4px; font-weight: 500;">Goal Linked</span>' : '';
       
+      let goalBadge = '';
+      if (item.category_type === 'Alokasi Surplus' || item.linked_goal_id) {
+        if (item.linked_goal_id) {
+          const g = (appState.financialGoals || []).find(x => x.goal_id === item.linked_goal_id);
+          goalBadge = '<span style="font-size: 0.68rem; color: #4338CA; background: #EEF2FF; padding: 2px 6px; border-radius: 4px; font-weight: 600; border: 1px solid #C7D2FE;">ðŸŽ¯ ' + (g ? ('[' + g.goal_code + '] ' + g.goal_name) : 'Goal Linked') + '</span>';
+        } else if (item.category_type === 'Alokasi Surplus') {
+          goalBadge = '<span style="font-size: 0.68rem; color: #D97706; background: #FEF3C7; padding: 2px 6px; border-radius: 4px; font-weight: 600;">âš ï¸ Klik untuk Hubungkan Goal</span>';
+        }
+      }
+
       let timingDisplay = item.timing_pattern || 'Flat Harian';
       if (Array.isArray(item.selected_dates) && item.selected_dates.length > 0) {
         timingDisplay = 'Tgl: ' + item.selected_dates.join(', ');
@@ -1366,7 +1804,7 @@ function renderBudgetsLists() {
 }
 
 // -----------------------------------------------------------------------------
-// 5. RENDER GOALS (WITH CLEAN SVG ICONS)
+// 6. RENDER GOALS (WITH CLEAN SVG ICONS)
 // -----------------------------------------------------------------------------
 function renderGoalsList() {
   const containerDashboard = document.getElementById('goals-container');
@@ -1418,17 +1856,20 @@ function renderGoalsList() {
 }
 
 function populateGoalDropdowns() {
-  const goalSelect = document.getElementById('budget-linked-goal');
-  if (goalSelect) {
-    goalSelect.innerHTML = '<option value="">-- Tanpa Relasi Goal --</option>';
-    appState.financialGoals.forEach(g => {
-      goalSelect.innerHTML += '<option value="' + g.goal_id + '">[' + g.goal_code + '] ' + g.goal_name + ' (' + (g.target_instrument || 'Investasi') + ')</option>';
-    });
-  }
+  const goalSelectAdd = document.getElementById('budget-linked-goal');
+  const goalSelectEdit = document.getElementById('edit-budget-linked-goal');
+
+  const optionsHtml = '<option value="">-- Tanpa Relasi Goal --</option>' +
+    (appState.financialGoals || []).map(g => 
+      '<option value="' + g.goal_id + '">[' + g.goal_code + '] ' + g.goal_name + ' (' + (g.target_instrument || 'Investasi') + ')</option>'
+    ).join('');
+
+  if (goalSelectAdd) goalSelectAdd.innerHTML = optionsHtml;
+  if (goalSelectEdit) goalSelectEdit.innerHTML = optionsHtml;
 }
 
 // -----------------------------------------------------------------------------
-// 6. RENDER TRANSACTIONS (WITH CLEAN SVG ICONS)
+// 7. RENDER TRANSACTIONS (WITH CLEAN SVG ICONS)
 // -----------------------------------------------------------------------------
 function renderTransactionsTable() {
   const container = document.getElementById('mutasi-transactions-list');
@@ -1466,7 +1907,7 @@ function renderTransactionsTable() {
 }
 
 // -----------------------------------------------------------------------------
-// 7. MODALS & CRUD HANDLERS (WITH INLINE EDIT ANGGARAN & TABS)
+// 8. MODALS & CRUD HANDLERS
 // -----------------------------------------------------------------------------
 function switchModalTab(tab) {
   const tabTx = document.getElementById('tab-modal-view-tx');
@@ -1624,6 +2065,7 @@ function openBudgetDetailModalById(budgetId) {
 async function openBudgetDetailModal(item) {
   appState.selectedBudgetItem = item;
   switchModalTab('tx');
+  populateGoalDropdowns();
 
   let timingDisplay = item.timing_pattern || 'Flat Harian';
   if (Array.isArray(item.selected_dates) && item.selected_dates.length > 0) {
@@ -1644,12 +2086,14 @@ async function openBudgetDetailModal(item) {
   const editFreq = document.getElementById('edit-budget-freq');
   const editNominal = document.getElementById('edit-budget-nominal');
   const editMult = document.getElementById('edit-budget-mult');
+  const editGoal = document.getElementById('edit-budget-linked-goal');
 
   if (editName) editName.value = item.item_name;
   if (editCat) editCat.value = item.category_type || 'Dasar';
   if (editFreq) editFreq.value = item.frekuensi || 'Bulanan';
   if (editNominal) editNominal.value = item.nominal_satuan || (item.target_anggaran / (item.multiplier || 1));
   if (editMult) editMult.value = item.multiplier || 1;
+  if (editGoal) editGoal.value = item.linked_goal_id || '';
 
   // Setup Edit Calendar Timing State
   let dates = [];
@@ -1708,6 +2152,7 @@ async function submitEditBudget() {
   const freq = document.getElementById('edit-budget-freq').value;
   const satuan = parseFloat(document.getElementById('edit-budget-nominal').value) || 0;
   const mult = parseInt(document.getElementById('edit-budget-mult').value) || 1;
+  const linkedGoal = document.getElementById('edit-budget-linked-goal') ? document.getElementById('edit-budget-linked-goal').value || null : item.linked_goal_id;
 
   if (!name || satuan <= 0) {
     alert('Harap isi nama pos anggaran dan nominal yang valid!');
@@ -1731,6 +2176,7 @@ async function submitEditBudget() {
   item.nominal_satuan = satuan;
   item.multiplier = mult;
   item.target_anggaran = newTarget;
+  item.linked_goal_id = linkedGoal;
   item.balance = newTarget - (Number(item.realisasi_used) || 0);
 
   if (currentUser.user_id === 'usr_admin_zidanmuzaki13') {
@@ -1744,6 +2190,7 @@ async function submitEditBudget() {
       embeddedMatch.nominal_satuan = satuan;
       embeddedMatch.multiplier = mult;
       embeddedMatch.target_anggaran = newTarget;
+      embeddedMatch.linked_goal_id = linkedGoal;
     }
   }
 
@@ -1761,11 +2208,12 @@ async function submitEditBudget() {
       selected_dates: selectedDates,
       nominal_satuan: satuan,
       multiplier: mult,
-      target_anggaran: newTarget
+      target_anggaran: newTarget,
+      linked_goal_id: linkedGoal
     })
   }).catch(() => {});
 
-  alert('Pos anggaran \'' + name + '\' berhasil disesuaikan untuk bulan ' + appState.currentMonth + '!');
+  alert('Pos anggaran \'' + name + '\' berhasil diperbarui!');
   
   // Refresh modal views
   document.getElementById('detail-budget-title').textContent = item.item_name;
@@ -1794,6 +2242,14 @@ async function submitManualTx() {
 
   item.realisasi_used = (Number(item.realisasi_used) || 0) + amount;
   item.balance = Number(item.target_anggaran) - item.realisasi_used;
+
+  // If item is linked to a Financial Goal, also update the goal's collected progress!
+  if (item.linked_goal_id) {
+    const linkedG = appState.financialGoals.find(g => g.goal_id === item.linked_goal_id);
+    if (linkedG) {
+      linkedG.current_amount = (Number(linkedG.current_amount) || 0) + amount;
+    }
+  }
 
   const newTx = {
     transaction_id: 'tx_' + Date.now().toString(36),
@@ -1945,7 +2401,7 @@ async function deleteSelectedGoal() {
 }
 
 // -----------------------------------------------------------------------------
-// 8. TEMPLATE DUPLICATION
+// 9. TEMPLATE DUPLICATION
 // -----------------------------------------------------------------------------
 function openDuplicateModal() {
   const curMIdx = MONTH_NAMES.indexOf(appState.currentMonth);
@@ -2004,141 +2460,35 @@ async function submitDuplicateMonth() {
 }
 
 // -----------------------------------------------------------------------------
-// 9. EXCEL IMPORT PARSER
-// -----------------------------------------------------------------------------
-function setupExcelImporter() {
-  const fileInput = document.getElementById('excel-file-input');
-  if (!fileInput) return;
-
-  fileInput.addEventListener('change', async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    document.getElementById('excel-import-status').textContent = 'Membaca file ' + file.name + '...';
-
-    const reader = new FileReader();
-    reader.onload = async (ev) => {
-      try {
-        const text = ev.target.result;
-        const lines = text.split(/\r?\n/).filter(l => l.trim().length > 0);
-        const incomes = [];
-        const budgets = [];
-
-        lines.forEach(line => {
-          const parts = line.split(/[,;\t]/);
-          if (parts.length >= 3) {
-            const first = parts[0].trim();
-            const second = parts[1].trim();
-            const rawAmount = parts[2].replace(/[^0-9.-]/g, '');
-            const amount = parseFloat(rawAmount) || 0;
-
-            if (first.toLowerCase().includes('gaji') || first.toLowerCase().includes('income') || first.toLowerCase().includes('pendapatan')) {
-              incomes.push({ source_name: first, amount: amount });
-            } else if (amount > 0 && !first.toLowerCase().includes('tanggal') && !first.toLowerCase().includes('total')) {
-              budgets.push({
-                item_name: first,
-                category_type: second || 'Dasar',
-                nominal_satuan: amount,
-                frekuensi: parts[3] ? parts[3].trim() : 'Bulanan',
-                timing_pattern: 'Rata-rata Harian (Flat)',
-                multiplier: 1
-              });
-            }
-          }
-        });
-
-        const targetM = document.getElementById('excel-target-month').value;
-        const targetY = parseInt(document.getElementById('excel-target-year').value);
-
-        incomes.forEach(inc => {
-          const item = {
-            income_id: 'inc_' + Math.random().toString(36).substring(2, 9),
-            user_id: currentUser.user_id,
-            period_month: targetM,
-            period_year: targetY,
-            source_name: inc.source_name,
-            amount: inc.amount
-          };
-          appState.incomes.push(item);
-          if (currentUser.user_id === 'usr_admin_zidanmuzaki13') EMBEDDED_ADMIN_DATA.incomes.push(item);
-        });
-
-        budgets.forEach(b => {
-          const item = {
-            budget_id: 'bgt_' + Math.random().toString(36).substring(2, 9),
-            user_id: currentUser.user_id,
-            period_month: targetM,
-            period_year: targetY,
-            category_type: b.category_type,
-            item_name: b.item_name,
-            nominal_satuan: b.nominal_satuan,
-            frekuensi: b.frekuensi,
-            multiplier: 1,
-            target_anggaran: b.nominal_satuan,
-            realisasi_used: 0.0,
-            balance: b.nominal_satuan,
-            timing_pattern: b.timing_pattern,
-            linked_goal_id: null
-          };
-          appState.budgets.push(item);
-          if (currentUser.user_id === 'usr_admin_zidanmuzaki13') EMBEDDED_ADMIN_DATA.budgets.push(item);
-        });
-
-        saveUserDataToStorage();
-
-        document.getElementById('excel-import-status').textContent = 'Berhasil mengimpor ' + incomes.length + ' pemasukan dan ' + budgets.length + ' pos anggaran ke ' + targetM + ' ' + targetY + '!';
-        refreshAllData();
-      } catch (err) {
-        document.getElementById('excel-import-status').textContent = 'Gagal mengimpor: ' + err.message;
-      }
-    };
-    reader.readAsText(file);
-  });
-}
-
-// -----------------------------------------------------------------------------
 // 10. STATEMENT PARSER (CSV & PDF)
 // -----------------------------------------------------------------------------
 function setupStatementUploader() {
   const fileInput = document.getElementById('statement-file-input');
   const textarea = document.getElementById('statement-textarea');
-  if (!fileInput || !textarea) return;
-
-  fileInput.addEventListener('change', async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const fileName = file.name.toLowerCase();
-
-    if (fileName.endsWith('.csv') || fileName.endsWith('.txt')) {
+  if (fileInput && textarea) {
+    fileInput.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
       const reader = new FileReader();
       reader.onload = (ev) => { textarea.value = ev.target.result; };
       reader.readAsText(file);
-    } else if (fileName.endsWith('.pdf')) {
-      textarea.value = '[Memproses file PDF: ' + file.name + '...]\n';
-      try {
-        const arrayBuffer = await file.arrayBuffer();
-        const bytes = new Uint8Array(arrayBuffer);
-        let textContent = '';
-        let chunk = '';
-        for (let i = 0; i < bytes.length; i++) {
-          const charCode = bytes[i];
-          if (charCode >= 32 && charCode <= 126) {
-            chunk += String.fromCharCode(charCode);
-          } else if (charCode === 10 || charCode === 13) {
-            if (chunk.length > 5) textContent += chunk + '\n';
-            chunk = '';
-          }
-        }
-        textarea.value = textContent.length > 50 ? textContent : '2026-08-05 WARUNG MAKAN 45000 DB\n2026-08-06 GOJEK TRANSPORT 25000 DB\n2026-08-07 SEWA KOS 1600000 DB\n2026-08-08 ISI ULANG GALON 15000 DB\n2026-08-10 TOPUP BIBIT DANA DARURAT 880000 DB';
-      } catch (err) {
-        alert('Gagal membaca PDF. Anda dapat menyalin teks mutasi secara manual.');
-      }
-    }
-  });
+    });
+  }
+
+  const interimFileInput = document.getElementById('interim-statement-file-input');
+  const interimTextarea = document.getElementById('interim-statement-textarea');
+  if (interimFileInput && interimTextarea) {
+    interimFileInput.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => { interimTextarea.value = ev.target.result; };
+      reader.readAsText(file);
+    });
+  }
 
   const loadSampleBtn = document.getElementById('btn-load-sample-statement');
-  if (loadSampleBtn) {
+  if (loadSampleBtn && textarea) {
     loadSampleBtn.addEventListener('click', () => {
       textarea.value = 'Tanggal,Keterangan,Tipe,Nominal,Saldo\n' +
         '2026-08-05,WARUNG MAKAN NASI PADANG,DEBIT,45000,7485000\n' +
@@ -2152,7 +2502,7 @@ function setupStatementUploader() {
   }
 
   const submitBtn = document.getElementById('btn-process-statement');
-  if (submitBtn) {
+  if (submitBtn && textarea) {
     submitBtn.addEventListener('click', async () => {
       const rawContent = textarea.value.trim();
       if (!rawContent) {
@@ -2192,6 +2542,11 @@ function setupStatementUploader() {
             matchedCount++;
             totalAmount += amt;
 
+            if (matchedItem.linked_goal_id) {
+              const lg = appState.financialGoals.find(g => g.goal_id === matchedItem.linked_goal_id);
+              if (lg) lg.current_amount = (Number(lg.current_amount) || 0) + amt;
+            }
+
             appState.transactions.unshift({
               transaction_id: 'tx_' + Math.random().toString(36).substring(2, 9),
               user_id: currentUser.user_id,
@@ -2215,7 +2570,7 @@ function setupStatementUploader() {
       document.getElementById('select-month').value = targetM;
       document.getElementById('select-year').value = targetY;
       refreshAllData();
-      switchView('view-dashboard');
+      switchView('view-analytics');
     });
   }
 }
@@ -2309,10 +2664,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // Category Tabs Filter
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      e.target.classList.add('active');
-      appState.activeCategory = e.target.getAttribute('data-category');
-      renderBudgetsLists();
+      if (btn.hasAttribute('data-category')) {
+        document.querySelectorAll('[data-category]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        appState.activeCategory = btn.getAttribute('data-category');
+        renderBudgetsLists();
+      }
     });
   });
 
@@ -2325,7 +2682,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   setupStatementUploader();
-  setupExcelImporter();
 
   // Explicit Form Submit Listeners
   const formLogin = document.getElementById('landing-form-login');
@@ -2394,3 +2750,12 @@ window.fetchUserFeedbacks = fetchUserFeedbacks;
 window.fetchAdminFeedbacks = fetchAdminFeedbacks;
 window.toggleFeedbackStatus = toggleFeedbackStatus;
 window.deleteFeedback = deleteFeedback;
+window.autoSyncSurplusBudget = autoSyncSurplusBudget;
+window.renderControlBalance = renderControlBalance;
+window.generateAiAnalytics = generateAiAnalytics;
+window.filterAnalyticsCategory = filterAnalyticsCategory;
+window.renderAnalyticsExpensesStream = renderAnalyticsExpensesStream;
+window.openAddExpenseModal = openAddExpenseModal;
+window.submitQuickExpense = submitQuickExpense;
+window.loadInterimSample = loadInterimSample;
+window.processInterimStatement = processInterimStatement;
