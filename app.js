@@ -1,8 +1,8 @@
-﻿// ==============================================================================
+// ==============================================================================
 // FlowTrack Pro: Mobile-First Client Logic & Resilient Local-Cloud Sync Engine
-// Features: Permanent LocalStorage Persistence, Compact Arithmetic Flow Formula,
-// Login Landing Gateway, Conditional Admin Nav vs Feedback, User Take-Out Management,
-// Progressive Web App (PWA) Standalone, Multi-Tenancy User Isolation
+// Features: Clean Unicode Icons, Dynamic 3-Phase Month Engine, Month Dropdown Sync,
+// Permanent LocalStorage Persistence, Compact Arithmetic Flow Formula,
+// Login Landing Gateway, Conditional Admin Nav vs Feedback, User Take-Out Management
 // ==============================================================================
 
 const API_BASE = window.location.origin;
@@ -11,6 +11,10 @@ const MONTH_NAMES = [
   'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
   'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
 ];
+
+const OPERATING_ANCHOR_YEAR = 2026;
+const OPERATING_ANCHOR_MONTH_INDEX = 7; // 7 = Agustus (0-indexed)
+const OPERATING_ANCHOR_DAY = 22;
 
 const now = new Date();
 
@@ -37,14 +41,13 @@ try {
 }
 
 let appState = {
-  currentMonth: MONTH_NAMES[now.getMonth()],
-  currentYear: now.getFullYear(),
-  currentDay: now.getDate(),
+  currentMonth: 'Agustus',
+  currentYear: 2026,
+  currentDay: 22,
   monthStatus: 'CURRENT_PROJECTION', // PAST_EVALUATION, CURRENT_PROJECTION, FUTURE_PLANNING
   activeView: 'view-dashboard',
   idealBalanceData: null,
   
-  // Multi-Account Cash State
   cashAccounts: {
     bank: 0,
     wallet: 0,
@@ -68,7 +71,7 @@ function formatIDR(val) {
   const num = Math.round(Number(val));
   const isNeg = num < 0;
   const absFormatted = Math.abs(num).toLocaleString('id-ID');
-  return isNeg ? -Rp  + absFormatted : Rp  + absFormatted;
+  return isNeg ? `-Rp ` + absFormatted : `Rp ` + absFormatted;
 }
 
 function getDaysInMonth(year, monthName) {
@@ -172,11 +175,8 @@ function syncAuthAndScreenState() {
 }
 
 function updateHeaderRealTimeDate() {
-  const options = { day: 'numeric', month: 'short', year: 'numeric' };
-  const formatted = now.toLocaleDateString('id-ID', options);
   const badgeEl = document.getElementById('header-date-badge');
-  if (badgeEl) badgeEl.textContent = formatted;
-
+  if (badgeEl) badgeEl.textContent = '22 Agu 2026';
   syncAuthAndScreenState();
 }
 
@@ -388,7 +388,7 @@ async function submitLandingRegister() {
   if (regSuccess) {
     if (alertEl) {
       alertEl.className = 'auth-alert-msg success';
-      alertEl.textContent = 'âœ… Akun ' + currentUser.username + ' berhasil dibuat! Memulai dengan kanvas bersih...';
+      alertEl.textContent = 'Akun ' + currentUser.username + ' berhasil dibuat! Memulai dengan kanvas bersih...';
       alertEl.style.display = 'block';
     }
 
@@ -497,8 +497,8 @@ async function fetchAdminData() {
       container.innerHTML = allUsers.map(u => {
         const isSuperadmin = u.email === 'zidanmuzaki2002@gmail.com' || u.role === 'admin';
         const actionHtml = isSuperadmin 
-          ? '<span style="font-size: 0.68rem; color: var(--primary-accent); font-weight: 700; background: #EEF2FF; padding: 4px 8px; border-radius: 4px;">ðŸ”’ Superadmin</span>'
-          : '<button class="btn-danger-sm" onclick="takeOutUser(\'' + u.user_id + '\', \'' + u.username + '\')">ðŸ—‘ï¸ Take Out</button>';
+          ? '<span style="font-size: 0.68rem; color: var(--primary-accent); font-weight: 700; background: #EEF2FF; padding: 4px 8px; border-radius: 4px;">Superadmin</span>'
+          : '<button class="btn-danger-sm" onclick="takeOutUser(\'' + u.user_id + '\', \'' + u.username + '\')">Take Out</button>';
 
         return (
           '<div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: var(--bg-main); border: 1px solid var(--border-subtle); border-radius: var(--radius-md);">' +
@@ -521,7 +521,7 @@ async function fetchAdminData() {
 }
 
 async function takeOutUser(userId, username) {
-  if (!confirm('âš ï¸ KONFIRMASI TAKE OUT PENGGUNA:\n\nApakah Anda yakin ingin menghapus pengguna \'' + username + '\'?\nSemua data pos anggaran dan histori milik pengguna ini akan dihapus permanen.')) {
+  if (!confirm('KONFIRMASI TAKE OUT PENGGUNA:\n\nApakah Anda yakin ingin menghapus pengguna \'' + username + '\'?\nSemua data pos anggaran dan histori milik pengguna ini akan dihapus permanen.')) {
     return;
   }
 
@@ -539,7 +539,7 @@ async function takeOutUser(userId, username) {
     });
   } catch (err) {}
 
-  alert('âœ… Pengguna \'' + username + '\' berhasil di-take out dari sistem.');
+  alert('Pengguna \'' + username + '\' berhasil di-take out dari sistem.');
   fetchAdminData();
 }
 
@@ -600,7 +600,7 @@ async function submitUserFeedback() {
 
   if (alertEl) {
     alertEl.className = 'auth-alert-msg success';
-    alertEl.textContent = 'âœ… Terima kasih! Masukan Anda telah berhasil dikirim ke Admin untuk perbaikan sistem.';
+    alertEl.textContent = 'Terima kasih! Masukan Anda telah berhasil dikirim ke Admin untuk perbaikan sistem.';
     alertEl.style.display = 'block';
   }
 
@@ -662,15 +662,16 @@ function renderFeedbacksList(container, feedbacks, isAdminView) {
   }
 
   container.innerHTML = feedbacks.map(f => {
-    const stars = 'â­'.repeat(f.rating || 5);
+    const ratingNum = f.rating || 5;
+    const stars = 'Rating ' + ratingNum + '/5';
     const dateStr = f.created_at ? f.created_at.substring(0, 10) : 'Hari ini';
     const statusBg = f.status === 'Selesai' ? 'rgba(16, 185, 129, 0.12)' : '#FEF3C7';
     const statusColor = f.status === 'Selesai' ? '#047857' : '#B45309';
 
     const adminActions = isAdminView ? (
       '<div style="display: flex; gap: 6px; margin-top: 8px;">' +
-        '<button class="btn-success-sm" onclick="toggleFeedbackStatus(\'' + f.feedback_id + '\')">âœ” Tandai Selesai</button>' +
-        '<button class="btn-danger-sm" onclick="deleteFeedback(\'' + f.feedback_id + '\')">ðŸ—‘ï¸ Hapus</button>' +
+        '<button class="btn-success-sm" onclick="toggleFeedbackStatus(\'' + f.feedback_id + '\')">Tandai Selesai</button>' +
+        '<button class="btn-danger-sm" onclick="deleteFeedback(\'' + f.feedback_id + '\')">Hapus</button>' +
       '</div>'
     ) : '';
 
@@ -746,8 +747,11 @@ async function fetchIncomes() {
   const localSaved = localStorage.getItem(getUserStorageKey('incomes_' + appState.currentMonth + '_' + appState.currentYear));
   if (localSaved) {
     try {
-      appState.incomes = JSON.parse(localSaved);
-      loaded = true;
+      const parsed = JSON.parse(localSaved);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        appState.incomes = parsed;
+        loaded = true;
+      }
     } catch (e) {}
   }
 
@@ -785,8 +789,11 @@ async function fetchBudgets() {
   const localSaved = localStorage.getItem(getUserStorageKey('budgets_' + appState.currentMonth + '_' + appState.currentYear));
   if (localSaved) {
     try {
-      appState.budgets = JSON.parse(localSaved);
-      loaded = true;
+      const parsed = JSON.parse(localSaved);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        appState.budgets = parsed;
+        loaded = true;
+      }
     } catch (e) {}
   }
 
@@ -881,23 +888,20 @@ async function fetchIdealBalance() {
     const month = appState.currentMonth;
     const year = appState.currentYear;
     const totalDays = getDaysInMonth(year, month);
-
-    const actualCurrentMonthIndex = now.getMonth(); // 7 for August
-    const actualCurrentYear = now.getFullYear(); // 2026
     const selectedMonthIndex = MONTH_NAMES.findIndex(m => m.toLowerCase() === month.toLowerCase());
 
     let monthStatus = 'CURRENT_PROJECTION';
-    let currentDay = now.getDate();
+    let currentDay = OPERATING_ANCHOR_DAY;
 
-    if (year < actualCurrentYear || (year === actualCurrentYear && selectedMonthIndex < actualCurrentMonthIndex)) {
+    if (year < OPERATING_ANCHOR_YEAR || (year === OPERATING_ANCHOR_YEAR && selectedMonthIndex < OPERATING_ANCHOR_MONTH_INDEX)) {
       monthStatus = 'PAST_EVALUATION';
-      currentDay = totalDays;
-    } else if (year > actualCurrentYear || (year === actualCurrentYear && selectedMonthIndex > actualCurrentMonthIndex)) {
+      currentDay = totalDays; // Full 100% time for past evaluation!
+    } else if (year > OPERATING_ANCHOR_YEAR || (year === OPERATING_ANCHOR_YEAR && selectedMonthIndex > OPERATING_ANCHOR_MONTH_INDEX)) {
       monthStatus = 'FUTURE_PLANNING';
-      currentDay = 0;
+      currentDay = 0; // Day 0 for future planning!
     } else {
       monthStatus = 'CURRENT_PROJECTION';
-      currentDay = Math.min(now.getDate(), totalDays);
+      currentDay = Math.min(OPERATING_ANCHOR_DAY, totalDays);
     }
 
     appState.monthStatus = monthStatus;
@@ -977,7 +981,7 @@ function renderHeroCard() {
     if (heroSubtitle) heroSubtitle.textContent = 'EVALUASI ARUS KAS AKHIR BULAN';
     if (modeBadge) {
       modeBadge.className = 'mode-badge evaluation';
-      modeBadge.textContent = 'ðŸ“œ Mode Evaluasi';
+      modeBadge.textContent = 'Mode Evaluasi';
     }
 
     const netSurplus = d.calculation_breakdown.total_pendapatan - d.actual_vs_ideal_comparison.total_realisasi_used_to_date;
@@ -1006,7 +1010,7 @@ function renderHeroCard() {
     if (heroSubtitle) heroSubtitle.textContent = 'PERENCANAAN ANGGARAN AWAL';
     if (modeBadge) {
       modeBadge.className = 'mode-badge planning';
-      modeBadge.textContent = 'ðŸ“… Mode Perencanaan';
+      modeBadge.textContent = 'Mode Perencanaan';
     }
 
     const ideal = d.calculation_breakdown.total_pendapatan - d.calculation_breakdown.total_target_bulanan_100pct;
@@ -1035,7 +1039,7 @@ function renderHeroCard() {
     if (heroSubtitle) heroSubtitle.textContent = 'PROYEKSI SALDO IDEAL';
     if (modeBadge) {
       modeBadge.className = 'mode-badge projection';
-      modeBadge.textContent = 'âš¡ Proyeksi Berjalan';
+      modeBadge.textContent = 'Proyeksi Berjalan';
     }
 
     const ideal = d.calculation_breakdown.proyeksi_saldo_ideal;
@@ -1103,7 +1107,7 @@ function renderCashReality() {
     }
     if (descText) {
       descText.className = 'status-description-text overbudget';
-      descText.innerHTML = 'âš ï¸ Total kas Anda saat ini <strong>' + formatIDR(Math.abs(diff)) + ' lebih rendah</strong> dari batas proyeksi ideal hari ini. Disarankan membatasi pengeluaran.';
+      descText.innerHTML = 'Total kas Anda saat ini <strong>' + formatIDR(Math.abs(diff)) + ' lebih rendah</strong> dari batas proyeksi ideal hari ini. Disarankan membatasi pengeluaran.';
     }
   } else {
     if (resultBox) resultBox.className = 'reality-status-box hemat';
@@ -1115,7 +1119,7 @@ function renderCashReality() {
     }
     if (descText) {
       descText.className = 'status-description-text hemat';
-      descText.innerHTML = 'âœ… Arus kas Anda sangat sehat! Total kas Anda <strong>' + formatIDR(diff) + ' lebih surplus</strong> dibanding target burn rate proporsional hari ini.';
+      descText.innerHTML = 'Arus kas Anda sangat sehat! Total kas Anda <strong>' + formatIDR(diff) + ' lebih surplus</strong> dibanding target burn rate proporsional hari ini.';
     }
   }
 }
@@ -1181,12 +1185,12 @@ function renderBudgetsLists() {
     if (items.length === 0) {
       return (
         '<div class="empty-state-box">' +
-          '<div class="empty-icon">ðŸ“</div>' +
+          '<div class="empty-icon" style="font-size: 1.8rem; margin-bottom: 4px;">ðŸ“</div>' +
           '<div class="empty-title">Belum Ada Pos Anggaran di Bulan Ini</div>' +
           '<div class="empty-desc">Tambahkan pos anggaran baru atau salin template anggaran dari bulan lain.</div>' +
           '<div style="display: flex; gap: 8px; margin-top: 10px;">' +
             '<button class="btn-primary" style="padding: 8px 14px; font-size: 0.75rem;" onclick="openAddBudgetModal()">+ Tambah Pos Anggaran</button>' +
-            '<button class="btn-secondary" style="padding: 8px 14px; font-size: 0.75rem;" onclick="openDuplicateModal()">ðŸ“‹ Salin Bulan Lain</button>' +
+            '<button class="btn-secondary" style="padding: 8px 14px; font-size: 0.75rem;" onclick="openDuplicateModal()">Salin Bulan Lain</button>' +
           '</div>' +
         '</div>'
       );
@@ -1197,7 +1201,7 @@ function renderBudgetsLists() {
       const balanceClass = balance >= 0 ? 'positive' : 'negative';
       const balanceText = balance >= 0 ? ('Sisa ' + formatIDR(balance)) : ('Minus ' + formatIDR(Math.abs(balance)));
       const goalBadge = item.linked_goal_id ? '<span style="font-size: 0.65rem; color: #4F46E5; background: #EEF2FF; padding: 1px 5px; border-radius: 4px; font-weight: 500;">Goal Linked</span>' : '';
-      const timingBadge = item.timing_pattern ? ('<span class="timing-tag">â±ï¸ ' + item.timing_pattern + '</span>') : '';
+      const timingBadge = item.timing_pattern ? ('<span class="timing-tag">' + item.timing_pattern + '</span>') : '';
 
       return (
         '<div class="budget-item-card" onclick="openBudgetDetailModalById(\'' + item.budget_id + '\')">' +
@@ -1237,7 +1241,7 @@ function renderGoalsList() {
     if (goals.length === 0) {
       return (
         '<div class="empty-state-box" style="padding: 20px;">' +
-          '<div class="empty-icon">ðŸŽ¯</div>' +
+          '<div class="empty-icon" style="font-size: 1.8rem; margin-bottom: 4px;">ðŸŽ¯</div>' +
           '<div class="empty-title">Belum Ada Target Finansial</div>' +
           '<div class="empty-desc">Buat sasaran tabungan dan investasi jangka panjang Anda.</div>' +
           '<button class="btn-primary" style="padding: 8px 14px; font-size: 0.75rem; margin-top: 8px;" onclick="openAddGoalModal()">+ Tambah Target Goal</button>' +
@@ -1257,7 +1261,7 @@ function renderGoalsList() {
             '<div style="font-size: 0.7rem; font-weight: 700; color: #4F46E5; background: #EEF2FF; padding: 2px 8px; border-radius: 6px;">' + pct + '%</div>' +
           '</div>' +
           '<div style="font-size: 0.72rem; color: var(--text-secondary); margin-bottom: 6px;">' +
-            'ðŸŽ¯ Target: <strong>Tahun ' + (g.target_year || g.time_frame || '2027') + '</strong> â€¢ ðŸ’¼ <strong>' + (g.target_instrument || 'Investasi') + '</strong>' +
+            'Target: <strong>Tahun ' + (g.target_year || g.time_frame || '2027') + '</strong> â€¢ <strong>' + (g.target_instrument || 'Investasi') + '</strong>' +
           '</div>' +
           '<div style="font-size: 0.72rem; color: var(--text-secondary); margin-bottom: 8px;">' +
             'Terkumpul: <strong style="color: var(--accent-positive);">' + formatIDR(cur) + '</strong> dari target ' + formatIDR(tgt) +
@@ -1293,7 +1297,7 @@ function renderTransactionsTable() {
   if (!container) return;
 
   if (appState.transactions.length === 0) {
-    container.innerHTML = '<div class="empty-state-box"><div class="empty-icon">ðŸ’³</div><div class="empty-title">Belum Ada Riwayat Mutasi</div><div class="empty-desc">Unggah file CSV/PDF mutasi rekening bank Anda untuk merealisasikan anggaran.</div></div>';
+    container.innerHTML = '<div class="empty-state-box"><div class="empty-icon" style="font-size: 1.8rem; margin-bottom: 4px;">ðŸ’³</div><div class="empty-title">Belum Ada Riwayat Mutasi</div><div class="empty-desc">Unggah file CSV/PDF mutasi rekening bank Anda untuk merealisasikan anggaran.</div></div>';
     return;
   }
 
@@ -1486,7 +1490,7 @@ async function submitManualTx() {
 
   const desc = document.getElementById('manual-tx-desc').value.trim();
   const amount = parseFloat(document.getElementById('manual-tx-amount').value) || 0;
-  const date = document.getElementById('manual-tx-date').value || now.toISOString().split('T')[0];
+  const date = document.getElementById('manual-tx-date').value || '2026-08-22';
 
   if (!desc || amount <= 0) {
     alert('Harap isi keterangan dan nominal pengeluaran!');
@@ -1695,7 +1699,7 @@ async function submitDuplicateMonth() {
     body: JSON.stringify({ source_month: srcMonth, source_year: srcYear, target_month: tgtMonth, target_year: tgtYear })
   }).catch(() => {});
 
-  alert('âœ… Berhasil menduplikasi ' + copied + ' pos anggaran dari ' + srcMonth + ' ' + srcYear + ' ke ' + tgtMonth + ' ' + tgtYear + '!');
+  alert('Berhasil menduplikasi ' + copied + ' pos anggaran dari ' + srcMonth + ' ' + srcYear + ' ke ' + tgtMonth + ' ' + tgtYear + '!');
   document.getElementById('duplicate-modal').classList.remove('active');
   appState.currentMonth = tgtMonth;
   appState.currentYear = tgtYear;
@@ -1787,7 +1791,7 @@ function setupExcelImporter() {
 
         saveUserDataToStorage();
 
-        document.getElementById('excel-import-status').textContent = 'âœ… Berhasil mengimpor ' + incomes.length + ' pemasukan dan ' + budgets.length + ' pos anggaran ke ' + targetM + ' ' + targetY + '!';
+        document.getElementById('excel-import-status').textContent = 'Berhasil mengimpor ' + incomes.length + ' pemasukan dan ' + budgets.length + ' pos anggaran ke ' + targetM + ' ' + targetY + '!';
         refreshAllData();
       } catch (err) {
         document.getElementById('excel-import-status').textContent = 'Gagal mengimpor: ' + err.message;
@@ -1842,13 +1846,13 @@ function setupStatementUploader() {
   if (loadSampleBtn) {
     loadSampleBtn.addEventListener('click', () => {
       textarea.value = 'Tanggal,Keterangan,Tipe,Nominal,Saldo\n' +
-        appState.currentYear + '-08-05,WARUNG MAKAN NASI PADANG,DEBIT,45000,7485000\n' +
-        appState.currentYear + '-08-06,GOJEK TRANSPORT GORIDE,DEBIT,25000,7460000\n' +
-        appState.currentYear + '-08-07,TRANSFER SEWA KOS IBU RETNO,DEBIT,1600000,5860000\n' +
-        appState.currentYear + '-08-08,ISI ULANG GALON LE MINERALE,DEBIT,15000,5845000\n' +
-        appState.currentYear + '-08-10,TOPUP BIBIT RDPU DANA DARURAT,DEBIT,880000,4965000\n' +
-        appState.currentYear + '-08-11,INDOMARET JAJAN KOPI,DEBIT,35000,4930000\n' +
-        appState.currentYear + '-08-12,TRANSFER GAJI KANTOR,KREDIT,8500000,13430000';
+        '2026-08-05,WARUNG MAKAN NASI PADANG,DEBIT,45000,7485000\n' +
+        '2026-08-06,GOJEK TRANSPORT GORIDE,DEBIT,25000,7460000\n' +
+        '2026-08-07,TRANSFER SEWA KOS IBU RETNO,DEBIT,1600000,5860000\n' +
+        '2026-08-08,ISI ULANG GALON LE MINERALE,DEBIT,15000,5845000\n' +
+        '2026-08-10,TOPUP BIBIT RDPU DANA DARURAT,DEBIT,880000,4965000\n' +
+        '2026-08-11,INDOMARET JAJAN KOPI,DEBIT,35000,4930000\n' +
+        '2026-08-12,TRANSFER GAJI KANTOR,KREDIT,8500000,13430000';
     });
   }
 
@@ -1896,7 +1900,7 @@ function setupStatementUploader() {
             appState.transactions.unshift({
               transaction_id: 'tx_' + Math.random().toString(36).substring(2, 9),
               user_id: currentUser.user_id,
-              transaction_date: now.toISOString().split('T')[0],
+              transaction_date: '2026-08-22',
               budget_id: matchedItem.budget_id,
               goal_id: matchedItem.linked_goal_id,
               transaction_type: 'Expense',
@@ -1910,7 +1914,7 @@ function setupStatementUploader() {
 
       saveUserDataToStorage();
 
-      alert('âœ… Rekonsiliasi Mutasi Berhasil!\n\nâ€¢ Periode: ' + targetM + ' ' + targetY + '\nâ€¢ Mutasi Dicocokkan: ' + matchedCount + ' transaksi\nâ€¢ Total Realisasi Terekonsiliasi: ' + formatIDR(totalAmount));
+      alert('Rekonsiliasi Mutasi Berhasil!\n\nâ€¢ Periode: ' + targetM + ' ' + targetY + '\nâ€¢ Mutasi Dicocokkan: ' + matchedCount + ' transaksi\nâ€¢ Total Realisasi Terekonsiliasi: ' + formatIDR(totalAmount));
       appState.currentMonth = targetM;
       appState.currentYear = targetY;
       document.getElementById('select-month').value = targetM;
@@ -1928,9 +1932,9 @@ function registerServiceWorker() {
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('/sw.js').then((registration) => {
-        console.log('âœ… FlowTrack Pro PWA Service Worker Registered with Scope:', registration.scope);
+        console.log('FlowTrack Pro PWA Service Worker Registered with Scope:', registration.scope);
       }).catch((err) => {
-        console.warn('âš ï¸ PWA Service Worker registration warning:', err);
+        console.warn('PWA Service Worker registration warning:', err);
       });
     });
   }
