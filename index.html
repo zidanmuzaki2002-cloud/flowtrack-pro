@@ -237,6 +237,17 @@
               Kalkulasi perbandingan status kas...
             </div>
           </div>
+
+          <!-- Catatan / Justifikasi Kas & Overbudget (Notes) -->
+          <div style="margin-top: 12px; background: var(--bg-main); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 10px 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <label for="cash-reality-notes" style="font-size: 0.75rem; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 4px;">
+                <span>📝</span> Catatan & Justifikasi Kas (<span id="cash-notes-period-badge">Agustus 2026</span>)
+              </label>
+              <span style="font-size: 0.65rem; color: var(--text-secondary);">Tersimpan Otomatis</span>
+            </div>
+            <textarea id="cash-reality-notes" rows="2" class="form-input" style="width: 100%; font-size: 0.78rem; resize: vertical; min-height: 48px; line-height: 1.4; padding: 8px; border-radius: 6px; box-sizing: border-box;" placeholder="Tulis alasan jika overbudget atau catatan kas mendesak bulan ini (misal: ganti ban motor mendesak Rp 700rb, servis laptop, kondangan, dll)..."></textarea>
+          </div>
         </section>
 
         <!-- Compact Visual Arithmetic Flow Widget -->
@@ -768,7 +779,7 @@
       </div>
     </div>
 
-    <!-- Modal 3: Detail Pos Anggaran & Riwayat Transaksi -->
+    <!-- Modal 3: Detail Pos Anggaran & Riwayat Transaksi & Edit -->
     <div class="modal-overlay" id="budget-detail-modal">
       <div class="modal-card">
         <div class="modal-header">
@@ -778,10 +789,11 @@
               <span id="detail-budget-cat"></span> • <span id="detail-budget-freq"></span> • <span id="detail-budget-timing"></span>
             </div>
           </div>
-          <button type="button" class="close-btn close-modal-btn">✕</button>
+          <button type="button" class="close-btn close-modal-btn">&times;</button>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 16px; background: var(--bg-main); padding: 12px; border-radius: var(--radius-md);">
+        <!-- Summary Mini Grid -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 12px; background: var(--bg-main); padding: 10px 12px; border-radius: var(--radius-md);">
           <div>
             <div style="font-size: 0.68rem; color: var(--text-secondary);">Target</div>
             <div id="detail-budget-target" style="font-weight: 700; font-size: 0.85rem;">Rp 0</div>
@@ -796,24 +808,89 @@
           </div>
         </div>
 
-        <div style="font-weight: 600; font-size: 0.82rem; margin-bottom: 8px;">Riwayat Transaksi Debit:</div>
-        <div id="detail-budget-tx-list" style="max-height: 130px; overflow-y: auto; margin-bottom: 14px;">
-          <!-- Transactions populated by app.js -->
+        <!-- Navigation Tabs inside Modal -->
+        <div style="display: flex; gap: 6px; background: var(--bg-main); padding: 4px; border-radius: var(--radius-sm); margin-bottom: 12px;">
+          <button type="button" id="tab-modal-view-tx" class="auth-tab-btn active" style="padding: 6px; font-size: 0.75rem;" onclick="switchModalTab('tx')">📊 Riwayat & Catat</button>
+          <button type="button" id="tab-modal-view-edit" class="auth-tab-btn" style="padding: 6px; font-size: 0.75rem;" onclick="switchModalTab('edit')">✏️ Edit / Sesuaikan Anggaran</button>
         </div>
 
-        <div style="font-weight: 600; font-size: 0.82rem; margin-bottom: 6px;">+ Catat Pengeluaran Manual:</div>
-        <div class="form-group" style="margin-bottom: 8px;">
-          <input type="text" id="manual-tx-desc" class="form-input" placeholder="Keterangan transaksi...">
+        <!-- View 1: Riwayat & Catat Manual -->
+        <div id="modal-content-tx">
+          <div style="font-weight: 600; font-size: 0.8rem; margin-bottom: 6px; color: var(--text-primary);">Riwayat Transaksi Debit:</div>
+          <div id="detail-budget-tx-list" style="max-height: 120px; overflow-y: auto; margin-bottom: 12px;"></div>
+
+          <div style="font-weight: 600; font-size: 0.8rem; margin-bottom: 6px; color: var(--text-primary);">+ Catat Pengeluaran Manual:</div>
+          <div class="form-group" style="margin-bottom: 8px;">
+            <input type="text" id="manual-tx-desc" class="form-input" placeholder="Keterangan transaksi...">
+          </div>
+          <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+            <input type="number" id="manual-tx-amount" class="form-input" placeholder="Nominal (Rp)...">
+            <input type="date" id="manual-tx-date" class="form-input" style="max-width: 140px;">
+          </div>
+          
+          <div style="display: flex; gap: 8px;">
+            <button type="button" class="btn-primary" style="flex: 2;" onclick="submitManualTx()">➕ Catat Pengeluaran</button>
+            <button type="button" class="btn-danger" style="flex: 1;" onclick="deleteSelectedBudget()">Hapus Pos</button>
+          </div>
         </div>
-        <div style="display: flex; gap: 8px; margin-bottom: 14px;">
-          <input type="number" id="manual-tx-amount" class="form-input" placeholder="Nominal (Rp)...">
-          <input type="date" id="manual-tx-date" class="form-input" style="max-width: 140px;">
+
+        <!-- View 2: Form Edit Anggaran -->
+        <div id="modal-content-edit" style="display: none; flex-direction: column; gap: 10px;">
+          <div class="form-group" style="margin-bottom: 6px;">
+            <label class="form-label" style="font-size: 0.75rem;">Nama Pos Pengeluaran</label>
+            <input type="text" id="edit-budget-name" class="form-input">
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 6px;">
+            <div>
+              <label class="form-label" style="font-size: 0.75rem;">Kategori</label>
+              <select id="edit-budget-cat" class="form-select" style="font-size: 0.75rem; padding: 6px;">
+                <option value="Dasar">Dasar (Pokok)</option>
+                <option value="Pribadi">Pribadi</option>
+                <option value="Hiburan">Hiburan</option>
+                <option value="Insidental">Insidental</option>
+                <option value="Alokasi Surplus">Alokasi Surplus</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-label" style="font-size: 0.75rem;">Frekuensi</label>
+              <select id="edit-budget-freq" class="form-select" style="font-size: 0.75rem; padding: 6px;">
+                <option value="Harian">Harian</option>
+                <option value="Mingguan">Mingguan</option>
+                <option value="Bulanan">Bulanan</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom: 6px;">
+            <label class="form-label" style="font-size: 0.75rem;">Pola Pengeluaran</label>
+            <select id="edit-budget-timing" class="form-select" style="font-size: 0.75rem; padding: 6px;">
+              <option value="Rata-rata Harian (Flat)">Rata-rata Harian (Flat)</option>
+              <option value="Tanggal Spesifik (Tgl 1)">Tanggal 1 Tiap Bulan</option>
+              <option value="Tanggal Spesifik (Tgl 5)">Tanggal 5 Tiap Bulan</option>
+              <option value="Tanggal Spesifik (Tgl 10)">Tanggal 10 Tiap Bulan</option>
+              <option value="Tanggal Spesifik (Tgl 15)">Tanggal 15 Tiap Bulan</option>
+              <option value="Tanggal Spesifik (Tgl 25)">Tanggal 25 Tiap Bulan</option>
+              <option value="Hari Tertentu Tiap Minggu (Senin)">Setiap Hari Senin</option>
+              <option value="Hari Tertentu Tiap Minggu (Jumat)">Setiap Hari Jumat</option>
+              <option value="Hari Tertentu Tiap Minggu (Weekend)">Setiap Akhir Pekan (Sabtu-Minggu)</option>
+              <option value="Fleksibel / Sesuai Kebutuhan">Fleksibel / Sesuai Kebutuhan</option>
+            </select>
+          </div>
+          <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 8px; margin-bottom: 8px;">
+            <div>
+              <label class="form-label" style="font-size: 0.75rem;">Nominal Satuan (Rp)</label>
+              <input type="number" id="edit-budget-nominal" class="form-input">
+            </div>
+            <div>
+              <label class="form-label" style="font-size: 0.75rem;">Pengali (Multiplier)</label>
+              <input type="number" id="edit-budget-mult" class="form-input" value="1">
+            </div>
+          </div>
+          <div style="display: flex; gap: 8px; margin-top: 4px;">
+            <button type="button" class="btn-primary" style="flex: 2;" onclick="submitEditBudget()">💾 Simpan Perubahan</button>
+            <button type="button" class="btn-secondary" style="flex: 1;" onclick="switchModalTab('tx')">Batal</button>
+          </div>
         </div>
-        
-        <div style="display: flex; gap: 8px;">
-          <button type="button" class="btn-primary" onclick="submitManualTx()">➕ Catat</button>
-          <button type="button" class="btn-danger" onclick="deleteSelectedBudget()">🗑️ Hapus Pos</button>
-        </div>
+
       </div>
     </div>
 

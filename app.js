@@ -1,8 +1,9 @@
 // ==============================================================================
 // FlowTrack Pro: Mobile-First Client Logic & Resilient Local-Cloud Sync Engine
-// Features: Bulletproof Clean SVG Icons (Zero Mojibake), Dynamic 3-Phase Engine,
+// Features: Bulletproof Clean SVG Icons, Dynamic 3-Phase Engine,
+// Pos Anggaran Edit/Adjustment Modal, Cash Reality Justification Notes per Month,
 // Permanent LocalStorage Persistence, Compact Arithmetic Flow Formula,
-// Login Landing Gateway, Conditional Admin Nav vs Feedback, User Take-Out Management
+// Multi-Tenant Auth & Take-Out Management
 // ==============================================================================
 
 const API_BASE = window.location.origin;
@@ -96,6 +97,12 @@ function saveUserDataToStorage() {
     localStorage.setItem(getUserStorageKey('budgets_' + appState.currentMonth + '_' + appState.currentYear), JSON.stringify(appState.budgets));
     localStorage.setItem(getUserStorageKey('goals'), JSON.stringify(appState.financialGoals));
     localStorage.setItem(getUserStorageKey('transactions'), JSON.stringify(appState.transactions));
+    
+    // Save Month Justification Notes
+    const notesEl = document.getElementById('cash-reality-notes');
+    if (notesEl) {
+      localStorage.setItem(getUserStorageKey('notes_' + appState.currentMonth + '_' + appState.currentYear), notesEl.value);
+    }
   } catch (e) {}
 }
 
@@ -113,6 +120,15 @@ function loadCashAccountsFromStorage() {
       if (walletInput) walletInput.value = appState.cashAccounts.wallet || '';
       if (emoneyInput) emoneyInput.value = appState.cashAccounts.emoney || '';
       if (otherInput) otherInput.value = appState.cashAccounts.other || '';
+    }
+
+    // Load Month Justification Notes & Update Badge
+    const notesEl = document.getElementById('cash-reality-notes');
+    const badgeNotes = document.getElementById('cash-notes-period-badge');
+    if (badgeNotes) badgeNotes.textContent = appState.currentMonth + ' ' + appState.currentYear;
+    if (notesEl) {
+      const savedNotes = localStorage.getItem(getUserStorageKey('notes_' + appState.currentMonth + '_' + appState.currentYear)) || '';
+      notesEl.value = savedNotes;
     }
   } catch (e) {}
 }
@@ -731,6 +747,7 @@ async function deleteFeedback(feedbackId) {
 // -----------------------------------------------------------------------------
 async function refreshAllData() {
   if (!currentUser) return;
+  loadCashAccountsFromStorage();
   await Promise.all([
     fetchIncomes(),
     fetchBudgets(),
@@ -1332,8 +1349,27 @@ function renderTransactionsTable() {
 }
 
 // -----------------------------------------------------------------------------
-// 7. MODALS & CRUD HANDLERS WITH PERMANENT LOCAL PERSISTENCE
+// 7. MODALS & CRUD HANDLERS (WITH INLINE EDIT ANGGARAN & TABS)
 // -----------------------------------------------------------------------------
+function switchModalTab(tab) {
+  const tabTx = document.getElementById('tab-modal-view-tx');
+  const tabEdit = document.getElementById('tab-modal-view-edit');
+  const contentTx = document.getElementById('modal-content-tx');
+  const contentEdit = document.getElementById('modal-content-edit');
+
+  if (tab === 'edit') {
+    if (tabEdit) tabEdit.classList.add('active');
+    if (tabTx) tabTx.classList.remove('active');
+    if (contentEdit) contentEdit.style.display = 'flex';
+    if (contentTx) contentTx.style.display = 'none';
+  } else {
+    if (tabTx) tabTx.classList.add('active');
+    if (tabEdit) tabEdit.classList.remove('active');
+    if (contentTx) contentTx.style.display = 'block';
+    if (contentEdit) contentEdit.style.display = 'none';
+  }
+}
+
 function openAddIncomeModal() {
   document.getElementById('income-modal-period').textContent = appState.currentMonth + ' ' + appState.currentYear;
   document.getElementById('income-source-input').value = '';
@@ -1457,6 +1493,8 @@ function openBudgetDetailModalById(budgetId) {
 
 async function openBudgetDetailModal(item) {
   appState.selectedBudgetItem = item;
+  switchModalTab('tx');
+
   document.getElementById('detail-budget-title').textContent = item.item_name;
   document.getElementById('detail-budget-cat').textContent = item.category_type;
   document.getElementById('detail-budget-freq').textContent = item.frekuensi;
@@ -1464,6 +1502,21 @@ async function openBudgetDetailModal(item) {
   document.getElementById('detail-budget-target').textContent = formatIDR(item.target_anggaran);
   document.getElementById('detail-budget-used').textContent = formatIDR(item.realisasi_used);
   document.getElementById('detail-budget-balance').textContent = formatIDR(item.balance);
+
+  // Populate Edit Fields
+  const editName = document.getElementById('edit-budget-name');
+  const editCat = document.getElementById('edit-budget-cat');
+  const editFreq = document.getElementById('edit-budget-freq');
+  const editTiming = document.getElementById('edit-budget-timing');
+  const editNominal = document.getElementById('edit-budget-nominal');
+  const editMult = document.getElementById('edit-budget-mult');
+
+  if (editName) editName.value = item.item_name;
+  if (editCat) editCat.value = item.category_type || 'Dasar';
+  if (editFreq) editFreq.value = item.frekuensi || 'Bulanan';
+  if (editTiming) editTiming.value = item.timing_pattern || 'Rata-rata Harian (Flat)';
+  if (editNominal) editNominal.value = item.nominal_satuan || (item.target_anggaran / (item.multiplier || 1));
+  if (editMult) editMult.value = item.multiplier || 1;
 
   const txContainer = document.getElementById('detail-budget-tx-list');
   txContainer.innerHTML = '<div style="font-size: 0.72rem; color: var(--text-secondary);">Memuat transaksi...</div>';
@@ -1493,6 +1546,77 @@ async function openBudgetDetailModal(item) {
 
   txContainer.innerHTML = '<div style="font-size: 0.72rem; color: var(--text-secondary);">Belum ada mutasi debit tercatat untuk pos ini.</div>';
   document.getElementById('budget-detail-modal').classList.add('active');
+}
+
+async function submitEditBudget() {
+  const item = appState.selectedBudgetItem;
+  if (!item) return;
+
+  const name = document.getElementById('edit-budget-name').value.trim();
+  const cat = document.getElementById('edit-budget-cat').value;
+  const freq = document.getElementById('edit-budget-freq').value;
+  const timing = document.getElementById('edit-budget-timing').value;
+  const satuan = parseFloat(document.getElementById('edit-budget-nominal').value) || 0;
+  const mult = parseInt(document.getElementById('edit-budget-mult').value) || 1;
+
+  if (!name || satuan <= 0) {
+    alert('Harap isi nama pos anggaran dan nominal yang valid!');
+    return;
+  }
+
+  const newTarget = satuan * mult;
+
+  item.item_name = name;
+  item.category_type = cat;
+  item.frekuensi = freq;
+  item.timing_pattern = timing;
+  item.nominal_satuan = satuan;
+  item.multiplier = mult;
+  item.target_anggaran = newTarget;
+  item.balance = newTarget - (Number(item.realisasi_used) || 0);
+
+  if (currentUser.user_id === 'usr_admin_zidanmuzaki13') {
+    const embeddedMatch = EMBEDDED_ADMIN_DATA.budgets.find(b => b.budget_id === item.budget_id);
+    if (embeddedMatch) {
+      embeddedMatch.item_name = name;
+      embeddedMatch.category_type = cat;
+      embeddedMatch.frekuensi = freq;
+      embeddedMatch.timing_pattern = timing;
+      embeddedMatch.nominal_satuan = satuan;
+      embeddedMatch.multiplier = mult;
+      embeddedMatch.target_anggaran = newTarget;
+    }
+  }
+
+  saveUserDataToStorage();
+
+  authFetch('/budgets', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      budget_id: item.budget_id,
+      item_name: name,
+      category_type: cat,
+      frekuensi: freq,
+      timing_pattern: timing,
+      nominal_satuan: satuan,
+      multiplier: mult,
+      target_anggaran: newTarget
+    })
+  }).catch(() => {});
+
+  alert('Pos anggaran \'' + name + '\' berhasil disesuaikan untuk bulan ' + appState.currentMonth + '!');
+  
+  // Refresh modal views
+  document.getElementById('detail-budget-title').textContent = item.item_name;
+  document.getElementById('detail-budget-cat').textContent = item.category_type;
+  document.getElementById('detail-budget-freq').textContent = item.frekuensi;
+  document.getElementById('detail-budget-timing').textContent = item.timing_pattern;
+  document.getElementById('detail-budget-target').textContent = formatIDR(item.target_anggaran);
+  document.getElementById('detail-budget-balance').textContent = formatIDR(item.balance);
+
+  switchModalTab('tx');
+  refreshAllData();
 }
 
 async function submitManualTx() {
@@ -2014,6 +2138,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (inp) inp.addEventListener('input', handleCashInputChange);
   });
 
+  // Month Notes Input Event
+  const notesInput = document.getElementById('cash-reality-notes');
+  if (notesInput) {
+    notesInput.addEventListener('input', () => {
+      saveUserDataToStorage();
+    });
+  }
+
   // Category Tabs Filter
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
@@ -2079,6 +2211,8 @@ window.deleteIncome = deleteIncome;
 window.openAddBudgetModal = openAddBudgetModal;
 window.submitAddBudget = submitAddBudget;
 window.openBudgetDetailModalById = openBudgetDetailModalById;
+window.switchModalTab = switchModalTab;
+window.submitEditBudget = submitEditBudget;
 window.submitManualTx = submitManualTx;
 window.deleteSelectedBudget = deleteSelectedBudget;
 window.openAddGoalModal = openAddGoalModal;
