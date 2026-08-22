@@ -1,6 +1,6 @@
 // ==============================================================================
 // FlowTrack Pro: Mobile-First Client Logic & Resilient Local-Cloud Sync Engine
-// Features: Clean Unicode Icons, Dynamic 3-Phase Month Engine, Month Dropdown Sync,
+// Features: Bulletproof Clean SVG Icons (Zero Mojibake), Dynamic 3-Phase Engine,
 // Permanent LocalStorage Persistence, Compact Arithmetic Flow Formula,
 // Login Landing Gateway, Conditional Admin Nav vs Feedback, User Take-Out Management
 // ==============================================================================
@@ -663,7 +663,7 @@ function renderFeedbacksList(container, feedbacks, isAdminView) {
 
   container.innerHTML = feedbacks.map(f => {
     const ratingNum = f.rating || 5;
-    const stars = 'Rating ' + ratingNum + '/5';
+    const starsHtml = '&#9733;'.repeat(ratingNum) + '&#9734;'.repeat(Math.max(0, 5 - ratingNum));
     const dateStr = f.created_at ? f.created_at.substring(0, 10) : 'Hari ini';
     const statusBg = f.status === 'Selesai' ? 'rgba(16, 185, 129, 0.12)' : '#FEF3C7';
     const statusColor = f.status === 'Selesai' ? '#047857' : '#B45309';
@@ -682,7 +682,7 @@ function renderFeedbacksList(container, feedbacks, isAdminView) {
             '<div style="font-weight: 700; font-size: 0.85rem; color: var(--text-primary);">' + f.subject + '</div>' +
             '<div style="font-size: 0.7rem; color: var(--text-secondary);">' +
               (isAdminView ? ('Dari: <strong>' + (f.username || f.email) + '</strong> (' + f.email + ') â€¢ ') : '') +
-              f.category + ' â€¢ ' + stars + ' â€¢ ' + dateStr +
+              f.category + ' â€¢ <span style="color: #F59E0B; font-size: 0.85rem;">' + starsHtml + '</span> â€¢ ' + dateStr +
             '</div>' +
           '</div>' +
           '<span style="font-size: 0.68rem; padding: 2px 6px; border-radius: 4px; background: ' + statusBg + '; color: ' + statusColor + '; font-weight: 600;">' + (f.status || 'Baru') + '</span>' +
@@ -1146,7 +1146,7 @@ function renderFlowFormula() {
 }
 
 // -----------------------------------------------------------------------------
-// 4. RENDER INCOMES & BUDGETS
+// 4. RENDER INCOMES & BUDGETS (WITH BULLETPROOF &times; & SVG ICONS)
 // -----------------------------------------------------------------------------
 function renderIncomesLists() {
   const containerDashboard = document.getElementById('incomes-list-preview');
@@ -1163,7 +1163,7 @@ function renderIncomesLists() {
           '</div>' +
           '<div style="display: flex; align-items: center; gap: 8px;">' +
             '<span style="font-weight: 700; color: var(--accent-positive);">' + formatIDR(inc.amount) + '</span>' +
-            '<button onclick="deleteIncome(\'' + inc.income_id + '\')" style="background: none; border: none; color: #EF4444; cursor: pointer; font-size: 0.8rem;">âœ•</button>' +
+            '<button onclick="deleteIncome(\'' + inc.income_id + '\')" title="Hapus pemasukan" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); color: #EF4444; cursor: pointer; font-size: 1rem; line-height: 1; font-weight: 700; padding: 1px 7px; border-radius: 4px;">&times;</button>' +
           '</div>' +
         '</div>'
       ).join('');
@@ -1184,13 +1184,15 @@ function renderBudgetsLists() {
   function generateCardsHtml(items) {
     if (items.length === 0) {
       return (
-        '<div class="empty-state-box">' +
-          '<div class="empty-icon" style="font-size: 1.8rem; margin-bottom: 4px;">ðŸ“</div>' +
-          '<div class="empty-title">Belum Ada Pos Anggaran di Bulan Ini</div>' +
-          '<div class="empty-desc">Tambahkan pos anggaran baru atau salin template anggaran dari bulan lain.</div>' +
-          '<div style="display: flex; gap: 8px; margin-top: 10px;">' +
+        '<div class="empty-state-box" style="padding: 24px 16px; text-align: center;">' +
+          '<div class="empty-icon" style="margin-bottom: 8px;">' +
+            '<svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>' +
+          '</div>' +
+          '<div class="empty-title" style="font-weight: 700; font-size: 0.9rem; color: var(--text-primary); margin-bottom: 4px;">Belum Ada Pos Anggaran di Bulan Ini</div>' +
+          '<div class="empty-desc" style="font-size: 0.75rem; color: var(--text-secondary); max-width: 280px; margin: 0 auto 12px; line-height: 1.4;">Tambahkan pos anggaran baru atau salin template anggaran dari bulan lain.</div>' +
+          '<div style="display: flex; gap: 8px; justify-content: center;">' +
             '<button class="btn-primary" style="padding: 8px 14px; font-size: 0.75rem;" onclick="openAddBudgetModal()">+ Tambah Pos Anggaran</button>' +
-            '<button class="btn-secondary" style="padding: 8px 14px; font-size: 0.75rem;" onclick="openDuplicateModal()">Salin Bulan Lain</button>' +
+            '<button class="btn-secondary" style="padding: 8px 14px; font-size: 0.75rem;" onclick="openDuplicateModal()">Salin dari Bulan Lain</button>' +
           '</div>' +
         '</div>'
       );
@@ -1230,7 +1232,7 @@ function renderBudgetsLists() {
 }
 
 // -----------------------------------------------------------------------------
-// 5. RENDER GOALS
+// 5. RENDER GOALS (WITH CLEAN SVG ICONS)
 // -----------------------------------------------------------------------------
 function renderGoalsList() {
   const containerDashboard = document.getElementById('goals-container');
@@ -1240,11 +1242,13 @@ function renderGoalsList() {
   function generateGoalsHtml(goals) {
     if (goals.length === 0) {
       return (
-        '<div class="empty-state-box" style="padding: 20px;">' +
-          '<div class="empty-icon" style="font-size: 1.8rem; margin-bottom: 4px;">ðŸŽ¯</div>' +
-          '<div class="empty-title">Belum Ada Target Finansial</div>' +
-          '<div class="empty-desc">Buat sasaran tabungan dan investasi jangka panjang Anda.</div>' +
-          '<button class="btn-primary" style="padding: 8px 14px; font-size: 0.75rem; margin-top: 8px;" onclick="openAddGoalModal()">+ Tambah Target Goal</button>' +
+        '<div class="empty-state-box" style="padding: 24px 16px; text-align: center;">' +
+          '<div class="empty-icon" style="margin-bottom: 8px;">' +
+            '<svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>' +
+          '</div>' +
+          '<div class="empty-title" style="font-weight: 700; font-size: 0.9rem; color: var(--text-primary); margin-bottom: 4px;">Belum Ada Target Finansial</div>' +
+          '<div class="empty-desc" style="font-size: 0.75rem; color: var(--text-secondary); max-width: 280px; margin: 0 auto 12px; line-height: 1.4;">Buat sasaran tabungan dan investasi jangka panjang Anda.</div>' +
+          '<button class="btn-primary" style="padding: 8px 14px; font-size: 0.75rem;" onclick="openAddGoalModal()">+ Tambah Target Goal</button>' +
         '</div>'
       );
     }
@@ -1290,14 +1294,21 @@ function populateGoalDropdowns() {
 }
 
 // -----------------------------------------------------------------------------
-// 6. RENDER TRANSACTIONS
+// 6. RENDER TRANSACTIONS (WITH CLEAN SVG ICONS)
 // -----------------------------------------------------------------------------
 function renderTransactionsTable() {
   const container = document.getElementById('mutasi-transactions-list');
   if (!container) return;
 
   if (appState.transactions.length === 0) {
-    container.innerHTML = '<div class="empty-state-box"><div class="empty-icon" style="font-size: 1.8rem; margin-bottom: 4px;">ðŸ’³</div><div class="empty-title">Belum Ada Riwayat Mutasi</div><div class="empty-desc">Unggah file CSV/PDF mutasi rekening bank Anda untuk merealisasikan anggaran.</div></div>';
+    container.innerHTML = 
+      '<div class="empty-state-box" style="padding: 24px 16px; text-align: center;">' +
+        '<div class="empty-icon" style="margin-bottom: 8px;">' +
+          '<svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>' +
+        '</div>' +
+        '<div class="empty-title" style="font-weight: 700; font-size: 0.9rem; color: var(--text-primary); margin-bottom: 4px;">Belum Ada Riwayat Mutasi</div>' +
+        '<div class="empty-desc" style="font-size: 0.75rem; color: var(--text-secondary); max-width: 280px; margin: 0 auto; line-height: 1.4;">Unggah file CSV/PDF mutasi rekening bank Anda untuk merealisasikan anggaran.</div>' +
+      '</div>';
     return;
   }
 
