@@ -149,7 +149,7 @@ body {
 /* Header */
 .app-header {
   background-color: var(--bg-card);
-  padding: 14px 18px 12px 18px;
+  padding: 12px 16px;
   border-bottom: 1px solid var(--border-subtle);
   position: sticky;
   top: 0;
@@ -157,24 +157,26 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 10px;
 }
 
 .brand-title {
-  font-weight: 700;
-  font-size: 1.2rem;
+  font-weight: 800;
+  font-size: 1.15rem;
   color: var(--text-primary);
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+  line-height: 1.2;
 }
 
 .brand-badge {
   background: var(--primary-accent-bg);
   color: var(--primary-accent);
-  font-size: 0.68rem;
-  font-weight: 600;
-  padding: 2px 8px;
-  border-radius: 20px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 12px;
 }
 
 .header-actions {
@@ -187,13 +189,14 @@ body {
 .user-header-profile {
   background: var(--bg-main);
   border: 1px solid var(--border-subtle);
-  border-radius: 24px;
-  padding: 3px 8px 3px 4px;
+  border-radius: 20px;
+  padding: 3px 10px 3px 4px;
   display: flex;
   align-items: center;
   gap: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
+  max-width: 130px;
 }
 
 .user-header-profile:hover {
@@ -202,8 +205,8 @@ body {
 }
 
 .user-avatar-circle {
-  width: 26px;
-  height: 26px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   background: linear-gradient(135deg, #4F46E5, #818CF8);
   color: #FFFFFF;
@@ -211,7 +214,8 @@ body {
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
+  flex-shrink: 0;
 }
 
 .user-header-text {
@@ -219,50 +223,23 @@ body {
   flex-direction: column;
   line-height: 1.1;
   text-align: left;
+  overflow: hidden;
 }
 
 .user-name-display {
-  font-size: 0.72rem;
-  font-weight: 600;
+  font-size: 0.7rem;
+  font-weight: 700;
   color: var(--text-primary);
-  max-width: 80px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .user-role-badge {
-  font-size: 0.58rem;
+  font-size: 0.55rem;
   font-weight: 700;
   color: var(--primary-accent);
   text-transform: uppercase;
-}
-
-.logout-pill-btn {
-  background: none;
-  border: none;
-  font-size: 0.8rem;
-  cursor: pointer;
-  padding: 2px 4px;
-  border-radius: 4px;
-  transition: transform 0.15s;
-}
-
-.logout-pill-btn:hover {
-  transform: scale(1.15);
-}
-
-.date-pill {
-  background-color: var(--bg-main);
-  border: 1px solid var(--border-subtle);
-  border-radius: 20px;
-  padding: 5px 10px;
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: var(--text-secondary);
-  display: flex;
-  align-items: center;
-  gap: 6px;
 }
 
 /* Language Switcher Pill */
@@ -273,6 +250,7 @@ body {
   border-radius: 16px;
   padding: 2px;
   gap: 2px;
+  flex-shrink: 0;
 }
 
 .lang-btn {
@@ -293,11 +271,31 @@ body {
   box-shadow: 0 1px 4px rgba(79, 70, 229, 0.3);
 }
 
+/* Date Pill */
+.date-pill {
+  background-color: var(--bg-main);
+  border: 1px solid var(--border-subtle);
+  border-radius: 20px;
+  padding: 3px 8px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
 /* Time Selector Bar (Month & Year Pickers) */
 .time-selector-bar {
   background: var(--bg-card);
-  padding: 10px 18px;
+  padding: 8px 16px;
   border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1060,7 +1058,21 @@ button {
 }
 
 .nav-icon {
-  font-size: 1.15rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+}
+
+.nav-icon svg {
+  stroke: var(--text-secondary);
+  transition: all 0.2s ease;
+}
+
+.nav-item.active .nav-icon svg {
+  stroke: var(--primary-accent);
+  transform: scale(1.1);
 }
 
 /* Modals & Popups */

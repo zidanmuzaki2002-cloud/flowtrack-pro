@@ -91,14 +91,14 @@
   <!-- ======================================================================= -->
   <div class="app-container" id="app-container">
     
-    <!-- 1. Header with User Profile & Real-Time Date -->
+    <!-- 1. Header with User Profile & Language Switcher -->
     <header class="app-header">
       <div>
         <div class="brand-title">
           <span>FlowTrack</span>
           <span class="brand-badge">Pro</span>
         </div>
-        <div style="font-size: 0.7rem; color: var(--text-secondary); margin-top: 1px;">Smart Cashflow & Burn Tracker</div>
+        <div style="font-size: 0.7rem; color: var(--text-secondary); margin-top: 1px;" id="txt-app-sub">Smart Cashflow & Burn Tracker</div>
       </div>
       <div class="header-actions">
         <!-- Language Switcher ID / EN -->
@@ -112,11 +112,6 @@
             <div class="user-name-display" id="user-name-display">zidanmuzaki13</div>
             <div class="user-role-badge" id="user-role-badge">ADMIN</div>
           </div>
-          <button class="logout-pill-btn" id="btn-logout" title="Keluar / Ganti Akun" onclick="event.stopPropagation(); handleLogout();">🚪</button>
-        </div>
-        <div class="date-pill">
-          <span style="width: 6px; height: 6px; background: #10B981; border-radius: 50%;"></span>
-          <span id="header-date-badge">22 Agt 2026</span>
         </div>
       </div>
     </header>
@@ -148,8 +143,12 @@
           <option value="2030">2030</option>
         </select>
       </div>
-      <div>
-        <span class="mode-badge projection" id="header-mode-badge">⚡ Proyeksi Berjalan</span>
+      <div style="display: flex; align-items: center; gap: 6px;">
+        <span class="mode-badge projection" id="header-mode-badge">Proyeksi Berjalan</span>
+        <div class="date-pill" id="header-date-pill">
+          <span style="width: 6px; height: 6px; background: #10B981; border-radius: 50%; display: inline-block;"></span>
+          <span id="header-date-badge">22 Agu 2026</span>
+        </div>
       </div>
     </div>
 
@@ -197,40 +196,40 @@
         <!-- Multi-Account Realita Kas Section -->
         <section class="card" id="reality-input-section">
           <div class="section-title">
-            <span>Input Realita Kas Anda</span>
-            <span style="font-size: 0.7rem; color: var(--text-secondary); font-weight: 500;">Saldo Dompet & Rekening</span>
+            <span id="txt-reality-title">Input Realita Kas Anda</span>
+            <span style="font-size: 0.7rem; color: var(--text-secondary); font-weight: 500;" id="txt-reality-sub">Saldo Dompet & Rekening</span>
           </div>
 
           <!-- Multi-Account Input Grid -->
           <div class="account-cash-grid">
             <div class="account-input-card">
-              <div class="account-input-header">🏦 Saldo di Bank</div>
+              <div class="account-input-header" id="txt-acc-bank">Saldo di Bank</div>
               <input type="number" id="cash-bank-input" class="account-input-field" placeholder="0" value="0">
             </div>
             <div class="account-input-card">
-              <div class="account-input-header">💵 Cash on Hand</div>
+              <div class="account-input-header" id="txt-acc-wallet">Cash on Hand</div>
               <input type="number" id="cash-wallet-input" class="account-input-field" placeholder="0" value="0">
             </div>
             <div class="account-input-card">
-              <div class="account-input-header">📱 Saldo E-Money</div>
+              <div class="account-input-header" id="txt-acc-emoney">Saldo E-Money</div>
               <input type="number" id="cash-emoney-input" class="account-input-field" placeholder="0" value="0">
             </div>
             <div class="account-input-card">
-              <div class="account-input-header">💼 Lain-lain</div>
+              <div class="account-input-header" id="txt-acc-other">Lain-lain</div>
               <input type="number" id="cash-other-input" class="account-input-field" placeholder="0" value="0">
             </div>
           </div>
 
           <!-- Total Cash Summary Banner -->
           <div class="total-cash-banner">
-            <span class="total-cash-title">Total Kas Riil Tersedia:</span>
+            <span class="total-cash-title" id="txt-total-cash-lbl">Total Kas Riil Tersedia:</span>
             <span class="total-cash-figure" id="total-cash-figure">Rp 0</span>
           </div>
 
           <!-- Dynamic Conditional Rendering Box -->
           <div class="reality-status-box" id="reality-result-box">
             <div class="status-header-row">
-              <div style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 500;">Status Arus Kas:</div>
+              <div style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 500;" id="txt-status-row-lbl">Status Arus Kas:</div>
               <span class="status-badge" id="reality-status-badge">
                 <span id="reality-status-label">HEMAT</span>
               </span>
@@ -247,9 +246,9 @@
           <div style="margin-top: 12px; background: var(--bg-main); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 10px 12px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
               <label for="cash-reality-notes" style="font-size: 0.75rem; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 4px;">
-                <span>📝</span> Catatan & Justifikasi Kas (<span id="cash-notes-period-badge">Agustus 2026</span>)
+                <span id="txt-notes-header">Catatan & Justifikasi Kas</span> (<span id="cash-notes-period-badge">Agustus 2026</span>)
               </label>
-              <span style="font-size: 0.65rem; color: var(--text-secondary);">Tersimpan Otomatis</span>
+              <span style="font-size: 0.65rem; color: var(--text-secondary);" id="txt-notes-auto-saved">Tersimpan Otomatis</span>
             </div>
             <textarea id="cash-reality-notes" rows="2" class="form-input" style="width: 100%; font-size: 0.78rem; resize: vertical; min-height: 48px; line-height: 1.4; padding: 8px; border-radius: 6px; box-sizing: border-box;" placeholder="Tulis alasan jika overbudget atau catatan kas mendesak bulan ini (misal: ganti ban motor mendesak Rp 700rb, servis laptop, kondangan, dll)..."></textarea>
           </div>
@@ -258,8 +257,8 @@
         <!-- Compact Visual Arithmetic Flow Widget -->
         <section class="card" style="padding: 14px 16px;">
           <div class="section-title" style="margin-bottom: 10px;">
-            <span>Alur Perhitungan Saldo Ideal</span>
-            <span style="font-size: 0.68rem; color: var(--primary-accent); font-weight: 600; background: var(--primary-accent-bg); padding: 2px 8px; border-radius: 10px;">Formula Ringkas</span>
+            <span id="txt-flow-title">Alur Perhitungan Saldo Ideal</span>
+            <span style="font-size: 0.68rem; color: var(--primary-accent); font-weight: 600; background: var(--primary-accent-bg); padding: 2px 8px; border-radius: 10px;" id="txt-flow-badge">Formula Ringkas</span>
           </div>
 
           <div class="compact-flow-container">
@@ -267,7 +266,7 @@
             <div class="compact-flow-row">
               <div class="c-flow-left">
                 <span class="c-flow-badge plus">+</span>
-                <span class="c-flow-label">Pemasukan Bulan Ini</span>
+                <span class="c-flow-label" id="txt-flow-lbl-inc">Pemasukan Bulan Ini</span>
               </div>
               <div class="c-flow-value positive" id="flow-val-income">Rp 0</div>
             </div>
@@ -277,8 +276,8 @@
               <div class="c-flow-left">
                 <span class="c-flow-badge minus">−</span>
                 <div>
-                  <span class="c-flow-label">Kebutuhan Bulanan (100%)</span>
-                  <span class="c-flow-sub">Sewa Kos, Listrik, Pulsa</span>
+                  <span class="c-flow-label" id="txt-flow-lbl-bulanan">Kebutuhan Bulanan (100%)</span>
+                  <span class="c-flow-sub" id="txt-flow-sub-bulanan">Sewa Kos, Listrik, Pulsa</span>
                 </div>
               </div>
               <div class="c-flow-value warning" id="flow-val-bulanan">- Rp 0</div>
@@ -289,8 +288,8 @@
               <div class="c-flow-left">
                 <span class="c-flow-badge minus">−</span>
                 <div>
-                  <span class="c-flow-label">Pengeluaran Rutin Berjalan</span>
-                  <span class="c-flow-sub" id="flow-sub-harian">Makan, Transport x % Hari</span>
+                  <span class="c-flow-label" id="txt-flow-lbl-variable">Pengeluaran Rutin Berjalan</span>
+                  <span class="c-flow-sub" id="flow-sub-harian">Kebutuhan Pos Terjadwal</span>
                 </div>
               </div>
               <div class="c-flow-value warning" id="flow-val-harian">- Rp 0</div>
@@ -304,8 +303,8 @@
               <div class="c-flow-left">
                 <span class="c-flow-badge equals">=</span>
                 <div>
-                  <span class="c-flow-label highlight">Proyeksi Saldo Ideal Hari Ini</span>
-                  <span class="c-flow-sub">Batas aman saldo dompet hari ini</span>
+                  <span class="c-flow-label highlight" id="txt-flow-lbl-result">Proyeksi Saldo Ideal Hari Ini</span>
+                  <span class="c-flow-sub" id="txt-flow-sub-result">Batas aman saldo dompet hari ini</span>
                 </div>
               </div>
               <div class="c-flow-value result" id="flow-val-result">Rp 0</div>
@@ -316,8 +315,8 @@
         <!-- Summary Budgets Section -->
         <section class="card">
           <div class="section-title">
-            <span>Ringkasan Pos Anggaran</span>
-            <button class="quick-btn" onclick="switchView('view-budgets')">Lihat Semua ➔</button>
+            <span id="txt-summary-budget-title">Ringkasan Pos Anggaran</span>
+            <button class="quick-btn" onclick="switchView('view-budgets')" id="txt-btn-view-all">Lihat Semua ➔</button>
           </div>
           <div class="budget-items-list" id="budgets-list-container">
             <!-- Populated by app.js -->
@@ -333,17 +332,17 @@
         
         <section class="card">
           <div class="section-title">
-            <span>Upload Mutasi Rekening Bank</span>
-            <span style="font-size: 0.72rem; color: var(--primary-accent);">CSV & PDF Statement</span>
+            <span id="txt-mutasi-card-title">Upload Mutasi Rekening Bank</span>
+            <span style="font-size: 0.72rem; color: var(--primary-accent);" id="txt-mutasi-card-sub">CSV & PDF Statement</span>
           </div>
 
-          <div style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 14px; line-height: 1.4;">
+          <div style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 14px; line-height: 1.4;" id="txt-mutasi-card-desc">
             Unggah mutasi rekening bank (format <strong>.CSV</strong> atau <strong>.PDF</strong>) untuk merealisasikan pos anggaran bulan target. Sistem akan mencocokkan kata kunci pengeluaran otomatis.
           </div>
 
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;">
             <div class="form-group" style="margin-bottom: 0;">
-              <label class="form-label">Bulan Mutasi:</label>
+              <label class="form-label" id="txt-mutasi-lbl-month">Bulan Mutasi:</label>
               <select id="mutasi-target-month" class="form-select">
                 <option value="Januari">Januari</option>
                 <option value="Februari">Februari</option>
@@ -360,7 +359,7 @@
               </select>
             </div>
             <div class="form-group" style="margin-bottom: 0;">
-              <label class="form-label">Tahun Mutasi:</label>
+              <label class="form-label" id="txt-mutasi-lbl-year">Tahun Mutasi:</label>
               <select id="mutasi-target-year" class="form-select">
                 <option value="2024">2024</option>
                 <option value="2025">2025</option>
@@ -371,26 +370,26 @@
           </div>
 
           <div class="form-group">
-            <label class="form-label">Pilih Dokumen Mutasi (.CSV, .PDF, .TXT):</label>
+            <label class="form-label" id="txt-mutasi-lbl-file">Pilih Dokumen Mutasi (.CSV, .PDF, .TXT):</label>
             <input type="file" id="statement-file-input" accept=".csv,.pdf,.txt" class="form-input" style="padding: 6px;">
           </div>
 
           <button type="button" class="quick-btn" id="btn-load-sample-statement" style="margin-bottom: 8px; width: 100%; text-align: center; justify-content: center; padding: 7px;">
-            📋 Muat Contoh Teks Mutasi Rekening Bank
+            <span id="txt-btn-load-sample">Muat Contoh Teks Mutasi Rekening Bank</span>
           </button>
 
           <textarea id="statement-textarea" style="width: 100%; height: 110px; padding: 10px; font-family: monospace; font-size: 0.72rem; border: 1.5px solid var(--border-subtle); border-radius: var(--radius-md); margin-bottom: 12px; outline: none;" placeholder="Tanggal,Keterangan,Tipe,Nominal,Saldo&#10;2026-08-05,WARUNG MAKAN NASI PADANG,DEBIT,45000..."></textarea>
 
           <button type="button" class="btn-primary" id="btn-process-statement">
-            🚀 Proses Mutasi & Realisasikan Anggaran
+            <span id="txt-btn-process-main">🚀 Proses Mutasi & Realisasikan Anggaran</span>
           </button>
         </section>
 
         <!-- Live Transactions History Table -->
         <section class="card">
           <div class="section-title">
-            <span>Riwayat Transaksi Mutasi</span>
-            <span style="font-size: 0.72rem; color: var(--text-secondary);">Terekonsiliasi</span>
+            <span id="txt-tx-history-title">Riwayat Transaksi Mutasi</span>
+            <span style="font-size: 0.72rem; color: var(--text-secondary);" id="txt-tx-history-sub">Terekonsiliasi</span>
           </div>
           <div id="mutasi-transactions-list">
             <!-- Populated by app.js -->
@@ -731,33 +730,47 @@
     <!-- Bottom Navigation Bar (Multi-Page Tabs) -->
     <nav class="bottom-nav">
       <button class="nav-item active" data-view="view-dashboard">
-        <span class="nav-icon">📊</span>
+        <span class="nav-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+        </span>
         <span id="nav-lbl-dashboard">Dashboard</span>
       </button>
       <button class="nav-item" data-view="view-budgets">
-        <span class="nav-icon">📝</span>
+        <span class="nav-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+        </span>
         <span id="nav-lbl-budgets">Anggaran</span>
       </button>
       <button class="nav-item" data-view="view-analytics">
-        <span class="nav-icon">💸</span>
+        <span class="nav-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+        </span>
         <span id="nav-lbl-expenses">Pengeluaran</span>
       </button>
       <button class="nav-item" data-view="view-goals">
-        <span class="nav-icon">🎯</span>
+        <span class="nav-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+        </span>
         <span id="nav-lbl-goals">Goals</span>
       </button>
       <button class="nav-item" data-view="view-mutasi">
-        <span class="nav-icon">💳</span>
+        <span class="nav-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+        </span>
         <span id="nav-lbl-mutasi">Mutasi</span>
       </button>
       <!-- CONDITIONAL RENDERING: Rendered ONLY if user.email === 'zidanmuzaki2002@gmail.com' -->
       <button class="nav-item" id="nav-item-admin" data-view="view-admin" style="display: none;">
-        <span class="nav-icon">🛡️</span>
+        <span class="nav-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </span>
         <span id="nav-lbl-admin">Admin</span>
       </button>
       <!-- CONDITIONAL RENDERING: Rendered ONLY for regular non-admin users -->
       <button class="nav-item" id="nav-item-feedback" data-view="view-feedback" style="display: none;">
-        <span class="nav-icon">💬</span>
+        <span class="nav-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        </span>
         <span id="nav-lbl-feedback">Feedback</span>
       </button>
     </nav>

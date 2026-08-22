@@ -1,14 +1,12 @@
 // ==============================================================================
 // FlowTrack Pro: Mobile-First Client Logic & Resilient Local-Cloud Sync Engine
-// Features: Language Switcher (ID / EN), Compact Control Balance,
-// Streamlined Realized Expenses + AI Financial Advisor, Interim Sync,
-// Zero-Based Control Balance, Multi-Date Calendar Picker (1-31 Burn Engine),
-// Permanent LocalStorage Persistence, Multi-Tenant Auth & Take-Out Management
+// Complete Bilingual I18N Engine (ID / EN), Vector SVG UI, Clean Layouts,
+// Compact Control Balance, Realized Expense Stream + AI Financial Advisor
 // ==============================================================================
 
 const API_BASE = window.location.origin;
 
-const MONTH_NAMES = [
+const MONTH_NAMES_ID = [
   'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
   'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
 ];
@@ -38,6 +36,7 @@ let currentLang = localStorage.getItem('flowtrack_lang') || 'id';
 
 const I18N = {
   id: {
+    appSub: 'Smart Cashflow & Burn Tracker',
     navDashboard: 'Dashboard',
     navBudgets: 'Anggaran',
     navExpenses: 'Pengeluaran',
@@ -45,21 +44,51 @@ const I18N = {
     navMutasi: 'Mutasi',
     navAdmin: 'Admin',
     navFeedback: 'Feedback',
-    operatingModeEvaluation: 'ðŸ“œ Mode Evaluasi (Bulan Ditutup)',
-    operatingModePlanning: 'ðŸ“… Mode Perencanaan (Awal Bulan)',
-    operatingModeProjection: 'âš¡ Proyeksi Saldo Ideal',
+    operatingModeEvaluation: 'Mode Evaluasi (Bulan Ditutup)',
+    operatingModePlanning: 'Mode Perencanaan (Awal Bulan)',
+    operatingModeProjection: 'Proyeksi Berjalan',
     heroSubtitleProjection: 'PROYEKSI SALDO IDEAL',
     heroSubtitleEvaluation: 'EVALUASI ARUS KAS AKHIR BULAN',
     heroSubtitlePlanning: 'PERENCANAAN ANGGARAN AWAL',
     timeElapsed: 'Waktu Berjalan',
-    cashRealityTitle: 'Input Realita Kas Anda',
-    cashRealitySub: 'Saldo Dompet & Rekening',
-    totalCashTitle: 'Total Kas Riil Tersedia:',
+    heroStatIncome: 'Total Pemasukan',
+    heroStatBurnProjection: 'Target Burn Jatuh Tempo',
+    heroStatBurnEvaluation: 'Total Realisasi Terpakai',
+    heroStatBurnPlanning: 'Total Target Anggaran',
+    realityTitle: 'Input Realita Kas Anda',
+    realitySub: 'Saldo Dompet & Rekening',
+    accBank: 'Saldo di Bank',
+    accWallet: 'Cash on Hand',
+    accEmoney: 'Saldo E-Money',
+    accOther: 'Lain-lain',
+    totalCashLbl: 'Total Kas Riil Tersedia:',
+    statusRowLbl: 'Status Arus Kas:',
     statusOverbudget: 'OVERBUDGET',
     statusHemat: 'HEMAT',
-    notesTitle: 'Catatan & Justifikasi Kas',
-    notesSub: 'Tersimpan Otomatis',
+    notesHeader: 'Catatan & Justifikasi Kas',
+    notesAutoSaved: 'Tersimpan Otomatis',
     notesPlaceholder: 'Tulis alasan jika overbudget atau catatan kas mendesak bulan ini...',
+    flowTitle: 'Alur Perhitungan Saldo Ideal',
+    flowBadge: 'Formula Ringkas',
+    flowLblInc: 'Pemasukan Bulan Ini',
+    flowLblBulanan: 'Kebutuhan Bulanan (100%)',
+    flowSubBulanan: 'Sewa Kos, Listrik, Pulsa',
+    flowLblVariable: 'Pengeluaran Rutin Berjalan',
+    flowSubVariable: 'Kebutuhan Pos Terjadwal',
+    flowLblResult: 'Proyeksi Saldo Ideal Hari Ini',
+    flowSubResult: 'Batas aman saldo dompet hari ini',
+    summaryBudgetTitle: 'Ringkasan Pos Anggaran',
+    btnViewAll: 'Lihat Semua âž”',
+    mutasiCardTitle: 'Upload Mutasi Rekening Bank',
+    mutasiCardSub: 'CSV & PDF Statement',
+    mutasiCardDesc: 'Unggah mutasi rekening bank (format .CSV atau .PDF) untuk merealisasikan pos anggaran bulan target. Sistem akan mencocokkan kata kunci pengeluaran otomatis.',
+    mutasiLblMonth: 'Bulan Mutasi:',
+    mutasiLblYear: 'Tahun Mutasi:',
+    mutasiLblFile: 'Pilih Dokumen Mutasi (.CSV, .PDF, .TXT):',
+    btnLoadSample: 'Muat Contoh Teks Mutasi Rekening Bank',
+    btnProcessMain: 'ðŸš€ Proses Mutasi & Realisasikan Anggaran',
+    txHistoryTitle: 'Riwayat Transaksi Mutasi',
+    txHistorySub: 'Terekonsiliasi',
     cbTitle: 'Control Balance (Zero-Based)',
     cbBtnSync: 'Alokasikan Surplus',
     cbLblIncome: 'Pemasukan',
@@ -91,13 +120,27 @@ const I18N = {
     aiLblRealized: 'Total Realisasi',
     aiLblAvg: 'Rata-rata/Hari',
     aiDiagHeader: 'ðŸ’¡ Diagnosa & Rekomendasi Cerdas AI:',
+    catSemua: 'Semua',
+    catDasar: 'Dasar',
+    catPribadi: 'Pribadi',
+    catHiburan: 'Hiburan',
+    catInsidental: 'Insidental',
+    catSurplus: 'Alokasi Goal',
+    freqHarian: 'Harian',
+    freqMingguan: 'Mingguan',
+    freqBulanan: 'Bulanan',
+    usedWord: 'Terpakai: ',
+    remWord: 'Sisa ',
+    minusWord: 'Minus ',
+    dateWord: 'Tgl: ',
+    flatWord: 'Flat Harian',
     dayWord: 'Hari',
     ofWord: 'dari',
     daysWord: 'hari',
-    perDayWord: '/hari',
-    safeDailyWord: 'alokasi aman belanja harian'
+    perDayWord: '/hari'
   },
   en: {
+    appSub: 'Smart Cashflow & Burn Tracker',
     navDashboard: 'Dashboard',
     navBudgets: 'Budgets',
     navExpenses: 'Expenses',
@@ -105,21 +148,51 @@ const I18N = {
     navMutasi: 'Statement',
     navAdmin: 'Admin',
     navFeedback: 'Feedback',
-    operatingModeEvaluation: 'ðŸ“œ Evaluation Mode (Closed Month)',
-    operatingModePlanning: 'ðŸ“… Planning Mode (Start of Month)',
-    operatingModeProjection: 'âš¡ Operating Projection',
+    operatingModeEvaluation: 'Evaluation Mode (Closed Month)',
+    operatingModePlanning: 'Planning Mode (Start of Month)',
+    operatingModeProjection: 'Operating Projection',
     heroSubtitleProjection: 'IDEAL BALANCE PROJECTION',
     heroSubtitleEvaluation: 'MONTH-END CASHFLOW EVALUATION',
     heroSubtitlePlanning: 'EARLY BUDGET PLANNING',
     timeElapsed: 'Time Elapsed',
-    cashRealityTitle: 'Input Real Cash Accounts',
-    cashRealitySub: 'Wallet, Bank & E-Money Balances',
-    totalCashTitle: 'Total Actual Cash Available:',
+    heroStatIncome: 'Total Income',
+    heroStatBurnProjection: 'Target Burn To Date',
+    heroStatBurnEvaluation: 'Total Realized Spent',
+    heroStatBurnPlanning: 'Total Target Budget',
+    realityTitle: 'Input Real Cash Accounts',
+    realitySub: 'Wallet, Bank & E-Money Balances',
+    accBank: 'Bank Balance',
+    accWallet: 'Cash on Hand',
+    accEmoney: 'E-Money / Wallet',
+    accOther: 'Other Accounts',
+    totalCashLbl: 'Total Actual Cash Available:',
+    statusRowLbl: 'Cashflow Status:',
     statusOverbudget: 'OVERBUDGET',
     statusHemat: 'ON-TRACK',
-    notesTitle: 'Cash & Overbudget Notes',
-    notesSub: 'Auto-Saved',
+    notesHeader: 'Cash & Overbudget Notes',
+    notesAutoSaved: 'Auto-Saved',
     notesPlaceholder: 'Write reasons for overbudget or urgent expenses this month...',
+    flowTitle: 'Cashflow Projection Formula',
+    flowBadge: 'Summary Formula',
+    flowLblInc: 'Monthly Income',
+    flowLblBulanan: 'Monthly Fixed Needs (100%)',
+    flowSubBulanan: 'Rent, Utilities, Bills',
+    flowLblVariable: 'Scheduled Variable Expenses',
+    flowSubVariable: 'Scheduled Due Categories',
+    flowLblResult: 'Today\'s Ideal Balance',
+    flowSubResult: 'Safe wallet balance limit today',
+    summaryBudgetTitle: 'Budget Summary',
+    btnViewAll: 'View All âž”',
+    mutasiCardTitle: 'Upload Bank Statement',
+    mutasiCardSub: 'CSV & PDF Statement',
+    mutasiCardDesc: 'Upload bank statement (.CSV or .PDF) to realize target month budgets. System automatically matches transaction descriptions.',
+    mutasiLblMonth: 'Statement Month:',
+    mutasiLblYear: 'Statement Year:',
+    mutasiLblFile: 'Select Statement File (.CSV, .PDF, .TXT):',
+    btnLoadSample: 'Load Sample Bank Statement Text',
+    btnProcessMain: 'ðŸš€ Process Statement & Realize Budgets',
+    txHistoryTitle: 'Transaction History',
+    txHistorySub: 'Reconciled',
     cbTitle: 'Zero-Based Control Balance',
     cbBtnSync: 'Allocate Surplus',
     cbLblIncome: 'Total Income',
@@ -151,11 +224,24 @@ const I18N = {
     aiLblRealized: 'Total Realized',
     aiLblAvg: 'Daily Average',
     aiDiagHeader: 'ðŸ’¡ AI Diagnostics & Actionable Advice:',
+    catSemua: 'All',
+    catDasar: 'Basic',
+    catPribadi: 'Personal',
+    catHiburan: 'Entertainment',
+    catInsidental: 'Incidental',
+    catSurplus: 'Goal Surplus',
+    freqHarian: 'Daily',
+    freqMingguan: 'Weekly',
+    freqBulanan: 'Monthly',
+    usedWord: 'Used: ',
+    remWord: 'Remaining ',
+    minusWord: 'Minus ',
+    dateWord: 'Date: ',
+    flatWord: 'Flat Daily',
     dayWord: 'Day',
     ofWord: 'of',
     daysWord: 'days',
-    perDayWord: '/day',
-    safeDailyWord: 'safe daily allowance'
+    perDayWord: '/day'
   }
 };
 
@@ -178,38 +264,100 @@ function setLanguage(lang) {
     if (btnId) btnId.classList.remove('active');
   }
 
+  updateMonthDropdownLabels();
   applyStaticTranslations();
+  updateCategoryTabsLabels();
+  updateHeaderRealTimeDate();
   renderHeroCard();
   renderCashReality();
   renderControlBalance();
+  renderIncomesLists();
   renderBudgetsLists();
   renderGoalsList();
+  renderTransactionsTable();
   if (appState.activeView === 'view-analytics') {
     generateAiAnalytics();
   }
 }
 
+function updateMonthDropdownLabels() {
+  const months = currentLang === 'en' ? MONTH_NAMES_EN : MONTH_NAMES_ID;
+  ['select-month', 'mutasi-target-month', 'dup-source-month', 'dup-target-month'].forEach(selectId => {
+    const el = document.getElementById(selectId);
+    if (el) {
+      const curVal = el.value;
+      for (let i = 0; i < el.options.length; i++) {
+        el.options[i].text = months[i];
+      }
+    }
+  });
+}
+
+function updateCategoryTabsLabels() {
+  const dict = I18N[currentLang] || I18N['id'];
+  document.querySelectorAll('[data-category]').forEach(btn => {
+    const cat = btn.getAttribute('data-category');
+    if (cat === 'Semua') btn.textContent = dict.catSemua;
+    else if (cat === 'Dasar') btn.textContent = dict.catDasar;
+    else if (cat === 'Pribadi') btn.textContent = dict.catPribadi;
+    else if (cat === 'Hiburan') btn.textContent = dict.catHiburan;
+    else if (cat === 'Insidental') btn.textContent = dict.catInsidental;
+    else if (cat === 'Alokasi Surplus') btn.textContent = dict.catSurplus;
+  });
+
+  document.querySelectorAll('[data-analytics-cat]').forEach(btn => {
+    const cat = btn.getAttribute('data-analytics-cat');
+    if (cat === 'Semua') btn.textContent = dict.catSemua;
+    else if (cat === 'Dasar') btn.textContent = dict.catDasar;
+    else if (cat === 'Pribadi') btn.textContent = dict.catPribadi;
+    else if (cat === 'Hiburan') btn.textContent = dict.catHiburan;
+    else if (cat === 'Insidental') btn.textContent = dict.catInsidental;
+    else if (cat === 'Alokasi Surplus') btn.textContent = dict.catSurplus;
+  });
+}
+
 function applyStaticTranslations() {
   const dict = I18N[currentLang] || I18N['id'];
   
-  // Navigation Bar
-  const navMap = {
+  const textMap = {
+    'txt-app-sub': dict.appSub,
     'nav-lbl-dashboard': dict.navDashboard,
     'nav-lbl-budgets': dict.navBudgets,
     'nav-lbl-expenses': dict.navExpenses,
     'nav-lbl-goals': dict.navGoals,
     'nav-lbl-mutasi': dict.navMutasi,
     'nav-lbl-admin': dict.navAdmin,
-    'nav-lbl-feedback': dict.navFeedback
-  };
-
-  for (const [id, text] of Object.entries(navMap)) {
-    const el = document.getElementById(id);
-    if (el) el.textContent = text;
-  }
-
-  // Control Balance Labels
-  const cbMap = {
+    'nav-lbl-feedback': dict.navFeedback,
+    'txt-reality-title': dict.realityTitle,
+    'txt-reality-sub': dict.realitySub,
+    'txt-acc-bank': dict.accBank,
+    'txt-acc-wallet': dict.accWallet,
+    'txt-acc-emoney': dict.accEmoney,
+    'txt-acc-other': dict.accOther,
+    'txt-total-cash-lbl': dict.totalCashLbl,
+    'txt-status-row-lbl': dict.statusRowLbl,
+    'txt-notes-header': dict.notesHeader,
+    'txt-notes-auto-saved': dict.notesAutoSaved,
+    'txt-flow-title': dict.flowTitle,
+    'txt-flow-badge': dict.flowBadge,
+    'txt-flow-lbl-inc': dict.flowLblInc,
+    'txt-flow-lbl-bulanan': dict.flowLblBulanan,
+    'txt-flow-sub-bulanan': dict.flowSubBulanan,
+    'txt-flow-lbl-variable': dict.flowLblVariable,
+    'txt-flow-lbl-result': dict.flowLblResult,
+    'txt-flow-sub-result': dict.flowSubResult,
+    'txt-summary-budget-title': dict.summaryBudgetTitle,
+    'txt-btn-view-all': dict.btnViewAll,
+    'txt-mutasi-card-title': dict.mutasiCardTitle,
+    'txt-mutasi-card-sub': dict.mutasiCardSub,
+    'txt-mutasi-card-desc': dict.mutasiCardDesc,
+    'txt-mutasi-lbl-month': dict.mutasiLblMonth,
+    'txt-mutasi-lbl-year': dict.mutasiLblYear,
+    'txt-mutasi-lbl-file': dict.mutasiLblFile,
+    'txt-btn-load-sample': dict.btnLoadSample,
+    'txt-btn-process-main': dict.btnProcessMain,
+    'txt-tx-history-title': dict.txHistoryTitle,
+    'txt-tx-history-sub': dict.txHistorySub,
     'txt-cb-title': dict.cbTitle,
     'txt-cb-btn-sync': dict.cbBtnSync,
     'txt-cb-lbl-income': dict.cbLblIncome,
@@ -236,10 +384,13 @@ function applyStaticTranslations() {
     'txt-ai-diag-header': dict.aiDiagHeader
   };
 
-  for (const [id, text] of Object.entries(cbMap)) {
+  for (const [id, text] of Object.entries(textMap)) {
     const el = document.getElementById(id);
     if (el) el.textContent = text;
   }
+
+  const notesEl = document.getElementById('cash-reality-notes');
+  if (notesEl) notesEl.placeholder = dict.notesPlaceholder;
 }
 
 // -----------------------------------------------------------------------------
@@ -261,7 +412,7 @@ let appState = {
   currentMonth: 'Agustus',
   currentYear: 2026,
   currentDay: 22,
-  monthStatus: 'CURRENT_PROJECTION', // PAST_EVALUATION, CURRENT_PROJECTION, FUTURE_PLANNING
+  monthStatus: 'CURRENT_PROJECTION',
   activeView: 'view-dashboard',
   idealBalanceData: null,
   
@@ -284,17 +435,9 @@ let appState = {
 };
 
 // Calendar Date Picker Modal State
-let addModalTiming = {
-  mode: 'flat', // 'flat' or 'dates'
-  selectedDates: []
-};
+let addModalTiming = { mode: 'flat', selectedDates: [] };
+let editModalTiming = { mode: 'flat', selectedDates: [] };
 
-let editModalTiming = {
-  mode: 'flat', // 'flat' or 'dates'
-  selectedDates: []
-};
-
-// Format Currency IDR
 function formatIDR(val) {
   if (val === null || val === undefined || isNaN(val)) return 'Rp 0';
   const num = Math.round(Number(val));
@@ -304,22 +447,19 @@ function formatIDR(val) {
 }
 
 function getDaysInMonth(year, monthName) {
-  const mIdx = MONTH_NAMES.findIndex(m => m.toLowerCase() === monthName.toLowerCase());
+  const mIdx = MONTH_NAMES_ID.findIndex(m => m.toLowerCase() === monthName.toLowerCase());
   const m = mIdx >= 0 ? mIdx + 1 : 8;
   return new Date(year, m, 0).getDate();
 }
 
 function getMonthDisplayName(monthName) {
   if (currentLang === 'en') {
-    const idx = MONTH_NAMES.findIndex(m => m.toLowerCase() === monthName.toLowerCase());
+    const idx = MONTH_NAMES_ID.findIndex(m => m.toLowerCase() === monthName.toLowerCase());
     return idx >= 0 ? MONTH_NAMES_EN[idx] : monthName;
   }
   return monthName;
 }
 
-// -----------------------------------------------------------------------------
-// PERMANENT LOCAL STORAGE PERSISTENCE ENGINE (ANTI-LOST GUARANTEE)
-// -----------------------------------------------------------------------------
 function getUserStorageKey(key) {
   const uid = (currentUser && currentUser.user_id) ? currentUser.user_id : 'usr_guest';
   return 'flowtrack_' + uid + '_' + key;
@@ -334,7 +474,6 @@ function saveUserDataToStorage() {
     localStorage.setItem(getUserStorageKey('goals'), JSON.stringify(appState.financialGoals));
     localStorage.setItem(getUserStorageKey('transactions'), JSON.stringify(appState.transactions));
     
-    // Save Month Justification Notes
     const notesEl = document.getElementById('cash-reality-notes');
     if (notesEl) {
       localStorage.setItem(getUserStorageKey('notes_' + appState.currentMonth + '_' + appState.currentYear), notesEl.value);
@@ -358,7 +497,6 @@ function loadCashAccountsFromStorage() {
       if (otherInput) otherInput.value = appState.cashAccounts.other || '';
     }
 
-    // Load Month Justification Notes & Update Badge
     const notesEl = document.getElementById('cash-reality-notes');
     const badgeNotes = document.getElementById('cash-notes-period-badge');
     if (badgeNotes) badgeNotes.textContent = getMonthDisplayName(appState.currentMonth) + ' ' + appState.currentYear;
@@ -370,7 +508,7 @@ function loadCashAccountsFromStorage() {
 }
 
 // -----------------------------------------------------------------------------
-// ZERO-BASED CONTROL BALANCE & AUTO-SURPLUS ENGINE
+// CONTROL BALANCE & AUTO-SURPLUS ENGINE
 // -----------------------------------------------------------------------------
 function renderControlBalance() {
   const totalIncome = (appState.incomes || []).reduce((sum, i) => sum + Number(i.amount), 0);
@@ -506,7 +644,7 @@ function ensureMonthlySurplusBudgetExists() {
 }
 
 // -----------------------------------------------------------------------------
-// 5. ANALISIS PENGELUARAN & AI ADVISOR ENGINE
+// ANALISIS PENGELUARAN & AI ADVISOR ENGINE
 // -----------------------------------------------------------------------------
 function generateAiAnalytics() {
   const monthTitle = document.getElementById('analytics-month-title');
@@ -531,7 +669,6 @@ function generateAiAnalytics() {
     ? (appState.idealBalanceData.calculation_breakdown.proportional_burn_rate_variable || (totalTarget * (currentDay / totalDays)))
     : (totalTarget * (currentDay / totalDays));
 
-  // Compute Health Score (0 - 100)
   let healthScore = 85;
   if (expectedBurn > 0) {
     const ratio = totalRealized / expectedBurn;
@@ -554,7 +691,6 @@ function generateAiAnalytics() {
   if (realizedEl) realizedEl.textContent = formatIDR(totalRealized);
   if (dailyEl) dailyEl.textContent = formatIDR(dailyAvg) + t('perDayWord');
 
-  // Category breakdown
   let catSpend = { Dasar: 0, Pribadi: 0, Hiburan: 0, Insidental: 0, 'Alokasi Surplus': 0 };
   (appState.budgets || []).forEach(b => {
     const cat = b.category_type || 'Dasar';
@@ -618,9 +754,7 @@ function renderAnalyticsExpensesStream() {
   const container = document.getElementById('analytics-expenses-stream-list');
   if (!container) return;
 
-  const currentMonthTx = (appState.transactions || []).filter(tx => {
-    return true; // Show active transactions
-  });
+  const currentMonthTx = (appState.transactions || []).filter(tx => true);
 
   const filteredTx = appState.activeAnalyticsCategory === 'Semua'
     ? currentMonthTx
@@ -736,9 +870,6 @@ async function submitQuickExpense() {
   alert(alertMsg);
 }
 
-// -----------------------------------------------------------------------------
-// INTERIM STATEMENT PARSER
-// -----------------------------------------------------------------------------
 function loadInterimSample() {
   const textarea = document.getElementById('interim-statement-textarea');
   if (textarea) {
@@ -933,7 +1064,7 @@ async function authFetch(endpoint, options = {}) {
 }
 
 // -----------------------------------------------------------------------------
-// SCREEN GATEWAY & CONDITIONAL RENDERING
+// SCREEN GATEWAY & PROFILE
 // -----------------------------------------------------------------------------
 function syncAuthAndScreenState() {
   const landingScreen = document.getElementById('login-landing-screen');
@@ -1055,9 +1186,7 @@ async function submitLandingLogin() {
     const isAdmin = (emailOrUser.toLowerCase() === 'zidanmuzaki13' || emailOrUser.toLowerCase() === 'zidanmuzaki2002@gmail.com') && password === 'zakiya03';
     
     let localUsers = [];
-    try {
-      localUsers = JSON.parse(localStorage.getItem('flowtrack_local_users') || '[]');
-    } catch (e) {}
+    try { localUsers = JSON.parse(localStorage.getItem('flowtrack_local_users') || '[]'); } catch (e) {}
 
     const matchedLocal = localUsers.find(u => 
       (u.email.toLowerCase() === emailOrUser.toLowerCase() || u.username.toLowerCase() === emailOrUser.toLowerCase()) && 
@@ -1339,7 +1468,7 @@ async function takeOutUser(userId, username) {
 }
 
 // -----------------------------------------------------------------------------
-// FEEDBACK ENGINE (USER SUBMISSION & ADMIN INBOX)
+// FEEDBACK ENGINE
 // -----------------------------------------------------------------------------
 function setFeedbackRating(ratingNum) {
   document.getElementById('feedback-rating-val').value = ratingNum;
@@ -1459,14 +1588,14 @@ function renderFeedbacksList(container, feedbacks, isAdminView) {
   container.innerHTML = feedbacks.map(f => {
     const ratingNum = f.rating || 5;
     const starsHtml = '&#9733;'.repeat(ratingNum) + '&#9734;'.repeat(Math.max(0, 5 - ratingNum));
-    const dateStr = f.created_at ? f.created_at.substring(0, 10) : 'Hari ini';
+    const dateStr = f.created_at ? f.created_at.substring(0, 10) : (currentLang === 'en' ? 'Today' : 'Hari ini');
     const statusBg = f.status === 'Selesai' ? 'rgba(16, 185, 129, 0.12)' : '#FEF3C7';
     const statusColor = f.status === 'Selesai' ? '#047857' : '#B45309';
 
     const adminActions = isAdminView ? (
       '<div style="display: flex; gap: 6px; margin-top: 8px;">' +
-        '<button class="btn-success-sm" onclick="toggleFeedbackStatus(\'' + f.feedback_id + '\')">Tandai Selesai</button>' +
-        '<button class="btn-danger-sm" onclick="deleteFeedback(\'' + f.feedback_id + '\')">Hapus</button>' +
+        '<button class="btn-success-sm" onclick="toggleFeedbackStatus(\'' + f.feedback_id + '\')">' + (currentLang === 'en' ? 'Mark Completed' : 'Tandai Selesai') + '</button>' +
+        '<button class="btn-danger-sm" onclick="deleteFeedback(\'' + f.feedback_id + '\')">' + (currentLang === 'en' ? 'Delete' : 'Hapus') + '</button>' +
       '</div>'
     ) : '';
 
@@ -1476,7 +1605,7 @@ function renderFeedbacksList(container, feedbacks, isAdminView) {
           '<div>' +
             '<div style="font-weight: 700; font-size: 0.85rem; color: var(--text-primary);">' + f.subject + '</div>' +
             '<div style="font-size: 0.7rem; color: var(--text-secondary);">' +
-              (isAdminView ? ('Dari: <strong>' + (f.username || f.email) + '</strong> (' + f.email + ') &bull; ') : '') +
+              (isAdminView ? ('From: <strong>' + (f.username || f.email) + '</strong> (' + f.email + ') &bull; ') : '') +
               f.category + ' &bull; <span style="color: #F59E0B; font-size: 0.85rem;">' + starsHtml + '</span> &bull; ' + dateStr +
             '</div>' +
           '</div>' +
@@ -1510,7 +1639,7 @@ async function toggleFeedbackStatus(feedbackId) {
 }
 
 async function deleteFeedback(feedbackId) {
-  if (!confirm('Hapus feedback ini?')) return;
+  if (!confirm(currentLang === 'en' ? 'Delete this feedback?' : 'Hapus feedback ini?')) return;
 
   let localFeedbacks = [];
   try { localFeedbacks = JSON.parse(localStorage.getItem('flowtrack_local_feedbacks') || '[]'); } catch (e) {}
@@ -1692,17 +1821,17 @@ async function fetchIdealBalance() {
     const month = appState.currentMonth;
     const year = appState.currentYear;
     const totalDays = getDaysInMonth(year, month);
-    const selectedMonthIndex = MONTH_NAMES.findIndex(m => m.toLowerCase() === month.toLowerCase());
+    const selectedMonthIndex = MONTH_NAMES_ID.findIndex(m => m.toLowerCase() === month.toLowerCase());
 
     let monthStatus = 'CURRENT_PROJECTION';
     let currentDay = OPERATING_ANCHOR_DAY;
 
     if (year < OPERATING_ANCHOR_YEAR || (year === OPERATING_ANCHOR_YEAR && selectedMonthIndex < OPERATING_ANCHOR_MONTH_INDEX)) {
       monthStatus = 'PAST_EVALUATION';
-      currentDay = totalDays; // Full 100% time for past evaluation!
+      currentDay = totalDays;
     } else if (year > OPERATING_ANCHOR_YEAR || (year === OPERATING_ANCHOR_YEAR && selectedMonthIndex > OPERATING_ANCHOR_MONTH_INDEX)) {
       monthStatus = 'FUTURE_PLANNING';
-      currentDay = 0; // Day 0 for future planning!
+      currentDay = 0;
     } else {
       monthStatus = 'CURRENT_PROJECTION';
       currentDay = Math.min(OPERATING_ANCHOR_DAY, totalDays);
@@ -1728,7 +1857,6 @@ async function fetchIdealBalance() {
       } else if (monthStatus === 'FUTURE_PLANNING') {
         itemBurn = 0;
       } else {
-        // Multi-Date Calendar Calculation
         let dates = [];
         if (Array.isArray(b.selected_dates) && b.selected_dates.length > 0) {
           dates = b.selected_dates.map(Number);
@@ -1826,10 +1954,10 @@ function renderHeroCard() {
     if (elBurn) elBurn.textContent = formatIDR(d.actual_vs_ideal_comparison.total_realisasi_used_to_date);
 
     const elIncLbl = document.getElementById('hero-stat-income-label');
-    if (elIncLbl) elIncLbl.textContent = currentLang === 'en' ? 'Total Income' : 'Total Pemasukan';
+    if (elIncLbl) elIncLbl.textContent = t('heroStatIncome');
 
     const elBurnLbl = document.getElementById('hero-stat-burn-label');
-    if (elBurnLbl) elBurnLbl.textContent = currentLang === 'en' ? 'Total Realized Spent' : 'Total Realisasi Terpakai';
+    if (elBurnLbl) elBurnLbl.textContent = t('heroStatBurnEvaluation');
 
   } else if (appState.monthStatus === 'FUTURE_PLANNING') {
     if (heroCard) heroCard.className = 'card hero-card';
@@ -1859,10 +1987,10 @@ function renderHeroCard() {
     if (elBurn) elBurn.textContent = formatIDR(d.calculation_breakdown.total_target_bulanan_100pct);
 
     const elIncLbl = document.getElementById('hero-stat-income-label');
-    if (elIncLbl) elIncLbl.textContent = currentLang === 'en' ? 'Planned Income' : 'Rencana Pemasukan';
+    if (elIncLbl) elIncLbl.textContent = t('heroStatIncome');
 
     const elBurnLbl = document.getElementById('hero-stat-burn-label');
-    if (elBurnLbl) elBurnLbl.textContent = currentLang === 'en' ? 'Total Target Budget' : 'Total Target Anggaran';
+    if (elBurnLbl) elBurnLbl.textContent = t('heroStatBurnPlanning');
 
   } else {
     if (heroCard) heroCard.className = 'card hero-card';
@@ -1896,10 +2024,10 @@ function renderHeroCard() {
     if (elBurn) elBurn.textContent = formatIDR(d.calculation_breakdown.proportional_burn_rate_variable);
 
     const elIncLbl = document.getElementById('hero-stat-income-label');
-    if (elIncLbl) elIncLbl.textContent = currentLang === 'en' ? 'Total Income' : 'Total Pemasukan';
+    if (elIncLbl) elIncLbl.textContent = t('heroStatIncome');
 
     const elBurnLbl = document.getElementById('hero-stat-burn-label');
-    if (elBurnLbl) elBurnLbl.textContent = currentLang === 'en' ? 'Target Burn To Date' : 'Target Burn Jatuh Tempo';
+    if (elBurnLbl) elBurnLbl.textContent = t('heroStatBurnProjection');
   }
 }
 
@@ -1978,13 +2106,13 @@ function renderFlowFormula() {
 
   if (elInc) elInc.textContent = formatIDR(b.total_pendapatan);
   if (elBul) elBul.textContent = '- ' + formatIDR(b.total_target_bulanan_100pct);
-  if (elSubHar) elSubHar.textContent = currentLang === 'en' ? 'Scheduled Due Categories' : 'Kebutuhan Pos Terjadwal';
+  if (elSubHar) elSubHar.textContent = t('flowSubVariable');
   if (elHar) elHar.textContent = '- ' + formatIDR(b.proportional_burn_rate_variable);
   if (elRes) elRes.textContent = formatIDR(b.proyeksi_saldo_ideal);
 }
 
 // -----------------------------------------------------------------------------
-// 4. RENDER INCOMES & BUDGETS (WITH ZERO-BASED GOAL LINKING & SVG ICONS)
+// 4. RENDER INCOMES & BUDGETS
 // -----------------------------------------------------------------------------
 function renderIncomesLists() {
   const containerDashboard = document.getElementById('incomes-list-preview');
@@ -2001,7 +2129,7 @@ function renderIncomesLists() {
           '</div>' +
           '<div style="display: flex; align-items: center; gap: 8px;">' +
             '<span style="font-weight: 700; color: var(--accent-positive);">' + formatIDR(inc.amount) + '</span>' +
-            '<button onclick="deleteIncome(\'' + inc.income_id + '\')" title="Hapus pemasukan" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); color: #EF4444; cursor: pointer; font-size: 1rem; line-height: 1; font-weight: 700; padding: 1px 7px; border-radius: 4px;">&times;</button>' +
+            '<button onclick="deleteIncome(\'' + inc.income_id + '\')" title="Hapus" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); color: #EF4444; cursor: pointer; font-size: 1rem; line-height: 1; font-weight: 700; padding: 1px 7px; border-radius: 4px;">&times;</button>' +
           '</div>' +
         '</div>'
       ).join('');
@@ -2044,23 +2172,30 @@ function renderBudgetsLists() {
     return items.map(item => {
       const balance = Number(item.balance !== undefined ? item.balance : (item.target_anggaran - item.realisasi_used));
       const balanceClass = balance >= 0 ? 'positive' : 'negative';
-      const balanceText = balance >= 0 ? ((currentLang === 'en' ? 'Remaining ' : 'Sisa ') + formatIDR(balance)) : ('Minus ' + formatIDR(Math.abs(balance)));
+      const balanceText = balance >= 0 ? (t('remWord') + formatIDR(balance)) : (t('minusWord') + formatIDR(Math.abs(balance)));
       
       let goalBadge = '';
       if (item.category_type === 'Alokasi Surplus' || item.linked_goal_id) {
         if (item.linked_goal_id) {
           const g = (appState.financialGoals || []).find(x => x.goal_id === item.linked_goal_id);
-          goalBadge = '<span style="font-size: 0.68rem; color: #4338CA; background: #EEF2FF; padding: 2px 6px; border-radius: 4px; font-weight: 600; border: 1px solid #C7D2FE;">ðŸŽ¯ ' + (g ? ('[' + g.goal_code + '] ' + g.goal_name) : 'Goal Linked') + '</span>';
+          goalBadge = '<span style="font-size: 0.68rem; color: #4338CA; background: #EEF2FF; padding: 2px 6px; border-radius: 4px; font-weight: 600; border: 1px solid #C7D2FE;">' + (g ? ('[' + g.goal_code + '] ' + g.goal_name) : 'Goal Linked') + '</span>';
         } else if (item.category_type === 'Alokasi Surplus') {
-          goalBadge = '<span style="font-size: 0.68rem; color: #D97706; background: #FEF3C7; padding: 2px 6px; border-radius: 4px; font-weight: 600;">âš ï¸ ' + (currentLang === 'en' ? 'Click to Link Goal' : 'Klik untuk Hubungkan Goal') + '</span>';
+          goalBadge = '<span style="font-size: 0.68rem; color: #D97706; background: #FEF3C7; padding: 2px 6px; border-radius: 4px; font-weight: 600;">' + (currentLang === 'en' ? 'Link Goal' : 'Hubungkan Goal') + '</span>';
         }
       }
 
-      let timingDisplay = item.timing_pattern || (currentLang === 'en' ? 'Flat Daily' : 'Flat Harian');
+      let timingDisplay = item.timing_pattern || t('flatWord');
       if (Array.isArray(item.selected_dates) && item.selected_dates.length > 0) {
-        timingDisplay = (currentLang === 'en' ? 'Date: ' : 'Tgl: ') + item.selected_dates.join(', ');
+        timingDisplay = t('dateWord') + item.selected_dates.join(', ');
       }
       const timingBadge = '<span class="timing-tag">' + timingDisplay + '</span>';
+
+      let freqDisplay = item.frekuensi;
+      if (currentLang === 'en') {
+        if (item.frekuensi === 'Harian') freqDisplay = 'Daily';
+        else if (item.frekuensi === 'Mingguan') freqDisplay = 'Weekly';
+        else if (item.frekuensi === 'Bulanan') freqDisplay = 'Monthly';
+      }
 
       return (
         '<div class="budget-item-card" onclick="openBudgetDetailModalById(\'' + item.budget_id + '\')">' +
@@ -2068,14 +2203,14 @@ function renderBudgetsLists() {
             '<div class="item-name">' + item.item_name + '</div>' +
             '<div class="item-category-pill">' +
               '<span>' + item.category_type + '</span>' +
-              '<span class="freq-tag ' + item.frekuensi + '">' + item.frekuensi + '</span>' +
+              '<span class="freq-tag ' + item.frekuensi + '">' + freqDisplay + '</span>' +
               timingBadge +
               goalBadge +
             '</div>' +
           '</div>' +
           '<div class="item-right">' +
             '<div class="item-target">' + formatIDR(item.target_anggaran) + '</div>' +
-            '<div class="item-used">' + (currentLang === 'en' ? 'Used: ' : 'Terpakai: ') + formatIDR(item.realisasi_used) + '</div>' +
+            '<div class="item-used">' + t('usedWord') + formatIDR(item.realisasi_used) + '</div>' +
             '<div><span class="item-balance-tag ' + balanceClass + '">' + balanceText + '</span></div>' +
           '</div>' +
         '</div>'
@@ -2089,7 +2224,7 @@ function renderBudgetsLists() {
 }
 
 // -----------------------------------------------------------------------------
-// 6. RENDER GOALS (WITH CLEAN SVG ICONS)
+// 6. RENDER GOALS
 // -----------------------------------------------------------------------------
 function renderGoalsList() {
   const containerDashboard = document.getElementById('goals-container');
@@ -2158,7 +2293,7 @@ function populateGoalDropdowns() {
 }
 
 // -----------------------------------------------------------------------------
-// 7. RENDER TRANSACTIONS (WITH CLEAN SVG ICONS)
+// 7. RENDER TRANSACTIONS
 // -----------------------------------------------------------------------------
 function renderTransactionsTable() {
   const container = document.getElementById('mutasi-transactions-list');
@@ -2277,7 +2412,6 @@ function openAddBudgetModal() {
   document.getElementById('budget-nominal-satuan').value = '';
   document.getElementById('budget-multiplier').value = '1';
   
-  // Reset Calendar Pickers
   addModalTiming = { mode: 'flat', selectedDates: [] };
   setTimingMode('add', 'flat');
   renderCalendarDaysGrid('add');
@@ -2370,7 +2504,6 @@ async function openBudgetDetailModal(item) {
   document.getElementById('detail-budget-used').textContent = formatIDR(item.realisasi_used);
   document.getElementById('detail-budget-balance').textContent = formatIDR(item.balance);
 
-  // Populate Edit Fields
   const editName = document.getElementById('edit-budget-name');
   const editCat = document.getElementById('edit-budget-cat');
   const editFreq = document.getElementById('edit-budget-freq');
@@ -2385,7 +2518,6 @@ async function openBudgetDetailModal(item) {
   if (editMult) editMult.value = item.multiplier || 1;
   if (editGoal) editGoal.value = item.linked_goal_id || '';
 
-  // Setup Edit Calendar Timing State
   let dates = [];
   if (Array.isArray(item.selected_dates) && item.selected_dates.length > 0) {
     dates = item.selected_dates.map(Number);
@@ -2505,7 +2637,6 @@ async function submitEditBudget() {
 
   alert(currentLang === 'en' ? 'Budget category \'' + name + '\' updated successfully!' : 'Pos anggaran \'' + name + '\' berhasil diperbarui!');
   
-  // Refresh modal views
   document.getElementById('detail-budget-title').textContent = item.item_name;
   document.getElementById('detail-budget-cat').textContent = item.category_type;
   document.getElementById('detail-budget-freq').textContent = item.frekuensi;
@@ -2533,7 +2664,6 @@ async function submitManualTx() {
   item.realisasi_used = (Number(item.realisasi_used) || 0) + amount;
   item.balance = Number(item.target_anggaran) - item.realisasi_used;
 
-  // If item is linked to a Financial Goal, also update the goal's collected progress!
   if (item.linked_goal_id) {
     const linkedG = appState.financialGoals.find(g => g.goal_id === item.linked_goal_id);
     if (linkedG) {
@@ -2696,11 +2826,11 @@ async function deleteSelectedGoal() {
 // 9. TEMPLATE DUPLICATION
 // -----------------------------------------------------------------------------
 function openDuplicateModal() {
-  const curMIdx = MONTH_NAMES.indexOf(appState.currentMonth);
+  const curMIdx = MONTH_NAMES_ID.indexOf(appState.currentMonth);
   const prevMIdx = curMIdx > 0 ? curMIdx - 1 : 11;
   const prevYear = curMIdx > 0 ? appState.currentYear : appState.currentYear - 1;
 
-  document.getElementById('dup-source-month').value = MONTH_NAMES[prevMIdx];
+  document.getElementById('dup-source-month').value = MONTH_NAMES_ID[prevMIdx];
   document.getElementById('dup-source-year').value = prevYear;
   document.getElementById('dup-target-month').value = appState.currentMonth;
   document.getElementById('dup-target-year').value = appState.currentYear;
@@ -2756,7 +2886,7 @@ async function submitDuplicateMonth() {
 }
 
 // -----------------------------------------------------------------------------
-// 10. STATEMENT PARSER (CSV & PDF)
+// 10. STATEMENT PARSER
 // -----------------------------------------------------------------------------
 function setupStatementUploader() {
   const fileInput = document.getElementById('statement-file-input');
@@ -2876,7 +3006,7 @@ function setupStatementUploader() {
 }
 
 // -----------------------------------------------------------------------------
-// PROGRESSIVE WEB APP (PWA) SERVICE WORKER REGISTRATION
+// PROGRESSIVE WEB APP (PWA) REGISTRATION
 // -----------------------------------------------------------------------------
 function registerServiceWorker() {
   if ('serviceWorker' in navigator) {
