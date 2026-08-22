@@ -1,7 +1,7 @@
 // ==============================================================================
 // FlowTrack Pro: Mobile-First Client Logic & Resilient Local-Cloud Sync Engine
-// Complete Bilingual I18N Engine (ID / EN), Volumetric 3D Badges,
-// Collapsible Flow Formula, Category Summaries, PDF.js BCA Parser, Unified Pengeluaran
+// Clean SVG & 3D Volumetric Badges (100% Immune to Mojibake / Character Errors)
+// Bilingual I18N Engine (ID / EN) & Bank Statement PDF Parser
 // ==============================================================================
 
 const API_BASE = window.location.origin;
@@ -38,12 +38,12 @@ const I18N = {
     landingSub: 'Kelola arus kas, proyeksi saldo ideal, dan burn rate proporsional dalam satu aplikasi pintar.',
     lblLoginEmail: 'Email atau Username',
     lblLoginPass: 'Password',
-    btnLoginSubmit: 'ðŸ” Masuk Sekarang',
+    btnLoginSubmit: 'Masuk Sekarang',
     lblRegUser: 'Username Baru',
     lblRegEmail: 'Alamat Email',
     lblRegPass: 'Password',
-    regHelper: 'âœ¨ Pengguna baru akan otomatis dibuatkan kerangka pos anggaran dengan seluruh nominal 0 (kanvas bersih).',
-    btnRegSubmit: 'ðŸš€ Buat Akun & Mulai',
+    regHelper: 'Pengguna baru akan otomatis dibuatkan kerangka pos anggaran dengan seluruh nominal 0 (kanvas bersih).',
+    btnRegSubmit: 'Buat Akun & Mulai',
     navDashboard: 'Dashboard',
     navBudgets: 'Anggaran',
     navExpenses: 'Pengeluaran',
@@ -61,8 +61,8 @@ const I18N = {
     heroStatBurnProjection: 'Target Burn Jatuh Tempo',
     heroStatBurnEvaluation: 'Total Realisasi Terpakai',
     heroStatBurnPlanning: 'Total Target Anggaran',
-    heroToggleHintOpen: 'âœ¨ Klik untuk Buka Alur Perhitungan Saldo Ideal â–¾',
-    heroToggleHintClose: 'âœ¨ Klik untuk Tutup Alur Perhitungan Saldo Ideal â–´',
+    heroToggleHintOpen: 'Klik untuk Buka Alur Perhitungan Saldo Ideal \u25BE',
+    heroToggleHintClose: 'Klik untuk Tutup Alur Perhitungan Saldo Ideal \u25B4',
     realityTitle: 'Input Realita Kas Anda',
     realitySub: 'Saldo Dompet & Rekening',
     accBank: 'Saldo di Bank',
@@ -86,8 +86,8 @@ const I18N = {
     flowLblResult: 'Proyeksi Saldo Ideal Hari Ini',
     flowSubResult: 'Batas aman saldo dompet hari ini',
     summaryBudgetTitle: 'Ringkasan Pos Anggaran (Per Komponen)',
-    btnQuickBudget: 'Kelola Pos âž”',
-    btnViewAll: 'ðŸ“‹ Lihat Seluruh Rincian Pos di Halaman Anggaran âž”',
+    btnQuickBudget: 'Kelola Pos \u2192',
+    btnViewAll: 'Lihat Seluruh Rincian Pos di Halaman Anggaran \u2192',
     cbTitle: 'Control Balance (Zero-Based)',
     cbBtnSync: 'Alokasikan Surplus',
     cbLblIncome: 'Pemasukan',
@@ -100,42 +100,42 @@ const I18N = {
     btnAddIncome: '+ Pemasukan',
     budgetsTitle: 'Daftar Pos Pengeluaran',
     btnDupBudget: 'Salin Bulan',
-    btnAddBudget: 'âž• + Pos Anggaran',
+    btnAddBudget: '+ Pos Anggaran',
     realizedTitle: 'Daftar Seluruh Pengeluaran Realized',
-    btnAddExpense: 'âž• + Catat Pengeluaran',
+    btnAddExpense: '+ Catat Pengeluaran',
     interimTitle: 'Upload & Rekonsiliasi Mutasi Bank',
     interimDesc: 'Unggah mutasi rekening (format .PDF Rekening Tahapan BCA, .CSV, atau .TXT) untuk otomatis membaca transaksi dan merealisasikan pos anggaran.',
     lblUploadFile: 'Pilih Berkas Mutasi (PDF / CSV / TXT):',
-    btnProcessInterim: 'ðŸš€ Proses Mutasi Realisasi',
+    btnProcessInterim: 'Proses Mutasi Realisasi',
     btnSampleInterim: 'Contoh BCA',
     txHistoryTitle: 'Riwayat Transaksi Terekonsiliasi:',
     aiBadge: 'AI Financial Advisor',
     analyticsMonthTitle: 'Analisis Realisasi Pengeluaran',
-    btnRefreshAi: 'âœ¨ Refresh AI',
+    btnRefreshAi: 'Refresh AI',
     aiLblScore: 'Skor Disiplin',
     aiLblRealized: 'Total Realisasi',
     aiLblAvg: 'Batas Aman Harian',
-    aiDiagHeader: 'ðŸ’¡ Diagnosa & Rekomendasi AI:',
+    aiDiagHeader: 'Diagnosa & Rekomendasi AI:',
     goalsTitle: 'Portofolio & Target Keuangan',
-    btnAddGoal: 'ðŸŽ¯ + Goal Baru',
+    btnAddGoal: '+ Goal Baru',
     goalsDesc: 'Kelola sasaran tabungan dan investasi jangka panjang Anda. Pos anggaran kategori Alokasi Surplus terhubung langsung ke sasaran target di sini.',
-    adminTitle: 'ðŸ›¡ï¸ Admin Master Control',
+    adminTitle: 'Admin Master Control',
     adminDesc: 'Panel kontrol administrator untuk melihat daftar pengguna terdaftar dan masukan rating dari pengguna.',
-    adminStatUsersLbl: 'ðŸ‘¥ Total Pengguna Terdaftar',
-    adminStatRatingLbl: 'â­ Rata-rata Rating Feedback',
+    adminStatUsersLbl: 'Total Pengguna Terdaftar',
+    adminStatRatingLbl: 'Rata-rata Rating Feedback',
     adminUsersTitle: 'Direktori Pengguna Terdaftar',
-    btnRefreshAdmin: 'ðŸ”„ Refresh Data',
-    adminFbTitle: 'ðŸ“¬ Kotak Masukan & Feedback Pengguna',
-    feedbackTitle: 'ðŸ’¬ Kirim Feedback & Saran',
+    btnRefreshAdmin: 'Refresh Data',
+    adminFbTitle: 'Kotak Masukan & Feedback Pengguna',
+    feedbackTitle: 'Kirim Feedback & Saran',
     badgeHelp: 'Bantuan',
     feedbackDesc: 'Punya ide fitur baru, menemukan kendala, atau ingin memberikan masukan tampilan? Tuliskan saran Anda langsung ke tim Admin.',
     lblFbCat: 'Kategori Masukan',
     lblFbRating: 'Rating Kepuasan Anda',
     lblFbSubj: 'Subjek / Topik',
     lblFbMsg: 'Isi Pesan / Masukan Detail',
-    btnFbSubmit: 'ðŸš€ Kirim Feedback ke Admin',
+    btnFbSubmit: 'Kirim Feedback ke Admin',
     userFbHistoryTitle: 'Riwayat Feedback Terkirim',
-    btnRefreshUserFb: 'ðŸ”„ Refresh',
+    btnRefreshUserFb: 'Refresh',
     catSemua: 'Semua',
     catDasar: 'Dasar (Pokok)',
     catPribadi: 'Pribadi',
@@ -157,12 +157,12 @@ const I18N = {
     landingSub: 'Manage cashflow, ideal balance projections, and proportional burn rates in one smart app.',
     lblLoginEmail: 'Email or Username',
     lblLoginPass: 'Password',
-    btnLoginSubmit: 'ðŸ” Sign In Now',
+    btnLoginSubmit: 'Sign In Now',
     lblRegUser: 'New Username',
     lblRegEmail: 'Email Address',
     lblRegPass: 'Password',
-    regHelper: 'âœ¨ New users will automatically receive a clean budget framework with 0 balance (fresh canvas).',
-    btnRegSubmit: 'ðŸš€ Create Account & Start',
+    regHelper: 'New users will automatically receive a clean budget framework with 0 balance (fresh canvas).',
+    btnRegSubmit: 'Create Account & Start',
     navDashboard: 'Dashboard',
     navBudgets: 'Budgets',
     navExpenses: 'Expenses',
@@ -180,8 +180,8 @@ const I18N = {
     heroStatBurnProjection: 'Target Burn To Date',
     heroStatBurnEvaluation: 'Total Realized Spent',
     heroStatBurnPlanning: 'Total Target Budget',
-    heroToggleHintOpen: 'âœ¨ Click to View Cashflow Calculation Flow â–¾',
-    heroToggleHintClose: 'âœ¨ Click to Close Cashflow Calculation Flow â–´',
+    heroToggleHintOpen: 'Click to View Cashflow Calculation Flow \u25BE',
+    heroToggleHintClose: 'Click to Close Cashflow Calculation Flow \u25B4',
     realityTitle: 'Input Real Cash Accounts',
     realitySub: 'Wallet, Bank & E-Money Balances',
     accBank: 'Bank Balance',
@@ -205,8 +205,8 @@ const I18N = {
     flowLblResult: 'Today\'s Ideal Balance',
     flowSubResult: 'Safe wallet balance limit today',
     summaryBudgetTitle: 'Budget Summary (By Component)',
-    btnQuickBudget: 'Manage âž”',
-    btnViewAll: 'ðŸ“‹ View All Category Breakdown in Budgets âž”',
+    btnQuickBudget: 'Manage \u2192',
+    btnViewAll: 'View All Category Breakdown in Budgets \u2192',
     cbTitle: 'Zero-Based Control Balance',
     cbBtnSync: 'Allocate Surplus',
     cbLblIncome: 'Total Income',
@@ -219,42 +219,42 @@ const I18N = {
     btnAddIncome: '+ Add Income',
     budgetsTitle: 'Budget Categories',
     btnDupBudget: 'Copy Month',
-    btnAddBudget: 'âž• + Add Budget',
+    btnAddBudget: '+ Add Budget',
     realizedTitle: 'Realized Expense Transactions',
-    btnAddExpense: 'âž• + Log Expense',
+    btnAddExpense: '+ Log Expense',
     interimTitle: 'Upload & Reconcile Bank Statement',
     interimDesc: 'Upload bank statement (.PDF BCA Tahapan, .CSV, or .TXT) to auto-extract transactions and realize budget items.',
     lblUploadFile: 'Select Statement File (PDF / CSV / TXT):',
-    btnProcessInterim: 'ðŸš€ Process Statement Reconcile',
+    btnProcessInterim: 'Process Statement Reconcile',
     btnSampleInterim: 'Sample BCA',
     txHistoryTitle: 'Reconciled Transactions History:',
     aiBadge: 'AI Financial Advisor',
     analyticsMonthTitle: 'Realized Spending Analysis',
-    btnRefreshAi: 'âœ¨ Refresh AI',
+    btnRefreshAi: 'Refresh AI',
     aiLblScore: 'Discipline Score',
     aiLblRealized: 'Total Realized',
     aiLblAvg: 'Safe Daily Limit',
-    aiDiagHeader: 'ðŸ’¡ AI Diagnostics & Actionable Advice:',
+    aiDiagHeader: 'AI Diagnostics & Actionable Advice:',
     goalsTitle: 'Financial Portfolio & Target Goals',
-    btnAddGoal: 'ðŸŽ¯ + New Goal',
+    btnAddGoal: '+ New Goal',
     goalsDesc: 'Manage your long-term savings and investment milestones. Surplus Allocation budgets link directly to these targets.',
-    adminTitle: 'ðŸ›¡ï¸ Admin Master Control',
+    adminTitle: 'Admin Master Control',
     adminDesc: 'Administrator dashboard to monitor registered users and feedback satisfaction ratings.',
-    adminStatUsersLbl: 'ðŸ‘¥ Total Registered Users',
-    adminStatRatingLbl: 'â­ Average User Rating',
+    adminStatUsersLbl: 'Total Registered Users',
+    adminStatRatingLbl: 'Average User Rating',
     adminUsersTitle: 'Registered Users Directory',
-    btnRefreshAdmin: 'ðŸ”„ Refresh Data',
-    adminFbTitle: 'ðŸ“¬ User Feedback & Inbox',
-    feedbackTitle: 'ðŸ’¬ Send Feedback & Suggestions',
+    btnRefreshAdmin: 'Refresh Data',
+    adminFbTitle: 'User Feedback & Inbox',
+    feedbackTitle: 'Send Feedback & Suggestions',
     badgeHelp: 'Support',
     feedbackDesc: 'Have a feature idea, found a bug, or want to suggest improvements? Write directly to the Admin team.',
     lblFbCat: 'Feedback Category',
     lblFbRating: 'Your Satisfaction Rating',
     lblFbSubj: 'Subject / Topic',
     lblFbMsg: 'Detailed Message / Feedback',
-    btnFbSubmit: 'ðŸš€ Send Feedback to Admin',
+    btnFbSubmit: 'Send Feedback to Admin',
     userFbHistoryTitle: 'Sent Feedback History',
-    btnRefreshUserFb: 'ðŸ”„ Refresh',
+    btnRefreshUserFb: 'Refresh',
     catSemua: 'All',
     catDasar: 'Basic Needs',
     catPribadi: 'Personal',
@@ -714,18 +714,53 @@ function ensureMonthlySurplusBudgetExists() {
 }
 
 // -----------------------------------------------------------------------------
-// DASHBOARD CATEGORY SUMMARY RENDERER
+// DASHBOARD CATEGORY SUMMARY RENDERER WITH 3D VOLUMETRIC BADGES & PURE SVG
 // -----------------------------------------------------------------------------
 function renderDashboardCategorySummary() {
   const container = document.getElementById('dashboard-category-summary-list');
   if (!container) return;
 
   const categories = [
-    { key: 'Dasar', labelId: 'Kebutuhan Pokok & Rutin (Dasar)', labelEn: 'Basic Living & Needs', icon: 'ðŸ¥©', grad: '#3B82F6' },
-    { key: 'Pribadi', labelId: 'Kebutuhan Pribadi & Rumah', labelEn: 'Personal & Household', icon: 'ðŸ§´', grad: '#10B981' },
-    { key: 'Hiburan', labelId: 'Hiburan, Jajan & Lifestyle', labelEn: 'Entertainment & Fun', icon: 'ðŸ¿', grad: '#F59E0B' },
-    { key: 'Insidental', labelId: 'Pengeluaran Insidental / Darurat', labelEn: 'Incidental & Emergencies', icon: 'âš¡', grad: '#EF4444' },
-    { key: 'Alokasi Surplus', labelId: 'Alokasi Surplus & Sasaran Goal', labelEn: 'Surplus & Goals Allocation', icon: 'ðŸŽ¯', grad: '#8B5CF6' }
+    {
+      key: 'Dasar',
+      labelId: 'Kebutuhan Pokok & Rutin (Dasar)',
+      labelEn: 'Basic Living & Needs',
+      badgeClass: 'dasar',
+      svgIcon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>',
+      barColor: '#0284C7'
+    },
+    {
+      key: 'Pribadi',
+      labelId: 'Kebutuhan Pribadi & Rumah',
+      labelEn: 'Personal & Household',
+      badgeClass: 'pribadi',
+      svgIcon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+      barColor: '#059669'
+    },
+    {
+      key: 'Hiburan',
+      labelId: 'Hiburan, Jajan & Lifestyle',
+      labelEn: 'Entertainment & Fun',
+      badgeClass: 'hiburan',
+      svgIcon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>',
+      barColor: '#D97706'
+    },
+    {
+      key: 'Insidental',
+      labelId: 'Pengeluaran Insidental / Darurat',
+      labelEn: 'Incidental & Emergencies',
+      badgeClass: 'insidental',
+      svgIcon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
+      barColor: '#DC2626'
+    },
+    {
+      key: 'Alokasi Surplus',
+      labelId: 'Alokasi Surplus & Sasaran Goal',
+      labelEn: 'Surplus & Goals Allocation',
+      badgeClass: 'surplus',
+      svgIcon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>',
+      barColor: '#7C3AED'
+    }
   ];
 
   const html = categories.map(cat => {
@@ -739,13 +774,13 @@ function renderDashboardCategorySummary() {
       '<div class="cat-summary-card" onclick="switchView(\'view-budgets\')">' +
         '<div class="cat-summary-header">' +
           '<div class="cat-summary-title">' +
-            '<span>' + cat.icon + '</span>' +
+            '<div class="volumetric-icon-badge ' + cat.badgeClass + '">' + cat.svgIcon + '</div>' +
             '<span>' + label + '</span>' +
           '</div>' +
-          '<span style="font-size: 0.72rem; font-weight: 700; color: ' + cat.grad + ';">' + pct + '%</span>' +
+          '<span style="font-size: 0.75rem; font-weight: 700; color: ' + cat.barColor + ';">' + pct + '%</span>' +
         '</div>' +
         '<div class="progress-track" style="height: 6px; background: rgba(0,0,0,0.06);">' +
-          '<div class="progress-fill" style="width: ' + pct + '%; background: ' + cat.grad + ';"></div>' +
+          '<div class="progress-fill" style="width: ' + pct + '%; background: ' + cat.barColor + ';"></div>' +
         '</div>' +
         '<div class="cat-summary-stats">' +
           '<span>' + t('usedWord') + '<strong style="color: var(--text-primary);">' + formatIDR(totalUsed) + '</strong></span>' +
@@ -827,9 +862,9 @@ function generateAiAnalytics() {
 
     if (diagEl) {
       diagEl.innerHTML = 
-        '<div style="margin-bottom: 4px;">â€¢ Basic: ' + formatIDR(catSpend.Dasar) + ' | Fun/Personal: ' + formatIDR(catSpend.Pribadi + catSpend.Hiburan) + ' | Surplus: ' + formatIDR(catSpend['Alokasi Surplus']) + '</div>' +
-        '<div style="margin-bottom: 4px;">â€¢ ' + overText + '</div>' +
-        '<div>â€¢ ' + adviceText + '</div>';
+        '<div style="margin-bottom: 4px;">&bull; Basic: ' + formatIDR(catSpend.Dasar) + ' | Fun/Personal: ' + formatIDR(catSpend.Pribadi + catSpend.Hiburan) + ' | Surplus: ' + formatIDR(catSpend['Alokasi Surplus']) + '</div>' +
+        '<div style="margin-bottom: 4px;">&bull; ' + overText + '</div>' +
+        '<div>&bull; ' + adviceText + '</div>';
     }
   } else {
     overText = overBudgets.length > 0 
@@ -842,9 +877,9 @@ function generateAiAnalytics() {
 
     if (diagEl) {
       diagEl.innerHTML = 
-        '<div style="margin-bottom: 4px;">â€¢ Pokok: ' + formatIDR(catSpend.Dasar) + ' | Pribadi/Hiburan: ' + formatIDR(catSpend.Pribadi + catSpend.Hiburan) + ' | Surplus: ' + formatIDR(catSpend['Alokasi Surplus']) + '</div>' +
-        '<div style="margin-bottom: 4px;">â€¢ ' + overText + '</div>' +
-        '<div>â€¢ ' + adviceText + '</div>';
+        '<div style="margin-bottom: 4px;">&bull; Pokok: ' + formatIDR(catSpend.Dasar) + ' | Pribadi/Hiburan: ' + formatIDR(catSpend.Pribadi + catSpend.Hiburan) + ' | Surplus: ' + formatIDR(catSpend['Alokasi Surplus']) + '</div>' +
+        '<div style="margin-bottom: 4px;">&bull; ' + overText + '</div>' +
+        '<div>&bull; ' + adviceText + '</div>';
     }
   }
 
@@ -1120,8 +1155,8 @@ async function processInterimStatement() {
   generateAiAnalytics();
   textarea.value = '';
   const successMsg = currentLang === 'en'
-    ? 'Bank Statement Reconciled Successfully!\n\nâ€¢ Matched: ' + matched + ' transactions\nâ€¢ Total Realized: ' + formatIDR(totalAmt)
-    : 'Rekonsiliasi Mutasi Bank Berhasil!\n\nâ€¢ Mutasi Dicocokkan: ' + matched + ' transaksi\nâ€¢ Total Realisasi Terekonsiliasi: ' + formatIDR(totalAmt);
+    ? 'Bank Statement Reconciled Successfully!\n\n- Matched: ' + matched + ' transactions\n- Total Realized: ' + formatIDR(totalAmt)
+    : 'Rekonsiliasi Mutasi Bank Berhasil!\n\n- Mutasi Dicocokkan: ' + matched + ' transaksi\n- Total Realisasi Terekonsiliasi: ' + formatIDR(totalAmt);
   alert(successMsg);
 }
 
@@ -1700,7 +1735,7 @@ function renderFeedbacksList(container, feedbacks, isAdminView) {
 
   container.innerHTML = feedbacks.map(f => {
     const ratingNum = f.rating || 5;
-    const starsHtml = 'â­'.repeat(ratingNum);
+    const starsHtml = ratingNum + ' / 5 Stars';
     const dateStr = f.created_at ? f.created_at.substring(0, 10) : (currentLang === 'en' ? 'Today' : 'Hari ini');
     const statusBg = f.status === 'Selesai' ? 'rgba(16, 185, 129, 0.12)' : '#FEF3C7';
     const statusColor = f.status === 'Selesai' ? '#047857' : '#B45309';

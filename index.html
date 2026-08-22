@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>FlowTrack Pro — Smart Personal Cashflow & Burn Tracker</title>
-  <meta name="description" content="Aplikasi mobile-first financial planning dengan kalkulasi burn rate proporsional, evaluasi akhir bulan, rekonsiliasi mutasi BCA PDF & CSV, multi-tenancy dan PWA standalone.">
+  <title>FlowTrack Pro - Smart Personal Cashflow &amp; Burn Tracker</title>
+  <meta name="description" content="Aplikasi mobile-first financial planning dengan kalkulasi burn rate proporsional, evaluasi akhir bulan, rekonsiliasi mutasi BCA PDF &amp; CSV, multi-tenancy dan PWA standalone.">
   
   <!-- Progressive Web App (PWA) Meta Tags -->
   <link rel="manifest" href="manifest.json">
@@ -37,7 +37,7 @@
     
     <div class="landing-header-branding">
       <div class="landing-brand-badge">
-        <span>⚡ FlowTrack Pro</span>
+        <span>FlowTrack Pro</span>
       </div>
       <h1 class="landing-title">Smart Personal Cashflow</h1>
       <p class="landing-subtitle" id="txt-landing-sub">Kelola arus kas, proyeksi saldo ideal, dan burn rate proporsional dalam satu aplikasi pintar.</p>
@@ -59,10 +59,10 @@
         </div>
         <div class="form-group">
           <label class="form-label" id="txt-lbl-login-pass">Password</label>
-          <input type="password" id="landing-login-password" class="form-input" placeholder="••••••••" required>
+          <input type="password" id="landing-login-password" class="form-input" placeholder="Password" required>
         </div>
         
-        <button type="submit" class="btn-primary" style="margin-top: 6px;" id="txt-btn-login-submit">🔐 Masuk Sekarang</button>
+        <button type="submit" class="btn-primary" style="margin-top: 6px;" id="txt-btn-login-submit">Masuk Sekarang</button>
       </form>
 
       <!-- Landing Form Register -->
@@ -81,15 +81,15 @@
         </div>
 
         <div style="font-size: 0.72rem; color: var(--text-secondary); line-height: 1.4;" id="txt-reg-helper">
-          ✨ Pengguna baru akan otomatis dibuatkan kerangka pos anggaran dengan <strong>seluruh nominal 0 (kanvas bersih)</strong>.
+          Pengguna baru akan otomatis dibuatkan kerangka pos anggaran dengan <strong>seluruh nominal 0 (kanvas bersih)</strong>.
         </div>
 
-        <button type="submit" class="btn-primary" style="margin-top: 6px;" id="txt-btn-reg-submit">🚀 Buat Akun & Mulai</button>
+        <button type="submit" class="btn-primary" style="margin-top: 6px;" id="txt-btn-reg-submit">Buat Akun &amp; Mulai</button>
       </form>
     </div>
 
     <div style="text-align: center; margin-top: 18px; font-size: 0.7rem; color: var(--text-secondary);">
-      Standard PWA Standalone • FlowTrack Pro Multi-Tenant System
+      Standard PWA Standalone &bull; FlowTrack Pro Multi-Tenant System
     </div>
 
   </div>
@@ -106,9 +106,10 @@
           <span>FlowTrack</span>
           <span class="brand-badge">Pro</span>
         </div>
-        <div style="font-size: 0.7rem; color: var(--text-secondary); margin-top: 1px;" id="txt-app-sub">Smart Cashflow & Burn Tracker</div>
+        <div style="font-size: 0.7rem; color: var(--text-secondary); margin-top: 1px;" id="txt-app-sub">Smart Cashflow &amp; Burn Tracker</div>
       </div>
       <div class="header-actions">
+        <!-- Language Switcher ID / EN -->
         <div class="lang-switcher-pill" title="Ganti Bahasa / Switch Language">
           <button type="button" class="lang-btn active" id="btn-lang-id" onclick="setLanguage('id')">ID</button>
           <button type="button" class="lang-btn" id="btn-lang-en" onclick="setLanguage('en')">EN</button>
@@ -202,7 +203,7 @@
           <!-- Toggle Hint -->
           <div style="text-align: center;">
             <div class="hero-toggle-hint" id="hero-toggle-hint">
-              <span id="hero-toggle-hint-text">✨ Klik untuk Buka / Tutup Alur Perhitungan Saldo Ideal ▾</span>
+              <span id="hero-toggle-hint-text">Klik untuk Buka / Tutup Alur Perhitungan Saldo Ideal &darr;</span>
             </div>
           </div>
         </section>
@@ -227,7 +228,7 @@
             <!-- Row 2: Kebutuhan Bulanan (100%) -->
             <div class="compact-flow-row">
               <div class="c-flow-left">
-                <span class="c-flow-badge minus">−</span>
+                <span class="c-flow-badge minus">-</span>
                 <div>
                   <span class="c-flow-label" id="txt-flow-lbl-bulanan">Kebutuhan Bulanan (100%)</span>
                   <span class="c-flow-sub" id="txt-flow-sub-bulanan">Sewa Kos, Listrik, Pulsa</span>
@@ -239,7 +240,7 @@
             <!-- Row 3: Pengeluaran Rutin Berjalan (Proportional) -->
             <div class="compact-flow-row">
               <div class="c-flow-left">
-                <span class="c-flow-badge minus">−</span>
+                <span class="c-flow-badge minus">-</span>
                 <div>
                   <span class="c-flow-label" id="txt-flow-lbl-variable">Pengeluaran Rutin Berjalan</span>
                   <span class="c-flow-sub" id="flow-sub-harian">Kebutuhan Pos Terjadwal</span>
@@ -269,9 +270,10 @@
         <section class="card" id="reality-input-section">
           <div class="section-title">
             <span id="txt-reality-title">Input Realita Kas Anda</span>
-            <span style="font-size: 0.7rem; color: var(--text-secondary); font-weight: 500;" id="txt-reality-sub">Saldo Dompet & Rekening</span>
+            <span style="font-size: 0.7rem; color: var(--text-secondary); font-weight: 500;" id="txt-reality-sub">Saldo Dompet &amp; Rekening</span>
           </div>
 
+          <!-- Multi-Account Input Grid -->
           <div class="account-cash-grid">
             <div class="account-input-card">
               <div class="account-input-header" id="txt-acc-bank">Saldo di Bank</div>
@@ -291,11 +293,13 @@
             </div>
           </div>
 
+          <!-- Total Cash Summary Banner -->
           <div class="total-cash-banner">
             <span class="total-cash-title" id="txt-total-cash-lbl">Total Kas Riil Tersedia:</span>
             <span class="total-cash-figure" id="total-cash-figure">Rp 0</span>
           </div>
 
+          <!-- Dynamic Conditional Rendering Box -->
           <div class="reality-status-box" id="reality-result-box">
             <div class="status-header-row">
               <div style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 500;" id="txt-status-row-lbl">Status Arus Kas:</div>
@@ -311,10 +315,11 @@
             </div>
           </div>
 
+          <!-- Catatan / Justifikasi Kas & Overbudget (Notes) -->
           <div style="margin-top: 12px; background: var(--bg-main); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 10px 12px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
               <label for="cash-reality-notes" style="font-size: 0.75rem; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 4px;">
-                <span id="txt-notes-header">Catatan & Justifikasi Kas</span> (<span id="cash-notes-period-badge">Agustus 2026</span>)
+                <span id="txt-notes-header">Catatan &amp; Justifikasi Kas</span> (<span id="cash-notes-period-badge">Agustus 2026</span>)
               </label>
               <span style="font-size: 0.65rem; color: var(--text-secondary);" id="txt-notes-auto-saved">Tersimpan Otomatis</span>
             </div>
@@ -326,13 +331,13 @@
         <section class="card">
           <div class="section-title">
             <span id="txt-summary-budget-title">Ringkasan Pos Anggaran (Per Komponen)</span>
-            <button class="quick-btn" onclick="switchView('view-budgets')" id="txt-btn-quick-budget">Kelola Pos ➔</button>
+            <button class="quick-btn" onclick="switchView('view-budgets')" id="txt-btn-quick-budget">Kelola Pos &rarr;</button>
           </div>
           <div id="dashboard-category-summary-list">
             <!-- Populated by app.js with category breakdown cards -->
           </div>
           <button type="button" class="btn-secondary" style="width: 100%; margin-top: 10px; font-size: 0.75rem; padding: 8px;" onclick="switchView('view-budgets')" id="txt-btn-view-all">
-            📋 Lihat Seluruh Rincian Pos di Halaman Anggaran ➔
+            Lihat Seluruh Rincian Pos di Halaman Anggaran &rarr;
           </button>
         </section>
 
@@ -354,7 +359,7 @@
                 Seimbang Rp 0
               </span>
               <button type="button" class="btn-primary" style="padding: 2px 7px; font-size: 0.65rem; background: #6366F1; border-color: #818CF8; border-radius: 6px; font-weight: 600;" onclick="autoSyncSurplusBudget()">
-                ⚡ <span id="txt-cb-btn-sync">Alokasikan Surplus</span>
+                <span id="txt-cb-btn-sync">Alokasikan Surplus</span>
               </button>
             </div>
           </div>
@@ -393,7 +398,7 @@
             <div style="display: flex; gap: 6px;">
               <button class="quick-btn" onclick="openDuplicateModal()" id="txt-btn-dup-budget" title="Salin dari Bulan Lain">Salin Bulan</button>
               <button class="btn-primary" style="padding: 5px 10px; font-size: 0.72rem;" onclick="openAddBudgetModal()" id="txt-btn-add-budget">
-                ➕ + Pos Anggaran
+                + Pos Anggaran
               </button>
             </div>
           </div>
@@ -425,7 +430,7 @@
           <div class="section-title">
             <span id="txt-realized-title">Daftar Seluruh Pengeluaran Realized</span>
             <button class="btn-primary" style="padding: 6px 12px; font-size: 0.72rem;" onclick="openAddExpenseModal()" id="txt-btn-add-expense">
-              ➕ + Catat Pengeluaran
+              + Catat Pengeluaran
             </button>
           </div>
 
@@ -447,8 +452,8 @@
         <!-- Section 2 (Middle): Bank Statement Auto-Reconcile (BCA PDF, CSV, TXT) -->
         <section class="card">
           <div class="section-title">
-            <span id="txt-interim-title">Upload & Rekonsiliasi Mutasi Bank</span>
-            <span style="font-size: 0.7rem; color: var(--primary-accent); font-weight: 600; background: #EEF2FF; padding: 2px 8px; border-radius: 12px;">BCA PDF • CSV • TXT</span>
+            <span id="txt-interim-title">Upload &amp; Rekonsiliasi Mutasi Bank</span>
+            <span style="font-size: 0.7rem; color: var(--primary-accent); font-weight: 600; background: #EEF2FF; padding: 2px 8px; border-radius: 12px;">BCA PDF &bull; CSV &bull; TXT</span>
           </div>
 
           <div style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.4;" id="txt-interim-desc">
@@ -466,7 +471,7 @@
 
           <div style="display: flex; gap: 8px; margin-bottom: 12px;">
             <button type="button" class="btn-primary" style="flex: 2;" onclick="processInterimStatement()" id="txt-btn-process-interim">
-              🚀 Proses Mutasi Realisasi
+              Proses Mutasi Realisasi
             </button>
             <button type="button" class="btn-secondary" style="flex: 1;" onclick="loadBcaSampleStatement()" id="txt-btn-sample-interim">
               Contoh BCA
@@ -490,7 +495,7 @@
               <div style="font-size: 0.95rem; font-weight: 800; color: #FFFFFF;" id="analytics-month-title">Analisis Realisasi Pengeluaran</div>
             </div>
             <button type="button" class="btn-primary" style="padding: 4px 10px; font-size: 0.68rem; background: #4F46E5; border-color: #6366F1;" onclick="generateAiAnalytics()" id="txt-btn-refresh-ai">
-              ✨ Refresh AI
+              Refresh AI
             </button>
           </div>
 
@@ -513,7 +518,7 @@
           <!-- AI Diagnostic Commentary -->
           <div style="background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius-sm); padding: 10px 12px;">
             <div style="font-weight: 700; font-size: 0.72rem; color: #C7D2FE; margin-bottom: 6px;" id="txt-ai-diag-header">
-              💡 Diagnosa & Rekomendasi AI:
+              Diagnosa &amp; Rekomendasi AI:
             </div>
             <div id="ai-diagnostic-text" style="font-size: 0.72rem; color: #E0E7FF; line-height: 1.45;">
               Memuat diagnosa pengeluaran berbasis data transaksi...
@@ -530,9 +535,9 @@
         
         <section class="card">
           <div class="section-title">
-            <span id="txt-goals-title">Portofolio & Target Keuangan</span>
+            <span id="txt-goals-title">Portofolio &amp; Target Keuangan</span>
             <button class="btn-primary" style="padding: 6px 12px; font-size: 0.72rem;" onclick="openAddGoalModal()" id="txt-btn-add-goal">
-              🎯 + Goal Baru
+              + Goal Baru
             </button>
           </div>
           <div style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 14px; line-height: 1.4;" id="txt-goals-desc">
@@ -552,7 +557,7 @@
         
         <section class="card">
           <div class="section-title">
-            <span id="txt-admin-title">🛡️ Admin Master Control</span>
+            <span id="txt-admin-title">Admin Master Control</span>
             <span class="brand-badge">Superadmin</span>
           </div>
           <div style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.4;" id="txt-admin-desc">
@@ -562,11 +567,11 @@
           <!-- Admin Quick Stats (Clean: Total Pengguna & Rating) -->
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;">
             <div class="account-input-card">
-              <div class="account-input-header" id="txt-admin-stat-users-lbl">👥 Total Pengguna Terdaftar</div>
+              <div class="account-input-header" id="txt-admin-stat-users-lbl">Total Pengguna Terdaftar</div>
               <div style="font-size: 1.25rem; font-weight: 800; color: var(--primary-accent);" id="admin-stat-users">1</div>
             </div>
             <div class="account-input-card">
-              <div class="account-input-header" id="txt-admin-stat-rating-lbl">⭐ Rata-rata Rating Feedback</div>
+              <div class="account-input-header" id="txt-admin-stat-rating-lbl">Rata-rata Rating Feedback</div>
               <div style="font-size: 1.25rem; font-weight: 800; color: #F59E0B;" id="admin-stat-rating">5.0 / 5</div>
             </div>
           </div>
@@ -576,7 +581,7 @@
         <section class="card">
           <div class="section-title">
             <span id="txt-admin-users-title">Direktori Pengguna Terdaftar</span>
-            <button class="quick-btn" onclick="fetchAdminData()" id="txt-btn-refresh-admin">🔄 Refresh Data</button>
+            <button class="quick-btn" onclick="fetchAdminData()" id="txt-btn-refresh-admin">Refresh Data</button>
           </div>
           <div id="admin-users-list" style="display: flex; flex-direction: column; gap: 8px;">
             <!-- Populated by app.js with Take Out action buttons -->
@@ -586,7 +591,7 @@
         <!-- Admin User Feedback Inbox Section -->
         <section class="card">
           <div class="section-title">
-            <span id="txt-admin-fb-title">📬 Kotak Masukan & Feedback Pengguna</span>
+            <span id="txt-admin-fb-title">Kotak Masukan &amp; Feedback Pengguna</span>
             <span style="font-size: 0.7rem; color: var(--primary-accent); font-weight: 600; background: var(--primary-accent-bg); padding: 2px 8px; border-radius: 12px;">User Feedback</span>
           </div>
           <div id="admin-feedback-inbox-list" style="display: flex; flex-direction: column; gap: 8px;">
@@ -603,7 +608,7 @@
         
         <section class="card">
           <div class="section-title">
-            <span id="txt-feedback-title">💬 Kirim Feedback & Saran</span>
+            <span id="txt-feedback-title">Kirim Feedback &amp; Saran</span>
             <span class="brand-badge" id="txt-badge-help">Bantuan</span>
           </div>
           <div style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.4;" id="txt-feedback-desc">
@@ -616,19 +621,19 @@
             <div class="form-group">
               <label class="form-label" id="txt-lbl-fb-cat">Kategori Masukan</label>
               <select id="feedback-category-select" class="form-select">
-                <option value="💡 Ide Fitur Baru">💡 Ide / Usulan Fitur Baru</option>
-                <option value="🐞 Laporan Kendala / Bug">🐞 Laporan Kendala / Bug</option>
-                <option value="🎨 Desain & Tampilan">🎨 Desain & Tampilan</option>
-                <option value="💬 Saran Umum" selected>💬 Saran & Masukan Umum</option>
+                <option value="Ide Fitur Baru">Ide / Usulan Fitur Baru</option>
+                <option value="Laporan Kendala / Bug">Laporan Kendala / Bug</option>
+                <option value="Desain &amp; Tampilan">Desain &amp; Tampilan</option>
+                <option value="Saran Umum" selected>Saran &amp; Masukan Umum</option>
               </select>
             </div>
 
             <div class="form-group">
               <label class="form-label" id="txt-lbl-fb-rating">Rating Kepuasan Anda</label>
               <div class="rating-stars-group">
-                <button type="button" class="rating-star-btn active" data-rating="5" onclick="setFeedbackRating(5)">⭐⭐⭐⭐⭐ (5/5)</button>
-                <button type="button" class="rating-star-btn" data-rating="4" onclick="setFeedbackRating(4)">⭐⭐⭐⭐ (4/5)</button>
-                <button type="button" class="rating-star-btn" data-rating="3" onclick="setFeedbackRating(3)">⭐⭐⭐ (3/5)</button>
+                <button type="button" class="rating-star-btn active" data-rating="5" onclick="setFeedbackRating(5)">5 Stars (5/5)</button>
+                <button type="button" class="rating-star-btn" data-rating="4" onclick="setFeedbackRating(4)">4 Stars (4/5)</button>
+                <button type="button" class="rating-star-btn" data-rating="3" onclick="setFeedbackRating(3)">3 Stars (3/5)</button>
               </div>
               <input type="hidden" id="feedback-rating-val" value="5">
             </div>
@@ -644,7 +649,7 @@
             </div>
 
             <button type="submit" class="btn-primary" style="margin-top: 6px;" id="txt-btn-fb-submit">
-              🚀 Kirim Feedback ke Admin
+              Kirim Feedback ke Admin
             </button>
           </form>
         </section>
@@ -653,7 +658,7 @@
         <section class="card">
           <div class="section-title">
             <span id="txt-user-fb-history-title">Riwayat Feedback Terkirim</span>
-            <button class="quick-btn" onclick="fetchUserFeedbacks()" id="txt-btn-refresh-user-fb">🔄 Refresh</button>
+            <button class="quick-btn" onclick="fetchUserFeedbacks()" id="txt-btn-refresh-user-fb">Refresh</button>
           </div>
           <div id="user-sent-feedback-list">
             <!-- Populated by app.js -->
@@ -733,7 +738,7 @@
           <label class="form-label" id="txt-lbl-income-amt">Nominal Pemasukan (Rp)</label>
           <input type="number" id="income-amount-input" class="form-input" placeholder="Contoh: 8500000">
         </div>
-        <button type="button" class="btn-primary" onclick="submitAddIncome()" id="txt-btn-save-income">💾 Simpan Pemasukan</button>
+        <button type="button" class="btn-primary" onclick="submitAddIncome()" id="txt-btn-save-income">Simpan Pemasukan</button>
       </div>
     </div>
 
@@ -815,7 +820,7 @@
             <option value="">-- Tanpa Relasi Goal --</option>
           </select>
         </div>
-        <button type="button" class="btn-primary" onclick="submitAddBudget()" id="txt-btn-save-budget">💾 Simpan Pos Anggaran</button>
+        <button type="button" class="btn-primary" onclick="submitAddBudget()" id="txt-btn-save-budget">Simpan Pos Anggaran</button>
       </div>
     </div>
 
@@ -826,7 +831,7 @@
           <div>
             <div id="detail-budget-title" style="font-weight: 700; font-size: 1.05rem; color: var(--text-primary);">Detail Pos</div>
             <div style="font-size: 0.72rem; color: var(--text-secondary);">
-              <span id="detail-budget-cat"></span> • <span id="detail-budget-freq"></span> • <span id="detail-budget-timing"></span>
+              <span id="detail-budget-cat"></span> &bull; <span id="detail-budget-freq"></span> &bull; <span id="detail-budget-timing"></span>
             </div>
           </div>
           <button type="button" class="close-btn close-modal-btn">&times;</button>
@@ -850,8 +855,8 @@
 
         <!-- Navigation Tabs inside Modal -->
         <div style="display: flex; gap: 6px; background: var(--bg-main); padding: 4px; border-radius: var(--radius-sm); margin-bottom: 12px;">
-          <button type="button" id="tab-modal-view-tx" class="auth-tab-btn active" style="padding: 6px; font-size: 0.75rem;" onclick="switchModalTab('tx')">📊 Riwayat & Catat</button>
-          <button type="button" id="tab-modal-view-edit" class="auth-tab-btn" style="padding: 6px; font-size: 0.75rem;" onclick="switchModalTab('edit')">✏️ Edit / Sesuaikan</button>
+          <button type="button" id="tab-modal-view-tx" class="auth-tab-btn active" style="padding: 6px; font-size: 0.75rem;" onclick="switchModalTab('tx')">Riwayat &amp; Catat</button>
+          <button type="button" id="tab-modal-view-edit" class="auth-tab-btn" style="padding: 6px; font-size: 0.75rem;" onclick="switchModalTab('edit')">Edit / Sesuaikan</button>
         </div>
 
         <!-- View 1: Riwayat & Catat Manual -->
@@ -869,7 +874,7 @@
           </div>
           
           <div style="display: flex; gap: 8px;">
-            <button type="button" class="btn-primary" style="flex: 2;" onclick="submitManualTx()" id="txt-btn-submit-manual-tx">➕ Catat Pengeluaran</button>
+            <button type="button" class="btn-primary" style="flex: 2;" onclick="submitManualTx()" id="txt-btn-submit-manual-tx">+ Catat Pengeluaran</button>
             <button type="button" class="btn-danger" style="flex: 1;" onclick="deleteSelectedBudget()" id="txt-btn-del-budget">Hapus Pos</button>
           </div>
         </div>
@@ -949,7 +954,7 @@
           </div>
 
           <div style="display: flex; gap: 8px; margin-top: 4px;">
-            <button type="button" class="btn-primary" style="flex: 2;" onclick="submitEditBudget()">💾 Simpan Perubahan</button>
+            <button type="button" class="btn-primary" style="flex: 2;" onclick="submitEditBudget()">Simpan Perubahan</button>
             <button type="button" class="btn-secondary" style="flex: 1;" onclick="switchModalTab('tx')">Batal</button>
           </div>
         </div>
@@ -984,11 +989,11 @@
         <div class="form-group">
           <label class="form-label" id="txt-lbl-goal-inst">Rencana Instrumen Investasi / Tabungan</label>
           <select id="goal-instrument-select" class="form-select">
-            <option value="📈 Saham Indonesia (IHSG / Stockbit)">📈 Saham Indonesia (IHSG / Stockbit)</option>
-            <option value="🇺🇸 Saham US / Global (Pluang / S&P500)">🇺🇸 Saham US / Global (Pluang / S&P500)</option>
-            <option value="🛡️ Reksa Dana Pasar Uang (Bibit RDPU)">🛡️ Reksa Dana Pasar Uang (Bibit RDPU)</option>
-            <option value="🏦 Tabungan Khusus / Deposito (Bank Jago/Seabank/BCA)">🏦 Tabungan Khusus / Deposito (Bank Jago/Seabank/BCA)</option>
-            <option value="🪙 Aset Kripto / Emas / Lainnya">🪙 Aset Kripto / Emas / Lainnya</option>
+            <option value="Saham Indonesia (IHSG / Stockbit)">Saham Indonesia (IHSG / Stockbit)</option>
+            <option value="Saham US / Global (Pluang / S&amp;P500)">Saham US / Global (Pluang / S&amp;P500)</option>
+            <option value="Reksa Dana Pasar Uang (Bibit RDPU)">Reksa Dana Pasar Uang (Bibit RDPU)</option>
+            <option value="Tabungan Khusus / Deposito (Bank Jago/Seabank/BCA)">Tabungan Khusus / Deposito (Bank Jago/Seabank/BCA)</option>
+            <option value="Aset Kripto / Emas / Lainnya">Aset Kripto / Emas / Lainnya</option>
           </select>
         </div>
         <div class="form-group">
@@ -999,7 +1004,7 @@
           <label class="form-label" id="txt-lbl-goal-initial-amt">Saldo Awal yang Sudah Terkumpul (Rp)</label>
           <input type="number" id="goal-initial-input" class="form-input" placeholder="0">
         </div>
-        <button type="button" class="btn-primary" onclick="submitAddGoal()" id="txt-btn-save-goal">🎯 Simpan Goal Finansial</button>
+        <button type="button" class="btn-primary" onclick="submitAddGoal()" id="txt-btn-save-goal">Simpan Goal Finansial</button>
       </div>
     </div>
 
@@ -1028,7 +1033,7 @@
           <input type="number" id="deposit-goal-amount" class="form-input" placeholder="Nominal setoran...">
         </div>
         <div style="display: flex; gap: 8px;">
-          <button type="button" class="btn-primary" style="flex: 2;" onclick="submitGoalDeposit()">💰 Setor Tabungan</button>
+          <button type="button" class="btn-primary" style="flex: 2;" onclick="submitGoalDeposit()">Setor Tabungan</button>
           <button type="button" class="btn-danger" style="flex: 1;" onclick="deleteSelectedGoal()">Hapus Goal</button>
         </div>
       </div>
@@ -1081,7 +1086,7 @@
             <input type="number" id="dup-target-year" class="form-input" value="2026">
           </div>
         </div>
-        <button type="button" class="btn-primary" onclick="submitDuplicateMonth()">📋 Salin & Terapkan Anggaran</button>
+        <button type="button" class="btn-primary" onclick="submitDuplicateMonth()">Salin &amp; Terapkan Anggaran</button>
       </div>
     </div>
 
@@ -1121,7 +1126,7 @@
             <option value="Bank Lain / Transfer">Bank Lain / Transfer</option>
           </select>
         </div>
-        <button type="button" class="btn-primary" onclick="submitQuickExpense()" id="txt-btn-save-exp">💾 Simpan & Realisasikan Pengeluaran</button>
+        <button type="button" class="btn-primary" onclick="submitQuickExpense()" id="txt-btn-save-exp">Simpan &amp; Realisasikan Pengeluaran</button>
       </div>
     </div>
 
@@ -1129,12 +1134,25 @@
     <div class="modal-overlay" id="auth-modal">
       <div class="modal-card">
         <div class="modal-header">
+          <div style="font-weight: 700; font-size: 1rem; color: var(--text-primary);" id="txt-modal-profile-title">Profil Pengguna</div>
+          <button type="button" class="close-btn close-modal-btn">&times;</button>
         </div>
+        <div style="display: flex; align-items: center; gap: 12px; background: var(--bg-main); padding: 14px; border-radius: var(--radius-md); margin-bottom: 14px;">
+          <div class="user-avatar-circle" id="modal-avatar-preview" style="width: 44px; height: 44px; font-size: 1.1rem;">Z</div>
+          <div>
+            <div id="modal-username-preview" style="font-weight: 700; font-size: 1rem; color: var(--text-primary);">zidanmuzaki13</div>
+            <div id="modal-email-preview" style="font-size: 0.75rem; color: var(--text-secondary);">zidanmuzaki2002@gmail.com</div>
+            <div id="modal-role-preview" style="font-size: 0.65rem; color: var(--primary-accent); font-weight: 700; text-transform: uppercase; margin-top: 2px;">ADMINISTRATOR</div>
+          </div>
+        </div>
+        <button type="button" class="btn-danger" style="width: 100%;" onclick="handleLogout()" id="txt-btn-modal-logout">
+          Keluar dari Akun (Logout)
+        </button>
       </div>
     </div>
 
   </div>
 
-  <script src="app.js" charset="utf-8"></script>
+  <script src="app.js"></script>
 </body>
 </html>

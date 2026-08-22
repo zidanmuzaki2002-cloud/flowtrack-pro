@@ -1133,6 +1133,53 @@ button {
   transform: scale(1.02);
 }
 
+/* Volumetric 3D-Styled Icon Badges */
+.volumetric-icon-badge {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  border-radius: 9px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.14), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+  color: #FFFFFF;
+  flex-shrink: 0;
+}
+
+.volumetric-icon-badge.dasar {
+  background: linear-gradient(135deg, #38BDF8 0%, #0284C7 100%);
+}
+
+.volumetric-icon-badge.pribadi {
+  background: linear-gradient(135deg, #34D399 0%, #059669 100%);
+}
+
+.volumetric-icon-badge.hiburan {
+  background: linear-gradient(135deg, #FBBF24 0%, #D97706 100%);
+}
+
+.volumetric-icon-badge.insidental {
+  background: linear-gradient(135deg, #F87171 0%, #DC2626 100%);
+}
+
+.volumetric-icon-badge.surplus {
+  background: linear-gradient(135deg, #C084FC 0%, #7C3AED 100%);
+}
+
+.volumetric-icon-badge.admin {
+  background: linear-gradient(135deg, #818CF8 0%, #4338CA 100%);
+}
+
+.volumetric-icon-badge.feedback {
+  background: linear-gradient(135deg, #2DD4BF 0%, #0D9488 100%);
+}
+
+.volumetric-icon-badge svg {
+  stroke: #FFFFFF !important;
+  stroke-width: 2.2px;
+}
+
 /* Category Summary Cards on Dashboard */
 .cat-summary-card {
   background: var(--bg-main);
@@ -1141,6 +1188,7 @@ button {
   padding: 10px 12px;
   margin-bottom: 8px;
   transition: transform 0.15s ease, border-color 0.15s ease;
+  cursor: pointer;
 }
 
 .cat-summary-card:hover {
@@ -1152,7 +1200,7 @@ button {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
 .cat-summary-title {
@@ -1161,7 +1209,7 @@ button {
   color: var(--text-primary);
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
 }
 
 .cat-summary-stats {
@@ -1170,7 +1218,13 @@ button {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 4px;
+  margin-top: 6px;
+}
+
+.inline-arrow-icon {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 4px;
 }
 
 /* Modals & Popups */
