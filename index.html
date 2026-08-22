@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>FlowTrack Pro — Smart Personal Cashflow & Burn Tracker</title>
+  <meta name="description" content="Aplikasi mobile-first financial planning dengan kalkulasi burn rate proporsional, evaluasi akhir bulan, rekonsiliasi mutasi CSV & PDF, multi-tenancy dan PWA standalone.">
+  
+  <!-- Progressive Web App (PWA) Meta Tags -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4F46E5">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="FlowTrack Pro">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192' width='192' height='192'%3E%3Crect width='192' height='192' rx='42' fill='%234F46E5'/%3E%3Cpath d='M48 96L84 132L144 60' stroke='white' stroke-width='18' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Ccircle cx='144' cy='60' r='10' fill='%2310B981'/%3E%3C/svg%3E">
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ======================================================================= -->
+  <!-- 1. DEDICATED LOGIN LANDING SCREEN (INITIAL GATEWAY)                      -->
+  <!-- ======================================================================= -->
+  <div class="login-landing-screen" id="login-landing-screen">
+    
+    <div class="landing-header-branding">
+      <div class="landing-brand-badge">
+        <span>⚡ FlowTrack Pro</span>
+      </div>
+      <h1 class="landing-title">Smart Personal Cashflow</h1>
+      <p class="landing-subtitle">Kelola arus kas, proyeksi saldo ideal, dan burn rate proporsional dalam satu aplikasi pintar.</p>
+    </div>
+
+    <div class="landing-card">
+      <div class="auth-tabs">
+        <button type="button" class="auth-tab-btn active" id="landing-tab-login" onclick="switchLandingAuthTab('login')">Masuk (Login)</button>
+        <button type="button" class="auth-tab-btn" id="landing-tab-register" onclick="switchLandingAuthTab('register')">Daftar Akun Baru</button>
+      </div>
+
+      <div id="landing-auth-alert" class="auth-alert-msg"></div>
+
+      <!-- Landing Form Login -->
+      <form class="auth-form-view active" id="landing-form-login" onsubmit="event.preventDefault(); submitLandingLogin();">
+        <div class="form-group">
+          <label class="form-label">Email atau Username</label>
+          <input type="text" id="landing-login-email" class="form-input" placeholder="contoh: nama@email.com atau username" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" id="landing-login-password" class="form-input" placeholder="••••••••" required>
+        </div>
+        
+        <button type="submit" class="btn-primary" style="margin-top: 6px;">🔐 Masuk Sekarang</button>
+      </form>
+
+      <!-- Landing Form Register -->
+      <form class="auth-form-view" id="landing-form-register" onsubmit="event.preventDefault(); submitLandingRegister();">
+        <div class="form-group">
+          <label class="form-label">Username Baru</label>
+          <input type="text" id="landing-reg-username" class="form-input" placeholder="contoh: alex_pratama" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Alamat Email</label>
+          <input type="email" id="landing-reg-email" class="form-input" placeholder="contoh: alex@email.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" id="landing-reg-password" class="form-input" placeholder="Minimal 6 karakter" required>
+        </div>
+
+        <div style="font-size: 0.72rem; color: var(--text-secondary); line-height: 1.4;">
+          ✨ Pengguna baru akan otomatis dibuatkan kerangka pos anggaran dengan <strong>seluruh nominal 0 (kanvas bersih)</strong>.
+        </div>
+
+        <button type="submit" class="btn-primary" style="margin-top: 6px;">🚀 Buat Akun & Mulai</button>
+      </form>
+    </div>
+
+    <div style="text-align: center; margin-top: 18px; font-size: 0.7rem; color: var(--text-secondary);">
+      Standard PWA Standalone • FlowTrack Pro Multi-Tenant System
+    </div>
+
+  </div>
+
+  <!-- ======================================================================= -->
+  <!-- 2. MAIN APPLICATION CONTAINER (ACCESSIBLE AFTER AUTHENTICATION)          -->
+  <!-- ======================================================================= -->
+  <div class="app-container" id="app-container">
+    
+    <!-- 1. Header with User Profile & Real-Time Date -->
+    <header class="app-header">
+      <div>
+        <div class="brand-title">
+          <span>FlowTrack</span>
+          <span class="brand-badge">Pro</span>
+        </div>
+        <div style="font-size: 0.7rem; color: var(--text-secondary); margin-top: 1px;">Smart Cashflow & Burn Tracker</div>
+      </div>
+      <div class="header-actions">
+        <div class="user-header-profile" id="user-header-profile" onclick="openAuthModal()" title="Profil Pengguna">
+          <div class="user-avatar-circle" id="user-avatar-badge">Z</div>
+          <div class="user-header-text">
+            <div class="user-name-display" id="user-name-display">zidanmuzaki13</div>
+            <div class="user-role-badge" id="user-role-badge">ADMIN</div>
+          </div>
+          <button class="logout-pill-btn" id="btn-logout" title="Keluar / Ganti Akun" onclick="event.stopPropagation(); handleLogout();">🚪</button>
+        </div>
+        <div class="date-pill">
+          <span style="width: 6px; height: 6px; background: #10B981; border-radius: 50%;"></span>
+          <span id="header-date-badge">22 Agt 2026</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- 2. Multi-Year & Multi-Month Selector Bar -->
+    <div class="time-selector-bar">
+      <div class="selector-group">
+        <select id="select-month" class="custom-select">
+          <option value="Januari">Januari</option>
+          <option value="Februari">Februari</option>
+          <option value="Maret">Maret</option>
+          <option value="April">April</option>
+          <option value="Mei">Mei</option>
+          <option value="Juni">Juni</option>
+          <option value="Juli">Juli</option>
+          <option value="Agustus" selected>Agustus</option>
+          <option value="September">September</option>
+          <option value="Oktober">Oktober</option>
+          <option value="November">November</option>
+          <option value="Desember">Desember</option>
+        </select>
+        <select id="select-year" class="custom-select">
+          <option value="2024">2024</option>
+          <option value="2025">2025</option>
+          <option value="2026" selected>2026</option>
+          <option value="2027">2027</option>
+          <option value="2028">2028</option>
+          <option value="2029">2029</option>
+          <option value="2030">2030</option>
+        </select>
+      </div>
+      <div>
+        <span class="mode-badge projection" id="header-mode-badge">⚡ Proyeksi Berjalan</span>
+      </div>
+    </div>
+
+    <!-- Main Views Container -->
+    <main class="main-content">
+
+      <!-- ===================================================================== -->
+      <!-- PAGE 1: VIEW DASHBOARD -->
+      <!-- ===================================================================== -->
+      <div class="view-page active" id="view-dashboard">
+
+        <!-- Hero Card (Proyeksi Saldo Ideal / Evaluasi Akhir Bulan) -->
+        <section class="card hero-card" id="hero-card-section">
+          <div class="hero-label-row">
+            <span class="hero-subtitle" id="hero-subtitle-text">PROYEKSI SALDO IDEAL</span>
+            <span class="period-indicator" id="hero-period-label">Agustus 2026</span>
+          </div>
+          
+          <div class="hero-balance-figure" id="hero-ideal-amount">Rp 0</div>
+
+          <!-- Time Progress Bar -->
+          <div class="time-progress-container">
+            <div class="time-progress-header">
+              <span>Waktu Berjalan</span>
+              <span id="time-progress-label">Hari ke-22 dari 31 hari (70.97%)</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill" id="time-progress-bar" style="width: 70.97%;"></div>
+            </div>
+          </div>
+
+          <!-- Mini Stats -->
+          <div class="hero-breakdown-grid">
+            <div>
+              <div class="hero-mini-stat" id="hero-stat-income-label">Total Pemasukan</div>
+              <div class="hero-mini-val" id="hero-stat-income">Rp 0</div>
+            </div>
+            <div>
+              <div class="hero-mini-stat" id="hero-stat-burn-label">Burn Rutin Berjalan</div>
+              <div class="hero-mini-val" id="hero-stat-burn">Rp 0</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Multi-Account Realita Kas Section -->
+        <section class="card" id="reality-input-section">
+          <div class="section-title">
+            <span>Input Realita Kas Anda</span>
+            <span style="font-size: 0.7rem; color: var(--text-secondary); font-weight: 500;">Saldo Dompet & Rekening</span>
+          </div>
+
+          <!-- Multi-Account Input Grid -->
+          <div class="account-cash-grid">
+            <div class="account-input-card">
+              <div class="account-input-header">🏦 Saldo di Bank</div>
+              <input type="number" id="cash-bank-input" class="account-input-field" placeholder="0" value="0">
+            </div>
+            <div class="account-input-card">
+              <div class="account-input-header">💵 Cash on Hand</div>
+              <input type="number" id="cash-wallet-input" class="account-input-field" placeholder="0" value="0">
+            </div>
+            <div class="account-input-card">
+              <div class="account-input-header">📱 Saldo E-Money</div>
+              <input type="number" id="cash-emoney-input" class="account-input-field" placeholder="0" value="0">
+            </div>
+            <div class="account-input-card">
+              <div class="account-input-header">💼 Lain-lain</div>
+              <input type="number" id="cash-other-input" class="account-input-field" placeholder="0" value="0">
+            </div>
+          </div>
+
+          <!-- Total Cash Summary Banner -->
+          <div class="total-cash-banner">
+            <span class="total-cash-title">Total Kas Riil Tersedia:</span>
+            <span class="total-cash-figure" id="total-cash-figure">Rp 0</span>
+          </div>
+
+          <!-- Dynamic Conditional Rendering Box -->
+          <div class="reality-status-box" id="reality-result-box">
+            <div class="status-header-row">
+              <div style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 500;">Status Arus Kas:</div>
+              <span class="status-badge" id="reality-status-badge">
+                <span id="reality-status-label">HEMAT</span>
+              </span>
+            </div>
+            
+            <div class="difference-figure" id="reality-diff-figure">+Rp 0</div>
+            
+            <div class="status-description-text" id="reality-desc-text">
+              Kalkulasi perbandingan status kas...
+            </div>
+          </div>
+        </section>
+
+        <!-- Advanced Visual Arithmetic Flow Widget -->
+        <section class="card">
+          <div class="section-title">
+            <span>Alur Perhitungan Saldo Ideal</span>
+            <span style="font-size: 0.7rem; color: var(--primary-accent); font-weight: 600; background: var(--primary-accent-bg); padding: 2px 8px; border-radius: 12px;">Visual Arithmetic Flow</span>
+          </div>
+
+          <div class="flow-formula-wrapper">
+            <!-- Step 1: Pemasukan -->
+            <div class="flow-step-card">
+              <div class="flow-step-left">
+                <div class="flow-step-icon income">💰</div>
+                <div>
+                  <div class="flow-step-title">Pemasukan Bersih</div>
+                  <div class="flow-step-subtitle">Total gaji & pemasukan bulan ini</div>
+                </div>
+              </div>
+              <div class="flow-step-val" style="color: var(--accent-positive);" id="flow-val-income">Rp 0</div>
+            </div>
+
+            <div class="flow-connector">➖</div>
+
+            <!-- Step 2: Bulanan Tetap (100%) -->
+            <div class="flow-step-card">
+              <div class="flow-step-left">
+                <div class="flow-step-icon bulanan">🏠</div>
+                <div>
+                  <div class="flow-step-title">Kebutuhan Bulanan (100%)</div>
+                  <div class="flow-step-subtitle">Sewa Kos, Listrik, Paket Data (Lump-sum)</div>
+                </div>
+              </div>
+              <div class="flow-step-val" style="color: var(--accent-warning);" id="flow-val-bulanan">- Rp 0</div>
+            </div>
+
+            <div class="flow-connector">➖</div>
+
+            <!-- Step 3: Harian & Mingguan Proporsional -->
+            <div class="flow-step-card">
+              <div class="flow-step-left">
+                <div class="flow-step-icon harian">⏳</div>
+                <div>
+                  <div class="flow-step-title">Pengeluaran Rutin Berjalan</div>
+                  <div class="flow-step-subtitle" id="flow-sub-harian">Target Harian/Mingguan x % Hari</div>
+                </div>
+              </div>
+              <div class="flow-step-val" style="color: var(--accent-warning);" id="flow-val-harian">- Rp 0</div>
+            </div>
+
+            <div class="flow-connector">🟰</div>
+
+            <!-- Step 4: Saldo Ideal -->
+            <div class="flow-step-card" style="background: #EEF2FF; border-color: #C7D2FE;">
+              <div class="flow-step-left">
+                <div class="flow-step-icon result">🎯</div>
+                <div>
+                  <div class="flow-step-title" style="color: var(--primary-accent);">Proyeksi Saldo Ideal Saat Ini</div>
+                  <div class="flow-step-subtitle">Batas aman saldo dompet hari ini</div>
+                </div>
+              </div>
+              <div class="flow-step-val" style="color: var(--primary-accent); font-size: 1rem;" id="flow-val-result">Rp 0</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Summary Budgets Section -->
+        <section class="card">
+          <div class="section-title">
+            <span>Ringkasan Pos Anggaran</span>
+            <button class="quick-btn" onclick="switchView('view-budgets')">Lihat Semua ➔</button>
+          </div>
+          <div class="budget-items-list" id="budgets-list-container">
+            <!-- Populated by app.js -->
+          </div>
+        </section>
+
+      </div>
+
+      <!-- ===================================================================== -->
+      <!-- PAGE 2: VIEW MUTASI BANK & REKONSILIASI -->
+      <!-- ===================================================================== -->
+      <div class="view-page" id="view-mutasi">
+        
+        <section class="card">
+          <div class="section-title">
+            <span>Upload Mutasi Rekening Bank</span>
+            <span style="font-size: 0.72rem; color: var(--primary-accent);">CSV & PDF Statement</span>
+          </div>
+
+          <div style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 14px; line-height: 1.4;">
+            Unggah mutasi rekening bank (format <strong>.CSV</strong> atau <strong>.PDF</strong>) untuk merealisasikan pos anggaran bulan target. Sistem akan mencocokkan kata kunci pengeluaran otomatis.
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label">Bulan Mutasi:</label>
+              <select id="mutasi-target-month" class="form-select">
+                <option value="Januari">Januari</option>
+                <option value="Februari">Februari</option>
+                <option value="Maret">Maret</option>
+                <option value="April">April</option>
+                <option value="Mei">Mei</option>
+                <option value="Juni">Juni</option>
+                <option value="Juli">Juli</option>
+                <option value="Agustus" selected>Agustus</option>
+                <option value="September">September</option>
+                <option value="Oktober">Oktober</option>
+                <option value="November">November</option>
+                <option value="Desember">Desember</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label">Tahun Mutasi:</label>
+              <select id="mutasi-target-year" class="form-select">
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+                <option value="2026" selected>2026</option>
+                <option value="2027">2027</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Pilih Dokumen Mutasi (.CSV, .PDF, .TXT):</label>
+            <input type="file" id="statement-file-input" accept=".csv,.pdf,.txt" class="form-input" style="padding: 6px;">
+          </div>
+
+          <button type="button" class="quick-btn" id="btn-load-sample-statement" style="margin-bottom: 8px; width: 100%; text-align: center; justify-content: center; padding: 7px;">
+            📋 Muat Contoh Teks Mutasi Rekening Bank
+          </button>
+
+          <textarea id="statement-textarea" style="width: 100%; height: 110px; padding: 10px; font-family: monospace; font-size: 0.72rem; border: 1.5px solid var(--border-subtle); border-radius: var(--radius-md); margin-bottom: 12px; outline: none;" placeholder="Tanggal,Keterangan,Tipe,Nominal,Saldo&#10;2026-08-05,WARUNG MAKAN NASI PADANG,DEBIT,45000..."></textarea>
+
+          <button type="button" class="btn-primary" id="btn-process-statement">
+            🚀 Proses Mutasi & Realisasikan Anggaran
+          </button>
+        </section>
+
+        <!-- Live Transactions History Table -->
+        <section class="card">
+          <div class="section-title">
+            <span>Riwayat Transaksi Mutasi</span>
+            <span style="font-size: 0.72rem; color: var(--text-secondary);">Terekonsiliasi</span>
+          </div>
+          <div id="mutasi-transactions-list">
+            <!-- Populated by app.js -->
+          </div>
+        </section>
+
+      </div>
+
+      <!-- ===================================================================== -->
+      <!-- PAGE 3: VIEW POS ANGGARAN & PEMASUKAN -->
+      <!-- ===================================================================== -->
+      <div class="view-page" id="view-budgets">
+        
+        <!-- Incomes Manager -->
+        <section class="card">
+          <div class="section-title">
+            <span>Pemasukan Bulan Ini</span>
+            <button class="quick-btn" onclick="openAddIncomeModal()">+ Pemasukan</button>
+          </div>
+          <div id="incomes-management-list">
+            <!-- Populated by app.js -->
+          </div>
+        </section>
+
+        <!-- Budgets Manager -->
+        <section class="card">
+          <div class="section-title">
+            <span>Daftar Pos Pengeluaran</span>
+            <button class="quick-btn" onclick="openAddBudgetModal()">
+              ➕ + Pos Anggaran
+            </button>
+          </div>
+
+          <!-- Category Filter Tabs -->
+          <div class="tabs-nav" style="margin-bottom: 12px;">
+            <button type="button" class="tab-btn active" data-category="Semua">Semua</button>
+            <button type="button" class="tab-btn" data-category="Dasar">Dasar</button>
+            <button type="button" class="tab-btn" data-category="Pribadi">Pribadi</button>
+            <button type="button" class="tab-btn" data-category="Hiburan">Hiburan</button>
+            <button type="button" class="tab-btn" data-category="Insidental">Insidental</button>
+            <button type="button" class="tab-btn" data-category="Alokasi Surplus">Alokasi Goal</button>
+          </div>
+
+          <div class="budget-items-list" id="budgets-page-list">
+            <!-- Populated by app.js -->
+          </div>
+        </section>
+
+      </div>
+
+      <!-- ===================================================================== -->
+      <!-- PAGE 4: VIEW FINANCIAL GOALS & INVESTASI -->
+      <!-- ===================================================================== -->
+      <div class="view-page" id="view-goals">
+        
+        <section class="card">
+          <div class="section-title">
+            <span>Portofolio & Target Keuangan</span>
+            <button class="quick-btn" onclick="openAddGoalModal()">
+              🎯 + Goal Baru
+            </button>
+          </div>
+          <div style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 14px; line-height: 1.4;">
+            Kelola sasaran tabungan dan investasi jangka panjang Anda. Pos anggaran kategori <strong>Alokasi Surplus</strong> terhubung langsung ke sasaran target di sini.
+          </div>
+          <div id="goals-page-list">
+            <!-- Populated by app.js -->
+          </div>
+        </section>
+
+      </div>
+
+      <!-- ===================================================================== -->
+      <!-- PAGE 5: VIEW PERENCANAAN, TEMPLATE & EXCEL IMPORT -->
+      <!-- ===================================================================== -->
+      <div class="view-page" id="view-template">
+        
+        <!-- Excel Importer Card -->
+        <section class="card">
+          <div class="section-title">
+            <span>Import File Excel Perencanaan</span>
+            <span style="font-size: 0.72rem; color: var(--primary-accent);">.XLSX & Spreadsheet</span>
+          </div>
+
+          <div style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 14px; line-height: 1.4;">
+            Unggah dokumen spreadsheet perencanaan keuangan Anda untuk mengekstrak <strong>Pemasukan</strong> dan <strong>Pos Anggaran</strong> secara otomatis ke bulan target.
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label">Bulan Target:</label>
+              <select id="excel-target-month" class="form-select">
+                <option value="Januari">Januari</option>
+                <option value="Februari">Februari</option>
+                <option value="Maret">Maret</option>
+                <option value="April">April</option>
+                <option value="Mei">Mei</option>
+                <option value="Juni">Juni</option>
+                <option value="Juli">Juli</option>
+                <option value="Agustus" selected>Agustus</option>
+                <option value="September">September</option>
+                <option value="Oktober">Oktober</option>
+                <option value="November">November</option>
+                <option value="Desember">Desember</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label">Tahun Target:</label>
+              <select id="excel-target-year" class="form-select">
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+                <option value="2026" selected>2026</option>
+                <option value="2027">2027</option>
+                <option value="2028">2028</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Pilih Dokumen Excel (.XLSX, .CSV, .TXT):</label>
+            <input type="file" id="excel-file-input" accept=".xlsx,.xls,.csv,.txt" class="form-input" style="padding: 6px;">
+          </div>
+
+          <div id="excel-import-status" style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 500;"></div>
+        </section>
+
+        <!-- Template Duplicator Card -->
+        <section class="card">
+          <div class="section-title">
+            <span>Salin Anggaran Antar Bulan</span>
+            <span style="font-size: 0.72rem; color: var(--primary-accent);">Duplikasi Bebas</span>
+          </div>
+
+          <div style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 14px; line-height: 1.4;">
+            Salin seluruh pos anggaran dan target dari bulan mana pun (contoh: Juni) ke bulan masa depan mana pun (contoh: September) dengan 1 klik.
+          </div>
+
+          <button class="btn-primary" onclick="openDuplicateModal()">
+            📋 Buka Panel Duplikasi Anggaran
+          </button>
+        </section>
+
+      </div>
+
+      <!-- ===================================================================== -->
+      <!-- PAGE 6: VIEW ADMIN PANEL (EXCLUSIVE FOR zidanmuzaki2002@gmail.com)   -->
+      <!-- ===================================================================== -->
+      <div class="view-page" id="view-admin">
+        
+        <section class="card">
+          <div class="section-title">
+            <span>🛡️ Admin Master Control</span>
+            <span class="brand-badge">Superadmin</span>
+          </div>
+          <div style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 14px; line-height: 1.4;">
+            Panel kontrol khusus administrator. Kelola status direktori user, pemantauan sistem, dan database multi-tenancy.
+          </div>
+
+          <!-- Admin Quick Stats -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px;">
+            <div class="account-input-card">
+              <div class="account-input-header">👥 Total Pengguna</div>
+              <div style="font-size: 1.2rem; font-weight: 700; color: var(--primary-accent);" id="admin-stat-users">0</div>
+            </div>
+            <div class="account-input-card">
+              <div class="account-input-header">📦 Total Pos Anggaran</div>
+              <div style="font-size: 1.2rem; font-weight: 700; color: var(--text-primary);" id="admin-stat-budgets">0</div>
+            </div>
+            <div class="account-input-card">
+              <div class="account-input-header">💰 Total Pemasukan</div>
+              <div style="font-size: 1.2rem; font-weight: 700; color: var(--accent-positive);" id="admin-stat-incomes">0</div>
+            </div>
+            <div class="account-input-card">
+              <div class="account-input-header">💳 Total Transaksi</div>
+              <div style="font-size: 1.2rem; font-weight: 700; color: var(--text-secondary);" id="admin-stat-tx">0</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Registered Users Directory Table -->
+        <section class="card">
+          <div class="section-title">
+            <span>Direktori Pengguna Terdaftar</span>
+            <button class="quick-btn" onclick="fetchAdminData()">🔄 Refresh Data</button>
+          </div>
+          <div id="admin-users-list" style="display: flex; flex-direction: column; gap: 8px;">
+            <!-- Populated by app.js -->
+          </div>
+        </section>
+
+      </div>
+
+    </main>
+
+    <!-- Bottom Navigation Bar (Multi-Page Tabs) -->
+    <nav class="bottom-nav">
+      <button class="nav-item active" data-view="view-dashboard">
+        <span class="nav-icon">📊</span>
+        <span>Dashboard</span>
+      </button>
+      <button class="nav-item" data-view="view-mutasi">
+        <span class="nav-icon">💳</span>
+        <span>Mutasi</span>
+      </button>
+      <button class="nav-item" data-view="view-budgets">
+        <span class="nav-icon">📝</span>
+        <span>Anggaran</span>
+      </button>
+      <button class="nav-item" data-view="view-goals">
+        <span class="nav-icon">🎯</span>
+        <span>Goals</span>
+      </button>
+      <button class="nav-item" data-view="view-template">
+        <span class="nav-icon">📋</span>
+        <span>Template</span>
+      </button>
+      <!-- CONDITIONAL RENDERING: Rendered ONLY if user.email === 'zidanmuzaki2002@gmail.com' -->
+      <button class="nav-item" id="nav-item-admin" data-view="view-admin" style="display: none;">
+        <span class="nav-icon">🛡️</span>
+        <span>Admin</span>
+      </button>
+    </nav>
+
+    <!-- ======================================================================= -->
+    <!-- MODALS -->
+    <!-- ======================================================================= -->
+
+    <!-- Modal 1: Tambah Pemasukan -->
+    <div class="modal-overlay" id="add-income-modal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div style="font-weight: 700; font-size: 1rem; color: var(--text-primary);">Tambah Pemasukan (<span id="income-modal-period"></span>)</div>
+          <button type="button" class="close-btn close-modal-btn">✕</button>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Sumber Pemasukan</label>
+          <input type="text" id="income-source-input" class="form-input" placeholder="Contoh: Gaji Pokok, Tunjangan, Side-Project">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nominal Pemasukan (Rp)</label>
+          <input type="number" id="income-amount-input" class="form-input" placeholder="Contoh: 8500000">
+        </div>
+        <button type="button" class="btn-primary" onclick="submitAddIncome()">💾 Simpan Pemasukan</button>
+      </div>
+    </div>
+
+    <!-- Modal 2: Tambah Pos Anggaran -->
+    <div class="modal-overlay" id="add-budget-modal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div style="font-weight: 700; font-size: 1rem; color: var(--text-primary);">Tambah Pos Anggaran (<span id="budget-modal-period"></span>)</div>
+          <button type="button" class="close-btn close-modal-btn">✕</button>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nama Pos Pengeluaran</label>
+          <input type="text" id="budget-item-name" class="form-input" placeholder="Contoh: Makan, Sewa Kos, Transportasi">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Kategori Sifat</label>
+          <select id="budget-category" class="form-select">
+            <option value="Dasar">Dasar (Pokok/Kebutuhan)</option>
+            <option value="Pribadi">Pribadi</option>
+            <option value="Hiburan">Hiburan</option>
+            <option value="Insidental">Insidental (Persiapan OJT, Wisuda, dll)</option>
+            <option value="Alokasi Surplus">Alokasi Surplus (Invest / Dana Darurat)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Frekuensi Anggaran</label>
+          <select id="budget-freq" class="form-select">
+            <option value="Harian">Harian</option>
+            <option value="Mingguan">Mingguan</option>
+            <option value="Bulanan" selected>Bulanan</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Perkiraan Waktu / Pola Pengeluaran</label>
+          <select id="budget-timing-select" class="form-select">
+            <option value="Rata-rata Harian (Flat)">⚖️ Rata-rata Harian (Flat)</option>
+            <option value="Tanggal Spesifik (Tgl 1)">📅 Tanggal 1 Tiap Bulan</option>
+            <option value="Tanggal Spesifik (Tgl 5)">📅 Tanggal 5 Tiap Bulan (e.g. Sewa Kos)</option>
+            <option value="Tanggal Spesifik (Tgl 10)">📅 Tanggal 10 Tiap Bulan (e.g. Listrik / Pulsa)</option>
+            <option value="Tanggal Spesifik (Tgl 15)">📅 Tanggal 15 Tiap Bulan (e.g. Pertengahan)</option>
+            <option value="Tanggal Spesifik (Tgl 25)">📅 Tanggal 25 Tiap Bulan (e.g. Akhir Bulan)</option>
+            <option value="Hari Tertentu Tiap Minggu (Senin)">🗓️ Setiap Hari Senin</option>
+            <option value="Hari Tertentu Tiap Minggu (Jumat)">🗓️ Setiap Hari Jumat</option>
+            <option value="Hari Tertentu Tiap Minggu (Weekend)">🗓️ Setiap Akhir Pekan (Sabtu-Minggu)</option>
+            <option value="Fleksibel / Sesuai Kebutuhan">🔄 Fleksibel / Sesuai Kebutuhan</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nominal Satuan (Rp)</label>
+          <input type="number" id="budget-nominal-satuan" class="form-input" placeholder="Contoh: 50000 (Makan) atau 1500000 (Kos)">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Pengali (Multiplier: Jumlah Hari/Minggu/Bulan)</label>
+          <input type="number" id="budget-multiplier" class="form-input" value="1" placeholder="30 (hari), 4 (minggu), 1 (bulan)">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Hubungkan ke Financial Goal (Wajib jika Alokasi Surplus)</label>
+          <select id="budget-linked-goal" class="form-select">
+            <option value="">-- Tanpa Relasi Goal --</option>
+          </select>
+        </div>
+        <button type="button" class="btn-primary" onclick="submitAddBudget()">💾 Simpan Pos Anggaran</button>
+      </div>
+    </div>
+
+    <!-- Modal 3: Detail Pos Anggaran & Riwayat Transaksi -->
+    <div class="modal-overlay" id="budget-detail-modal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div>
+            <div id="detail-budget-title" style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary);">Detail Pos</div>
+            <div style="font-size: 0.72rem; color: var(--text-secondary);">
+              <span id="detail-budget-cat"></span> • <span id="detail-budget-freq"></span> • <span id="detail-budget-timing"></span>
+            </div>
+          </div>
+          <button type="button" class="close-btn close-modal-btn">✕</button>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 16px; background: var(--bg-main); padding: 12px; border-radius: var(--radius-md);">
+          <div>
+            <div style="font-size: 0.68rem; color: var(--text-secondary);">Target</div>
+            <div id="detail-budget-target" style="font-weight: 700; font-size: 0.85rem;">Rp 0</div>
+          </div>
+          <div>
+            <div style="font-size: 0.68rem; color: var(--text-secondary);">Terpakai</div>
+            <div id="detail-budget-used" style="font-weight: 700; font-size: 0.85rem; color: var(--accent-warning);">Rp 0</div>
+          </div>
+          <div>
+            <div style="font-size: 0.68rem; color: var(--text-secondary);">Sisa Saldo</div>
+            <div id="detail-budget-balance" style="font-weight: 700; font-size: 0.85rem; color: var(--primary-accent);">Rp 0</div>
+          </div>
+        </div>
+
+        <div style="font-weight: 600; font-size: 0.82rem; margin-bottom: 8px;">Riwayat Transaksi Debit:</div>
+        <div id="detail-budget-tx-list" style="max-height: 130px; overflow-y: auto; margin-bottom: 14px;">
+          <!-- Transactions populated by app.js -->
+        </div>
+
+        <div style="font-weight: 600; font-size: 0.82rem; margin-bottom: 6px;">+ Catat Pengeluaran Manual:</div>
+        <div class="form-group" style="margin-bottom: 8px;">
+          <input type="text" id="manual-tx-desc" class="form-input" placeholder="Keterangan transaksi...">
+        </div>
+        <div style="display: flex; gap: 8px; margin-bottom: 14px;">
+          <input type="number" id="manual-tx-amount" class="form-input" placeholder="Nominal (Rp)...">
+          <input type="date" id="manual-tx-date" class="form-input" style="max-width: 140px;">
+        </div>
+        
+        <div style="display: flex; gap: 8px;">
+          <button type="button" class="btn-primary" onclick="submitManualTx()">➕ Catat</button>
+          <button type="button" class="btn-danger" onclick="deleteSelectedBudget()">🗑️ Hapus Pos</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal 4: Tambah Goal Finansial -->
+    <div class="modal-overlay" id="add-goal-modal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div style="font-weight: 700; font-size: 1rem; color: var(--text-primary);">Tambah Sasaran Finansial Baru</div>
+          <button type="button" class="close-btn close-modal-btn">✕</button>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Kode Singkat</label>
+          <input type="text" id="goal-code-input" class="form-input" placeholder="Contoh: B1, A3, G1">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nama Sasaran Finansial</label>
+          <input type="text" id="goal-name-input" class="form-input" placeholder="Contoh: Dana Darurat, Persiapan OJT, Mobil, Menikah">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Target Tercapai di Tahun:</label>
+          <select id="goal-target-year-select" class="form-select">
+            <option value="2026">Tahun 2026</option>
+            <option value="2027" selected>Tahun 2027</option>
+            <option value="2028">Tahun 2028</option>
+            <option value="2029">Tahun 2029</option>
+            <option value="2030">Tahun 2030</option>
+            <option value="2031">Tahun 2031</option>
+            <option value="2032">Tahun 2032</option>
+            <option value="2033">Tahun 2033</option>
+            <option value="2034">Tahun 2034</option>
+            <option value="2035">Tahun 2035</option>
+            <option value="2040">Tahun 2040</option>
+            <option value="2050">Tahun 2050+</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Rencana Instrumen Investasi / Tabungan</label>
+          <select id="goal-instrument-select" class="form-select">
+            <option value="📈 Saham Indonesia (IHSG / Stockbit)">📈 Saham Indonesia (IHSG / Stockbit)</option>
+            <option value="🇺🇸 Saham US / Global (Pluang / S&P500)">🇺🇸 Saham US / Global (Pluang / S&P500)</option>
+            <option value="🛡️ Reksa Dana Pasar Uang (Bibit RDPU)">🛡️ Reksa Dana Pasar Uang (Bibit RDPU)</option>
+            <option value="🏦 Tabungan Khusus / Deposito (Bank Jago/Seabank/BCA)">🏦 Tabungan Khusus / Deposito (Bank Jago/Seabank/BCA)</option>
+            <option value="🪙 Aset Kripto / Emas / Lainnya">🪙 Aset Kripto / Emas / Lainnya</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Target Nominal Sasaran (Rp)</label>
+          <input type="number" id="goal-target-input" class="form-input" placeholder="Contoh: 15000000">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Saldo Awal yang Sudah Terkumpul (Rp)</label>
+          <input type="number" id="goal-initial-input" class="form-input" placeholder="0">
+        </div>
+        <button type="button" class="btn-primary" onclick="submitAddGoal()">🎯 Simpan Goal Finansial</button>
+      </div>
+    </div>
+
+    <!-- Modal 5: Detail Goal Finansial -->
+    <div class="modal-overlay" id="detail-goal-modal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div>
+            <span id="detail-goal-code" style="font-weight: 700; color: #4F46E5;"></span>
+            <span id="detail-goal-name" style="font-weight: 700; font-size: 1rem; color: var(--text-primary); margin-left: 4px;"></span>
+          </div>
+          <button type="button" class="close-btn close-modal-btn">✕</button>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; background: var(--bg-main); padding: 12px; border-radius: var(--radius-md);">
+          <div>
+            <div style="font-size: 0.68rem; color: var(--text-secondary);">Target Nominal</div>
+            <div id="detail-goal-target" style="font-weight: 700; font-size: 0.95rem;">Rp 0</div>
+          </div>
+          <div>
+            <div style="font-size: 0.68rem; color: var(--text-secondary);">Terkumpul Saat Ini</div>
+            <div id="detail-goal-current" style="font-weight: 700; font-size: 0.95rem; color: var(--accent-positive);">Rp 0</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">+ Tambah Setoran Tabungan (Rp)</label>
+          <input type="number" id="deposit-goal-amount" class="form-input" placeholder="Contoh: 500000">
+        </div>
+
+        <div style="display: flex; gap: 8px;">
+          <button type="button" class="btn-primary" onclick="submitGoalDeposit()">💰 Tambah Setoran</button>
+          <button type="button" class="btn-danger" onclick="deleteSelectedGoal()">🗑️ Hapus Goal</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal 6: Duplikasi Bulan (Salin Template) -->
+    <div class="modal-overlay" id="duplicate-modal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div style="font-weight: 700; font-size: 1rem; color: var(--text-primary);">Salin Anggaran Antar Bulan</div>
+          <button type="button" class="close-btn close-modal-btn">✕</button>
+        </div>
+        <div style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 12px;">
+          Duplikasi seluruh pos anggaran beserta targetnya dari bulan sumber ke bulan target mana pun.
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label">Bulan Sumber:</label>
+            <select id="dup-source-month" class="form-select">
+              <option value="Januari">Januari</option>
+              <option value="Februari">Februari</option>
+              <option value="Maret">Maret</option>
+              <option value="April">April</option>
+              <option value="Mei">Mei</option>
+              <option value="Juni">Juni</option>
+              <option value="Juli">Juli</option>
+              <option value="Agustus">Agustus</option>
+              <option value="September">September</option>
+              <option value="Oktober">Oktober</option>
+              <option value="November">November</option>
+              <option value="Desember">Desember</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label">Tahun Sumber:</label>
+            <select id="dup-source-year" class="form-select">
+              <option value="2024">2024</option>
+              <option value="2025">2025</option>
+              <option value="2026" selected>2026</option>
+              <option value="2027">2027</option>
+            </select>
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px;">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label">Bulan Target:</label>
+            <select id="dup-target-month" class="form-select">
+              <option value="Januari">Januari</option>
+              <option value="Februari">Februari</option>
+              <option value="Maret">Maret</option>
+              <option value="April">April</option>
+              <option value="Mei">Mei</option>
+              <option value="Juni">Juni</option>
+              <option value="Juli">Juli</option>
+              <option value="Agustus" selected>Agustus</option>
+              <option value="September">September</option>
+              <option value="Oktober">Oktober</option>
+              <option value="November">November</option>
+              <option value="Desember">Desember</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label">Tahun Target:</label>
+            <select id="dup-target-year" class="form-select">
+              <option value="2024">2024</option>
+              <option value="2025">2025</option>
+              <option value="2026" selected>2026</option>
+              <option value="2027">2027</option>
+              <option value="2028">2028</option>
+            </select>
+          </div>
+        </div>
+        <button type="button" class="btn-primary" onclick="submitDuplicateMonth()">📋 Salin Anggaran Sekarang</button>
+      </div>
+    </div>
+
+    <!-- Modal 7: Switch Akun / Profil Modal -->
+    <div class="modal-overlay" id="auth-modal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary);">Akun & Profil Pengguna</div>
+          <button type="button" class="close-btn close-modal-btn">✕</button>
+        </div>
+
+        <div style="background: var(--bg-main); padding: 14px; border-radius: var(--radius-md); margin-bottom: 14px; display: flex; align-items: center; gap: 12px;">
+          <div class="user-avatar-circle" style="width: 42px; height: 42px; font-size: 1.1rem;" id="modal-avatar-preview">Z</div>
+          <div>
+            <div style="font-weight: 700; font-size: 0.95rem; color: var(--text-primary);" id="modal-username-preview">zidanmuzaki13</div>
+            <div style="font-size: 0.75rem; color: var(--text-secondary);" id="modal-email-preview">zidanmuzaki2002@gmail.com</div>
+            <div style="font-size: 0.68rem; font-weight: 700; color: var(--primary-accent); margin-top: 2px;" id="modal-role-preview">ADMINISTRATOR</div>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 8px;">
+          <button type="button" class="btn-secondary" style="flex: 1;" onclick="handleLogout()">🚪 Keluar / Ganti Akun</button>
+          <button type="button" class="btn-primary close-modal-btn" style="flex: 1;">Tutup</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

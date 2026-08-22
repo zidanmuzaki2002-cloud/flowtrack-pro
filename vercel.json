@@ -1,7 +1,5 @@
 {
   "version": 2,
-  "name": "flowtrack-pro",
-  "cleanUrls": true,
   "rewrites": [
     {
       "source": "/(auth/.*|admin/.*|calculate-ideal-balance|reconcile-csv|incomes|budgets|financial-goals|transactions|import-excel-plan|duplicate-month-budget|health)",

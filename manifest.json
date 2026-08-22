@@ -1,0 +1,27 @@
+{
+  "name": "FlowTrack Pro — Smart Personal Cashflow & Burn Tracker",
+  "short_name": "FlowTrack Pro",
+  "description": "Aplikasi Financial Planning dengan Proportional Burn Rate, Evaluasi Akhir Bulan, Multi-Tenancy & PWA Standalone.",
+  "start_url": "/",
+  "id": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#F8F9FA",
+  "theme_color": "#4F46E5",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192' width='192' height='192'%3E%3Crect width='192' height='192' rx='42' fill='%234F46E5'/%3E%3Cpath d='M48 96L84 132L144 60' stroke='white' stroke-width='18' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Ccircle cx='144' cy='60' r='10' fill='%2310B981'/%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' width='512' height='512'%3E%3Crect width='512' height='512' rx='112' fill='%234F46E5'/%3E%3Cpath d='M128 256L224 352L384 160' stroke='white' stroke-width='48' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Ccircle cx='384' cy='160' r='24' fill='%2310B981'/%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["finance", "productivity", "utilities"]
+}
