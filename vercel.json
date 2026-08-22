@@ -2,11 +2,51 @@
   "version": 2,
   "rewrites": [
     {
-      "source": "/(auth/.*|admin/.*|calculate-ideal-balance|reconcile-csv|incomes|budgets|financial-goals|transactions|import-excel-plan|duplicate-month-budget|health)",
+      "source": "/auth/:path*",
       "destination": "/api/index.js"
     },
     {
-      "source": "/api/(.*)",
+      "source": "/admin/:path*",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/api/:path*",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/calculate-ideal-balance",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/reconcile-csv",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/import-excel-plan",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/duplicate-month-budget",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/budgets",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/incomes",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/financial-goals",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/transactions",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/health",
       "destination": "/api/index.js"
     }
   ],
