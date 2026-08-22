@@ -463,6 +463,57 @@ button {
   transform: translateY(-1px);
 }
 
+/* Multi-Date Calendar Grid Styles */
+.calendar-days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+}
+
+.day-btn {
+  background: #FFFFFF;
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 6px 0;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s ease;
+}
+
+.day-btn:hover {
+  background: #EEF2FF;
+  color: var(--primary-accent);
+  border-color: var(--primary-accent);
+}
+
+.day-btn.active {
+  background: var(--primary-accent) !important;
+  color: #FFFFFF !important;
+  border-color: var(--primary-accent) !important;
+  box-shadow: 0 2px 6px rgba(79, 70, 229, 0.35);
+}
+
+.preset-pill {
+  background: #FFFFFF;
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  color: var(--text-secondary);
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.preset-pill:hover {
+  background: #EEF2FF;
+  color: var(--primary-accent);
+  border-color: var(--primary-accent);
+}
+
 /* Hero Card */
 .hero-card {
   background: linear-gradient(135deg, #1E1B4B 0%, #312E81 50%, #4338CA 100%);

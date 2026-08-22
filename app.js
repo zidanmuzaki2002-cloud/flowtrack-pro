@@ -1,9 +1,8 @@
 // ==============================================================================
 // FlowTrack Pro: Mobile-First Client Logic & Resilient Local-Cloud Sync Engine
-// Features: Bulletproof Clean SVG Icons, Dynamic 3-Phase Engine,
-// Pos Anggaran Edit/Adjustment Modal, Cash Reality Justification Notes per Month,
-// Permanent LocalStorage Persistence, Compact Arithmetic Flow Formula,
-// Multi-Tenant Auth & Take-Out Management
+// Features: Interactive Multi-Date Calendar Picker (1-31 Exact Burn Engine),
+// Dynamic 3-Phase Engine, Pos Anggaran Edit Modal, Cash Justification Notes,
+// Permanent LocalStorage Persistence, Multi-Tenant Auth & Take-Out Management
 // ==============================================================================
 
 const API_BASE = window.location.origin;
@@ -64,6 +63,17 @@ let appState = {
   activeCategory: 'Semua',
   selectedBudgetItem: null,
   selectedGoalItem: null
+};
+
+// Calendar Date Picker Modal State
+let addModalTiming = {
+  mode: 'flat', // 'flat' or 'dates'
+  selectedDates: []
+};
+
+let editModalTiming = {
+  mode: 'flat', // 'flat' or 'dates'
+  selectedDates: []
 };
 
 // Format Currency IDR
@@ -131,6 +141,92 @@ function loadCashAccountsFromStorage() {
       notesEl.value = savedNotes;
     }
   } catch (e) {}
+}
+
+// -----------------------------------------------------------------------------
+// MULTI-DATE CALENDAR PICKER INTERFACE
+// -----------------------------------------------------------------------------
+function setTimingMode(target, mode) {
+  const state = target === 'add' ? addModalTiming : editModalTiming;
+  state.mode = mode;
+
+  const btnFlat = document.getElementById('btn-mode-flat-' + target);
+  const btnDates = document.getElementById('btn-mode-dates-' + target);
+  const container = document.getElementById('calendar-grid-container-' + target);
+
+  if (mode === 'flat') {
+    if (btnFlat) btnFlat.classList.add('active');
+    if (btnDates) btnDates.classList.remove('active');
+    if (container) container.style.display = 'none';
+  } else {
+    if (btnDates) btnDates.classList.add('active');
+    if (btnFlat) btnFlat.classList.remove('active');
+    if (container) container.style.display = 'block';
+  }
+
+  updateDateSummaryText(target);
+}
+
+function renderCalendarDaysGrid(target) {
+  const container = document.getElementById('days-grid-' + target);
+  if (!container) return;
+
+  const state = target === 'add' ? addModalTiming : editModalTiming;
+  let html = '';
+
+  for (let d = 1; d <= 31; d++) {
+    const isSelected = state.selectedDates.includes(d);
+    const activeClass = isSelected ? 'active' : '';
+    html += '<button type="button" class="day-btn ' + activeClass + '" onclick="toggleDayDate(\'' + target + '\', ' + d + ')">' + d + '</button>';
+  }
+
+  container.innerHTML = html;
+  updateDateSummaryText(target);
+}
+
+function toggleDayDate(target, dayNum) {
+  const state = target === 'add' ? addModalTiming : editModalTiming;
+  const idx = state.selectedDates.indexOf(dayNum);
+
+  if (idx >= 0) {
+    state.selectedDates.splice(idx, 1);
+  } else {
+    state.selectedDates.push(dayNum);
+  }
+
+  state.selectedDates.sort((a, b) => a - b);
+  renderCalendarDaysGrid(target);
+}
+
+function applyDatePreset(target, datesArray) {
+  const state = target === 'add' ? addModalTiming : editModalTiming;
+  setTimingMode(target, 'dates');
+  state.selectedDates = [...datesArray].sort((a, b) => a - b);
+  renderCalendarDaysGrid(target);
+}
+
+function clearSelectedDates(target) {
+  const state = target === 'add' ? addModalTiming : editModalTiming;
+  state.selectedDates = [];
+  renderCalendarDaysGrid(target);
+}
+
+function updateDateSummaryText(target) {
+  const state = target === 'add' ? addModalTiming : editModalTiming;
+  const summaryEl = document.getElementById(target + '-date-summary');
+  if (!summaryEl) return;
+
+  if (state.mode === 'flat') {
+    summaryEl.textContent = 'Flat Harian';
+  } else {
+    if (state.selectedDates.length === 0) {
+      summaryEl.textContent = 'Pilih Tanggal...';
+    } else if (state.selectedDates.length === 1) {
+      summaryEl.textContent = 'Tanggal ' + state.selectedDates[0];
+    } else {
+      summaryEl.textContent = 'Tgl ' + state.selectedDates.join(', ') + ' (' + state.selectedDates.length + 'x)';
+    }
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -760,7 +856,6 @@ async function refreshAllData() {
 async function fetchIncomes() {
   let loaded = false;
 
-  // 1. Try local storage cache for this user & month
   const localSaved = localStorage.getItem(getUserStorageKey('incomes_' + appState.currentMonth + '_' + appState.currentYear));
   if (localSaved) {
     try {
@@ -802,7 +897,6 @@ async function fetchIncomes() {
 async function fetchBudgets() {
   let loaded = false;
 
-  // 1. Try local storage cache for this user & month
   const localSaved = localStorage.getItem(getUserStorageKey('budgets_' + appState.currentMonth + '_' + appState.currentYear));
   if (localSaved) {
     try {
@@ -925,25 +1019,43 @@ async function fetchIdealBalance() {
 
     const totalIncome = appState.incomes.reduce((sum, i) => sum + Number(i.amount), 0);
 
-    let totalBulanan = 0;
-    let totalHarianMingguan = 0;
+    let totalTarget = 0;
     let totalRealisasi = 0;
+    let totalProjectedBurn = 0;
 
     appState.budgets.forEach(b => {
       const tgt = Number(b.target_anggaran) || 0;
       const used = Number(b.realisasi_used) || 0;
+      totalTarget += tgt;
       totalRealisasi += used;
 
-      if (b.frekuensi === 'Bulanan') {
-        totalBulanan += tgt;
+      let itemBurn = 0;
+      if (monthStatus === 'PAST_EVALUATION') {
+        itemBurn = tgt;
+      } else if (monthStatus === 'FUTURE_PLANNING') {
+        itemBurn = 0;
       } else {
-        totalHarianMingguan += tgt;
+        // Multi-Date Calendar Calculation
+        let dates = [];
+        if (Array.isArray(b.selected_dates) && b.selected_dates.length > 0) {
+          dates = b.selected_dates.map(Number);
+        } else if (b.timing_pattern) {
+          const numMatches = b.timing_pattern.match(/\b\d{1,2}\b/g);
+          if (numMatches) dates = numMatches.map(Number).filter(d => d >= 1 && d <= 31);
+        }
+
+        if (dates.length > 0) {
+          const passedDates = dates.filter(d => d <= currentDay);
+          itemBurn = tgt * (passedDates.length / dates.length);
+        } else {
+          itemBurn = tgt * (currentDay / totalDays);
+        }
       }
+      totalProjectedBurn += itemBurn;
     });
 
     const timeRatio = monthStatus === 'PAST_EVALUATION' ? 1.0 : (monthStatus === 'FUTURE_PLANNING' ? 0.0 : (currentDay / totalDays));
-    const proportionalBurn = totalHarianMingguan * timeRatio;
-    const idealBalance = totalIncome - totalBulanan - proportionalBurn;
+    const idealBalance = totalIncome - totalProjectedBurn;
     const actualBal = totalIncome - totalRealisasi;
 
     appState.idealBalanceData = {
@@ -958,9 +1070,9 @@ async function fetchIdealBalance() {
       },
       calculation_breakdown: {
         total_pendapatan: totalIncome,
-        total_target_bulanan_100pct: totalBulanan,
-        total_target_harian_mingguan: totalHarianMingguan,
-        proportional_burn_rate_variable: proportionalBurn,
+        total_target_bulanan_100pct: totalTarget,
+        total_target_harian_mingguan: totalTarget,
+        proportional_burn_rate_variable: totalProjectedBurn,
         proyeksi_saldo_ideal: idealBalance
       },
       actual_vs_ideal_comparison: {
@@ -1043,7 +1155,7 @@ function renderHeroCard() {
     if (elInc) elInc.textContent = formatIDR(d.calculation_breakdown.total_pendapatan);
 
     const elBurn = document.getElementById('hero-stat-burn');
-    if (elBurn) elBurn.textContent = formatIDR(d.calculation_breakdown.total_target_bulanan_100pct + d.calculation_breakdown.total_target_harian_mingguan);
+    if (elBurn) elBurn.textContent = formatIDR(d.calculation_breakdown.total_target_bulanan_100pct);
 
     const elIncLbl = document.getElementById('hero-stat-income-label');
     if (elIncLbl) elIncLbl.textContent = 'Rencana Pemasukan';
@@ -1082,7 +1194,7 @@ function renderHeroCard() {
     if (elIncLbl) elIncLbl.textContent = 'Total Pemasukan';
 
     const elBurnLbl = document.getElementById('hero-stat-burn-label');
-    if (elBurnLbl) elBurnLbl.textContent = 'Burn Rutin Berjalan';
+    if (elBurnLbl) elBurnLbl.textContent = 'Target Burn Jatuh Tempo';
   }
 }
 
@@ -1157,7 +1269,7 @@ function renderFlowFormula() {
 
   if (elInc) elInc.textContent = formatIDR(b.total_pendapatan);
   if (elBul) elBul.textContent = '- ' + formatIDR(b.total_target_bulanan_100pct);
-  if (elSubHar) elSubHar.textContent = formatIDR(b.total_target_harian_mingguan) + ' x ' + d.period.time_elapsed_percentage + ' rasio';
+  if (elSubHar) elSubHar.textContent = 'Kebutuhan Pos Terjadwal';
   if (elHar) elHar.textContent = '- ' + formatIDR(b.proportional_burn_rate_variable);
   if (elRes) elRes.textContent = formatIDR(b.proyeksi_saldo_ideal);
 }
@@ -1220,7 +1332,12 @@ function renderBudgetsLists() {
       const balanceClass = balance >= 0 ? 'positive' : 'negative';
       const balanceText = balance >= 0 ? ('Sisa ' + formatIDR(balance)) : ('Minus ' + formatIDR(Math.abs(balance)));
       const goalBadge = item.linked_goal_id ? '<span style="font-size: 0.65rem; color: #4F46E5; background: #EEF2FF; padding: 1px 5px; border-radius: 4px; font-weight: 500;">Goal Linked</span>' : '';
-      const timingBadge = item.timing_pattern ? ('<span class="timing-tag">' + item.timing_pattern + '</span>') : '';
+      
+      let timingDisplay = item.timing_pattern || 'Flat Harian';
+      if (Array.isArray(item.selected_dates) && item.selected_dates.length > 0) {
+        timingDisplay = 'Tgl: ' + item.selected_dates.join(', ');
+      }
+      const timingBadge = '<span class="timing-tag">' + timingDisplay + '</span>';
 
       return (
         '<div class="budget-item-card" onclick="openBudgetDetailModalById(\'' + item.budget_id + '\')">' +
@@ -1428,6 +1545,12 @@ function openAddBudgetModal() {
   document.getElementById('budget-item-name').value = '';
   document.getElementById('budget-nominal-satuan').value = '';
   document.getElementById('budget-multiplier').value = '1';
+  
+  // Reset Calendar Pickers
+  addModalTiming = { mode: 'flat', selectedDates: [] };
+  setTimingMode('add', 'flat');
+  renderCalendarDaysGrid('add');
+
   populateGoalDropdowns();
   document.getElementById('add-budget-modal').classList.add('active');
 }
@@ -1436,7 +1559,6 @@ async function submitAddBudget() {
   const name = document.getElementById('budget-item-name').value.trim();
   const cat = document.getElementById('budget-category').value;
   const freq = document.getElementById('budget-freq').value;
-  const timing = document.getElementById('budget-timing-select').value;
   const satuan = parseFloat(document.getElementById('budget-nominal-satuan').value) || 0;
   const mult = parseInt(document.getElementById('budget-multiplier').value) || 1;
   const linkedGoal = document.getElementById('budget-linked-goal').value || null;
@@ -1449,6 +1571,13 @@ async function submitAddBudget() {
   if (cat === 'Alokasi Surplus' && !linkedGoal && appState.financialGoals.length > 0) {
     alert('Khusus kategori Alokasi Investasi / Surplus, wajib memilih target Goal Finansial!');
     return;
+  }
+
+  let timing = 'Rata-rata Harian (Flat)';
+  let selectedDates = [];
+  if (addModalTiming.mode === 'dates' && addModalTiming.selectedDates.length > 0) {
+    selectedDates = [...addModalTiming.selectedDates].sort((a, b) => a - b);
+    timing = 'Tanggal: ' + selectedDates.join(', ');
   }
 
   const newB = {
@@ -1465,6 +1594,7 @@ async function submitAddBudget() {
     realisasi_used: 0.0,
     balance: satuan * mult,
     timing_pattern: timing,
+    selected_dates: selectedDates,
     linked_goal_id: linkedGoal
   };
 
@@ -1495,10 +1625,15 @@ async function openBudgetDetailModal(item) {
   appState.selectedBudgetItem = item;
   switchModalTab('tx');
 
+  let timingDisplay = item.timing_pattern || 'Flat Harian';
+  if (Array.isArray(item.selected_dates) && item.selected_dates.length > 0) {
+    timingDisplay = 'Tgl: ' + item.selected_dates.join(', ');
+  }
+
   document.getElementById('detail-budget-title').textContent = item.item_name;
   document.getElementById('detail-budget-cat').textContent = item.category_type;
   document.getElementById('detail-budget-freq').textContent = item.frekuensi;
-  document.getElementById('detail-budget-timing').textContent = item.timing_pattern || 'Rata-rata Flat';
+  document.getElementById('detail-budget-timing').textContent = timingDisplay;
   document.getElementById('detail-budget-target').textContent = formatIDR(item.target_anggaran);
   document.getElementById('detail-budget-used').textContent = formatIDR(item.realisasi_used);
   document.getElementById('detail-budget-balance').textContent = formatIDR(item.balance);
@@ -1507,16 +1642,32 @@ async function openBudgetDetailModal(item) {
   const editName = document.getElementById('edit-budget-name');
   const editCat = document.getElementById('edit-budget-cat');
   const editFreq = document.getElementById('edit-budget-freq');
-  const editTiming = document.getElementById('edit-budget-timing');
   const editNominal = document.getElementById('edit-budget-nominal');
   const editMult = document.getElementById('edit-budget-mult');
 
   if (editName) editName.value = item.item_name;
   if (editCat) editCat.value = item.category_type || 'Dasar';
   if (editFreq) editFreq.value = item.frekuensi || 'Bulanan';
-  if (editTiming) editTiming.value = item.timing_pattern || 'Rata-rata Harian (Flat)';
   if (editNominal) editNominal.value = item.nominal_satuan || (item.target_anggaran / (item.multiplier || 1));
   if (editMult) editMult.value = item.multiplier || 1;
+
+  // Setup Edit Calendar Timing State
+  let dates = [];
+  if (Array.isArray(item.selected_dates) && item.selected_dates.length > 0) {
+    dates = item.selected_dates.map(Number);
+  } else if (item.timing_pattern) {
+    const matches = item.timing_pattern.match(/\b\d{1,2}\b/g);
+    if (matches) dates = matches.map(Number).filter(d => d >= 1 && d <= 31);
+  }
+
+  if (dates.length > 0) {
+    editModalTiming = { mode: 'dates', selectedDates: dates };
+    setTimingMode('edit', 'dates');
+  } else {
+    editModalTiming = { mode: 'flat', selectedDates: [] };
+    setTimingMode('edit', 'flat');
+  }
+  renderCalendarDaysGrid('edit');
 
   const txContainer = document.getElementById('detail-budget-tx-list');
   txContainer.innerHTML = '<div style="font-size: 0.72rem; color: var(--text-secondary);">Memuat transaksi...</div>';
@@ -1555,7 +1706,6 @@ async function submitEditBudget() {
   const name = document.getElementById('edit-budget-name').value.trim();
   const cat = document.getElementById('edit-budget-cat').value;
   const freq = document.getElementById('edit-budget-freq').value;
-  const timing = document.getElementById('edit-budget-timing').value;
   const satuan = parseFloat(document.getElementById('edit-budget-nominal').value) || 0;
   const mult = parseInt(document.getElementById('edit-budget-mult').value) || 1;
 
@@ -1564,12 +1714,20 @@ async function submitEditBudget() {
     return;
   }
 
+  let timing = 'Rata-rata Harian (Flat)';
+  let selectedDates = [];
+  if (editModalTiming.mode === 'dates' && editModalTiming.selectedDates.length > 0) {
+    selectedDates = [...editModalTiming.selectedDates].sort((a, b) => a - b);
+    timing = 'Tanggal: ' + selectedDates.join(', ');
+  }
+
   const newTarget = satuan * mult;
 
   item.item_name = name;
   item.category_type = cat;
   item.frekuensi = freq;
   item.timing_pattern = timing;
+  item.selected_dates = selectedDates;
   item.nominal_satuan = satuan;
   item.multiplier = mult;
   item.target_anggaran = newTarget;
@@ -1582,6 +1740,7 @@ async function submitEditBudget() {
       embeddedMatch.category_type = cat;
       embeddedMatch.frekuensi = freq;
       embeddedMatch.timing_pattern = timing;
+      embeddedMatch.selected_dates = selectedDates;
       embeddedMatch.nominal_satuan = satuan;
       embeddedMatch.multiplier = mult;
       embeddedMatch.target_anggaran = newTarget;
@@ -1599,6 +1758,7 @@ async function submitEditBudget() {
       category_type: cat,
       frekuensi: freq,
       timing_pattern: timing,
+      selected_dates: selectedDates,
       nominal_satuan: satuan,
       multiplier: mult,
       target_anggaran: newTarget
@@ -1611,7 +1771,7 @@ async function submitEditBudget() {
   document.getElementById('detail-budget-title').textContent = item.item_name;
   document.getElementById('detail-budget-cat').textContent = item.category_type;
   document.getElementById('detail-budget-freq').textContent = item.frekuensi;
-  document.getElementById('detail-budget-timing').textContent = item.timing_pattern;
+  document.getElementById('detail-budget-timing').textContent = timing;
   document.getElementById('detail-budget-target').textContent = formatIDR(item.target_anggaran);
   document.getElementById('detail-budget-balance').textContent = formatIDR(item.balance);
 
@@ -2215,6 +2375,11 @@ window.switchModalTab = switchModalTab;
 window.submitEditBudget = submitEditBudget;
 window.submitManualTx = submitManualTx;
 window.deleteSelectedBudget = deleteSelectedBudget;
+window.setTimingMode = setTimingMode;
+window.renderCalendarDaysGrid = renderCalendarDaysGrid;
+window.toggleDayDate = toggleDayDate;
+window.applyDatePreset = applyDatePreset;
+window.clearSelectedDates = clearSelectedDates;
 window.openAddGoalModal = openAddGoalModal;
 window.submitAddGoal = submitAddGoal;
 window.openGoalDetailModalById = openGoalDetailModalById;
